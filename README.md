@@ -1,5 +1,7 @@
 # bp22_cpu_perina
+Bakalářská práce: Vizualizace činnosti vyrovnávacích pamětí procesoru
 
+# Vue.js
 ## Project setup
 ```
 npm install
