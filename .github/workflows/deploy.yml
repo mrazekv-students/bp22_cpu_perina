@@ -1,0 +1,42 @@
+# Source: https://dev.to/dawntraoz/continuous-integration-ci-for-js-apps-github-actions-workflow-ime
+# Source: https://medium.com/@taverasady/how-to-use-ci-cd-for-vue-js-github-pages-605bbcf1dfdd
+
+
+name: Continuous Deployment
+on:
+  push:
+    branches: [ main ]
+
+jobs: 
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Setup Node.js environment
+        uses: actions/setup-node@v1
+        with:
+          node-version: 14
+
+      - name: Checkout branch
+        uses: actions/checkout@v2
+
+      - name: Cache node_modules
+        uses: actions/cache@v2.1.0
+        with:
+          path: node_modules
+          key: ubuntu-latest-node-v14-deps-${{ hashFiles(format('{0}{1}', github.workspace, '/package-lock.json')) }}
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run unit tests
+        run: npm run test:unit
+
+      - name: Build
+        run: npm run build
+
+      - name: Deploy
+        uses: JamesIves/github-pages-deploy-action@releases/v4
+        with:
+          token: ${{ secrets.ACCESS_TOKEN }}
+          branch: gh-pages
+          folder: dist
