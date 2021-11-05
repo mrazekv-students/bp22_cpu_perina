@@ -51,10 +51,10 @@ export default {
     transition: all .1s ease-in-out;
 }
 .control-button:hover {
-    background: lightgray;
+    background: #47474B;
 }
 .control-button:active {
     transform: scale(.90);
-    background: gray;
+    background: #5B5B60;
 }
 </style>

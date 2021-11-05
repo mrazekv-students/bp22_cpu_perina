@@ -14,6 +14,9 @@ export default {
 body {
   margin: 0;
   padding: 0;
+  width: 100%;
+  min-height: 100%;
+  background: #3A3A40;
 }
 * {
   box-sizing: border-box;
@@ -23,6 +26,6 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
-  color: #2c3e50;
+  color: #D6D6D6;
 }
 </style>
