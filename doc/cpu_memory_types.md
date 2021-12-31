@@ -41,7 +41,7 @@ Bez rychlé vyrovnávací paměti přistupuje procesor přímo k datům uložen�
 
 V rámci aplikace bude tento druh paměti použit pro zobrazení, jak moc absence RVP zpomaluje procesor. Dále budou na tomto druhu paměti prováděny _unit-testy_ jednotlivých instrukcí procesoru.
 
-TODO: Draw.io návrh
+![Návrh bez rychlé vyrovnávací paměti](./models/ram_only.png)
 
 ### 2. Rychlá vyrovnávací pamět s přímým mapováním
 Rychlá vyrovnávací paměť má _X_ blokových rámců s určitými _x bitovými_ adresami. Hlavní paměť má _Y_ blokových rámců, kde _Y > Y_, s určitými _y bitovými_ adresami. Adresa polohy bloku v RVP se určí podle nejnižších _x_ bitů adresy v hlavní paměti.
@@ -56,7 +56,7 @@ Hlavní nevýhoda tohoto druhu RVP je to, že dva bloky, které mají stejnou ad
 
 ![RVP s přímým mapováním](./img/rvp_primy_mapovanim_32.png)
 
-TODO: Draw.io návrh
+![Návrh RVP s přímým mapováním](./models/direct_rvp.png)
 
 ### 3. Více-cestná rychlá vyrovnávací paměť
 Problém vzájemného vytlačování položek se stejným ukazatelem v RBP se řeší zvýšením stupně asociativity. Podle počtu cest může být v RVP uloženy současně více položek se stejným ukazatelem. Stupeň asociativity lze zvyšovat, dokud se nedospěje k _plně asociativní paměti_, kde je v příznaku celá adresa.
@@ -66,17 +66,17 @@ Problém vzájemného vytlačování položek se stejným ukazatelem v RBP se ř
 ### 3.1 2-cestná rychlá vyrovnávací paměť
 U 2-cestné rychlé vyrovnávací paměti mohou být v paměti uloženy současně dvě položky se stejným ukazatelem. Při ponechání stejné celkové velikosti RVP se to projeví zmenšením počtu blokových rámců na polovinu bloků v RVP s přímým mapováním. Tudíž je třeba rozšířit adresový příznak o 1 bit.
 
-TODO: Draw.io návrh
+![Návrh 2-cestné RVP](./models/two_way_rvp.png)
 
 ### 3.2 4-cestná rychlá vyrovnávací paměť
 U 4-cestné rychlé vyrovnávací paměti mohou být v paměti uloženy současně čtyři položky se stejným ukazatel. Při ponechání stejné celkové velikosti RVP se to projeví zmenšením počtu blokových rámců na čtvrtinu bloku v RVP s přímým mapováním. Tudíž je třeba rozšířit adresový příznak o 2 bity.
 
-TODO: Draw.io návrh
+V rámci aplikace bude nutné posoudit, zda je rozsah paměti dostačující pro implementaci 4-cestné RVP.
 
 ### 4. Plně asociativní rychlá vyrovnávací paměť
 U plně asociativní rychlé vyrovnávací paměti může být jakákoliv položka v hlavní paměti uložena na jakoukoliv adresu v RVP. Adresa bloku RVP ztrácí význam a identita dat v RVP se určuje výhradně podle adresového příznaku. Tento druh RVP je v praxi nepoužitelný, neboť při hledání položky v RVP je nutné vyhledávat v celé paměti.
 
-TODO: Draw.io návrh
+![Návrh plně asociativní RVP](./models/full_rvp.png)
 
 # Zdroje
 [INP/2021 - Paměti](https://wis.fit.vutbr.cz/FIT/st/cfs.php.cs?file=%2Fcourse%2FINP-IT%2Flectures%2Finp2021_11pameti.pdf&cid=14003)
