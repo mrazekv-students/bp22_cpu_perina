@@ -1,16 +1,14 @@
 <!--
-    Main component, contains other components. 
-    TODO:
-        - Control buttons
-        - A lot
+    A main component containing application layout.
+    Most of layouting should be done here.
 !-->
 
 <template>
     <div class="horizontal-container">
         <div class="vertical-container control-container">
             <div class="horizontal-container button-container">
-                <control-button v-for="button in controlButtons" :key="button" :displayValue="button.display" :functionName="button.funcName"
-                    @button-clicked="OnButtonClicked"/>
+                <common-button v-for="button in commonButtons" :key="button" :displayValue="button.display" :functionName="button.funcName"
+                    class="control-button" @button-clicked="OnButtonClicked"/>
             </div>
             <div class="program-container">
                 <!-- TODO !-->
@@ -23,14 +21,14 @@
 </template>
 
 <script>
-import ControlButton from './common/ControlButton.vue'
+import CommonButton from './common/CommonButton.vue'
 export default {
     name: "TheLayout",
-    components: { ControlButton },
+    components: { CommonButton },
 
     data() {
         return {
-            controlButtons: [
+            commonButtons: [
                 {display: "|>", funcName: "start"},
                 {display: "|||", funcName: "stop"},
                 {display: "||", funcName: "pause"},
@@ -41,7 +39,7 @@ export default {
 
     methods: {
         OnButtonClicked(functionName) {
-            console.log("Button " + functionName + " clicked");
+            console.log("Button " + functionName + " clicked.");
         }
     }
 }
@@ -53,9 +51,12 @@ export default {
     height: 100%;
 }
 .button-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
     width: 100%;
     height: 10%;
-    justify-content: center;
 
     background: red;
 }

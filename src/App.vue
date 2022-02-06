@@ -40,4 +40,13 @@ body {
 .vertical-container {
     display: initial;
 }
+
+.control-button {
+    width: 4.5rem;
+    height: 4.5rem;
+    margin: 0.3rem;
+
+    font-size: 3rem;
+    font-weight: bold;
+}
 </style>
