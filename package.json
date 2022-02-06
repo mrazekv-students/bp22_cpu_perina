@@ -10,7 +10,9 @@
   },
   "dependencies": {
     "core-js": "^3.6.5",
+    "prismjs": "^1.26.0",
     "vue": "^3.0.0",
+    "vue-prism-editor": "^2.0.0-alpha.2",
     "vuex": "^4.0.0-0"
   },
   "devDependencies": {
