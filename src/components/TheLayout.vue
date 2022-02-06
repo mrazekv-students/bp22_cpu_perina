@@ -12,7 +12,7 @@
 </template>
 
 <script>
-import ControlButtonRow from './controls/ControlButtonRow.vue'
+import ControlButtonRow from './common/ControlButtonRow.vue'
 export default {
     name: "TheLayout",
     components: { ControlButtonRow },
