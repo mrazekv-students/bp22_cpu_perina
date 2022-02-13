@@ -11,10 +11,8 @@
 import { PrismEditor } from 'vue-prism-editor';
 import 'vue-prism-editor/dist/prismeditor.min.css';
 // Highlighting library: https://prismjs.com/
-import { highlight, languages } from 'prismjs/components/prism-core';
-import 'prismjs/components/prism-clike';
-import 'prismjs/components/prism-javascript';
-import 'prismjs/themes/prism-tomorrow.css';
+import Prism from 'prismjs/components/prism-core';
+import 'prismjs/themes/prism-dark.css'; // TODO: Study and create my own
 // Compiler
 import startCompilation from '@/scripts/Compiler.js';
 export default {
@@ -31,7 +29,12 @@ export default {
 
     methods: {
         HighlightCode(code) {
-            return highlight(code, languages.js);
+            // TODO: Define all highlighting, move to its own file
+            Prism.languages.bp22 = {
+                'operator': /\b(?:HALT|NEGATE|ACCDEC|ACCINC|NOP|OUTP|INP|MLOAD|DLOAD|ILOAD|DSTORE|ISTORE|BRANCH|BRZERO|BRPOS|BRNEG|MADD|IJUMP|LABEL)\b/i,
+            };
+
+            return Prism.highlight(code, Prism.languages.bp22);
         },
         ValidateProgram() {
             this.instructionList = [];
