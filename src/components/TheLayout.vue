@@ -12,11 +12,21 @@
             </div>
             <div class="program-container">
                 <!-- TODO: Define highlighting !-->
-                <code-editor />
+                <code-editor ref="codeEditor"/>
             </div>
         </div>
         <div class="model-container">
             <!-- TODO !-->
+            <!-- TEST: TEST buttons !-->
+            <div class="test-button" @click="$refs.codeEditor.ValidateProgram()">
+                Validate
+            </div>
+            <div class="test-button" @click="$refs.codeEditor.GetInstruction(5)">
+                Get instruction
+            </div>
+            <div class="test-button" @click="$refs.codeEditor.GetLabel('test')">
+                Get label
+            </div>
         </div>
     </div>
 </template>
@@ -42,7 +52,7 @@ export default {
     methods: {
         OnButtonClicked(functionName) {
             console.log("Button " + functionName + " clicked.");
-        }
+        },
     }
 }
 </script>
@@ -64,7 +74,7 @@ export default {
 }
 .program-container {
     width: 100%;
-    height: 90%;
+    height: 80%;
 
     background: darkslategray;
 }
@@ -82,5 +92,11 @@ export default {
 
     font-size: 3rem;
     font-weight: bold;
+}
+.test-button {
+    width: 6rem;
+    height: 3rem;
+    margin: 0.2rem;
+    background: black;
 }
 </style>

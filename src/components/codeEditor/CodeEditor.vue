@@ -15,7 +15,8 @@ import { highlight, languages } from 'prismjs/components/prism-core';
 import 'prismjs/components/prism-clike';
 import 'prismjs/components/prism-javascript';
 import 'prismjs/themes/prism-tomorrow.css';
-
+// Compiler
+import startCompilation from '@/scripts/Compiler.js';
 export default {
     name: "CodeEditor",
     components: { PrismEditor },
@@ -23,6 +24,8 @@ export default {
     data() {
         return {
             code: "",
+            instructionList: [],
+            labelDict: {}
         }
     },
 
@@ -31,16 +34,35 @@ export default {
             return highlight(code, languages.js);
         },
         ValidateProgram() {
-            // TODO: Validates syntax and semantics of program in code editor (this.code)
-            // TODO: Populates instructionsDict and labelDict
+            this.instructionList = [];
+            this.labelDict = {}
+
+            var result = startCompilation(this.code, this.instructionList);
+
+            // Error
+            if (result.result) {
+                console.error("Error " + result.result + " on instruction " + result.instructionNumber + ": " + result.message);
+                // TODO: Show error for user
+            }
+            else {
+                // Populate labelDict
+                for (var i in this.instructionList) {
+                    if (this.instructionList[i].instruction == "LABEL") {
+                        this.labelDict[this.instructionList[i].label] = i;
+                    }
+                }
+
+                console.log(this.instructionList);
+                console.log(this.labelDict);
+            }
         },
         GetInstruction(address) {
-            // TODO: Gets instruction at address
-            console.log(address);
+            console.log(this.instructionList[address]);
+            return this.instructionList[address];
         },
         GetLabel(label) {
-            // TODO: Gets address of label
-            console.log(label);
+            console.log(this.labelDict[label]);
+            return this.labelDict[label];
         }
     }
 }

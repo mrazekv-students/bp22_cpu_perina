@@ -6,3 +6,4 @@
 
 ## Vue.js tutorials
 https://stackoverflow.com/questions/55316490/vue-best-practice-for-calling-a-method-in-a-child-component
+https://pietschsoft.com/post/2015/09/05/javascript-basics-how-to-create-a-dictionary-with-keyvalue-pairs
