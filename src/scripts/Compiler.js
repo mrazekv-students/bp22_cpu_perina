@@ -22,15 +22,14 @@ function startCompilation(code, instructionList) {
     return result;
 }
 
-// 
+// Instruction switch
 function processInstruction(codeList, instructionList) {
     var result = { result: 0 };
     var instruction = codeList.pop();
 
     // Check if EOL
-    var instObject = {str: instruction};
-    var isNewLine = checkNewLine(instObject);
-    instruction = instObject.str;
+    var isNewLine = checkNewLine(instruction);
+    if (isNewLine) instruction.slice(0, -1);
 
     switch (instruction.toUpperCase()) {
         case Instruction.HALT.name:
@@ -54,59 +53,59 @@ function processInstruction(codeList, instructionList) {
             break;
 
         case Instruction.OUTP.name:
-            // Address
+            result = processAddressInstrution(Instruction.OUTP.name, isNewLine, codeList, instructionList);
             break;
 
         case Instruction.INP.name:
-            // Address
+            result = processAddressInstrution(Instruction.INP.name, isNewLine, codeList, instructionList);
             break;
 
         case Instruction.MLOAD.name:
-            // Value
+            result = processValueInstruction(Instruction.MLOAD.name, isNewLine, codeList, instructionList);
             break;
 
         case Instruction.DLOAD.name:
-            // Address
+            result = processAddressInstrution(Instruction.DLOAD.name, isNewLine, codeList, instructionList);
             break;
 
         case Instruction.ILOAD.name:
-            // Address
+            result = processAddressInstrution(Instruction.ILOAD.name, isNewLine, codeList, instructionList);
             break;
 
         case Instruction.DSTORE.name:
-            // Address
+            result = processAddressInstrution(Instruction.DSTORE.name, isNewLine, codeList, instructionList);
             break;
 
         case Instruction.ISTORE.name:
-            // Address
+            result = processAddressInstrution(Instruction.ISTORE.name, isNewLine, codeList, instructionList);
             break;
 
         case Instruction.BRANCH.name:
-            // Label
+            result = processLabelInstruction(Instruction.BRANCH.name, isNewLine, codeList, instructionList);
             break;
 
         case Instruction.BRZERO.name:
-            // Label
+            result = processLabelInstruction(Instruction.BRZERO.name, isNewLine, codeList, instructionList);
             break;
 
         case Instruction.BRPOS.name:
-            // Label
+            result = processLabelInstruction(Instruction.BRPOS.name, isNewLine, codeList, instructionList);
             break;
 
         case Instruction.BRNEG.name:
-            // Label
+            result = processLabelInstruction(Instruction.BRNEG.name, isNewLine, codeList, instructionList);
             break;
 
         case Instruction.MADD.name:
-            // Address
+            result = processAddressInstrution(Instruction.MADD.name, isNewLine, codeList, instructionList);
             break;
 
         case Instruction.IJUMP.name:
-            // Label
+            result = processLabelInstruction(Instruction.IJUMP.name, isNewLine, codeList, instructionList);
             break;
 
         case Instruction.LABEL.name:
-            // Label
+            result = processLabelInstruction(Instruction.LABEL.name, isNewLine, codeList, instructionList);
             break;
 
         default:
@@ -139,15 +138,12 @@ function processAddressInstrution(instruction, isNewLine, codeList, instructionL
         parameter = codeList.pop();
 
         // Check if EOL
-        var paramObject = {str: parameter};
-        isNewLine = checkNewLine(paramObject);
+        if (checkNewLine(parameter)) {
+            parameter = parameter.slice(0, -1);     // Remove '\n'
 
-        if (isNewLine) {
             // Check if address
-            var isAddress = checkAddress(paramObject);
-
-            if (isAddress) {
-                parameter = parseInt(paramObject.str);
+            if (checkAddress(parameter)) {
+                parameter = parseInt(parameter.substring(1));
                 instructionList.push({ instruction: instruction, address: parameter });
             }
             else
@@ -162,24 +158,66 @@ function processAddressInstrution(instruction, isNewLine, codeList, instructionL
     return result;
 }
 
-// Check if string ends with newLine
-// Removes newLine from string
-function checkNewLine(obj) {
-    var result = obj.str.endsWith("\n");
-    if (result) {
-        obj.str = obj.str.slice(0, -1);
+// Processes instruction with value parameter
+// Returns result object
+function processValueInstruction(instruction, isNewLine, codeList, instructionList) {
+    result = { result: 0 };
+
+    if (!isNewLine) {
+        parameter = codeList.pop();
+
+        // Check if EOL
+        if (checkNewLine(parameter)) {
+            parameter = parameter.slice(0, -1);     // Remove '\n'
+
+            // Check if value
+            if (isNumber(parameter)) {
+                parameter = parseInt(parameter);
+                instructionList.push({ instruction: instruction, value: parameter });
+            }
+            else
+                result = { result: ERROR_PARAM, message: "Incorrect parameter format"};
+        }
+        else
+            result = { result: ERROR_NL, message: "Parameter must end with new line" };
     }
+    else
+        result = { result: ERROR_MISSING_PARAM, message: "Missing parameter"};
+
     return result;
 }
 
-// Checks if string is syntax valid address
-// Removes '@' char from the beginning
-function checkAddress(obj) {
-    var result = obj.str.startsWith("@");
-    if (result) {
-        obj.str = obj.str.substring(1);
+// Processes instruction with label parameter
+// Returns result object
+function processLabelInstruction(instruction, isNewLine, codeList, instructionList) {
+    result = { result: 0 };
 
-        result = isNumber(obj.str);
+    if (!isNewLine) {
+        parameter = codeList.pop();
+
+        // Check if EOL
+        if (checkNewLine(parameter)) {
+            parameter = parameter.slice(0, -1);     // Remove '\n'
+            instructionList.push({ instruction: instruction, label: parameter })
+        }
+        else
+            result = { result: ERROR_NL, message: "Parameter must end with new line" };
+    }
+    else
+        result = { result: ERROR_MISSING_PARAM, message: "Missing parameter"};
+}
+
+// Check if string ends with newLine
+function checkNewLine(str) {
+    return str.endsWith("\n");
+}
+
+// Checks if string is syntax valid address
+function checkAddress(str) {
+    var result = str.startsWith("@");
+    if (result) {
+        str = str.substring(1);
+        result = isNumber(str);
     }
     return result
 }
