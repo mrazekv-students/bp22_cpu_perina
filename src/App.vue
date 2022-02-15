@@ -36,8 +36,10 @@ body {
 
 .horizontal-container {
     display: flex;
+    flex-direction: row;
 }
 .vertical-container {
-    display: initial;
+    display: flex;
+    flex-direction: column;
 }
 </style>

@@ -11,13 +11,15 @@
                     class="control-button" @button-clicked="OnButtonClicked"/>
             </div>
             <div class="program-container">
-                <!-- TODO: Define highlighting !-->
                 <code-editor ref="codeEditor"/>
             </div>
         </div>
         <div class="model-container">
-            <!-- TODO !-->
-            <!-- TEST: TEST buttons !-->
+            <processor ref="processor"/>
+        </div>
+
+        <!-- TEST: TEST buttons !-->
+        <div class="vertical-container">
             <div class="test-button" @click="$refs.codeEditor.ValidateProgram()">
                 Validate
             </div>
@@ -32,11 +34,12 @@
 </template>
 
 <script>
-import CommonButton from './common/CommonButton.vue'
-import CodeEditor from './codeEditor/CodeEditor.vue'
+import CommonButton from './common/CommonButton.vue';
+import CodeEditor from './codeEditor/CodeEditor.vue';
+import Processor from './model/Processor.vue';
 export default {
     name: "TheLayout",
-    components: { CommonButton, CodeEditor },
+    components: { CommonButton, CodeEditor, Processor },
 
     data() {
         return {
@@ -79,6 +82,10 @@ export default {
     background: darkslategray;
 }
 .model-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    
     width: 70%;
     height: 100%;
 
