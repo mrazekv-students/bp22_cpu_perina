@@ -19,16 +19,15 @@ export default {
             type: String,
             required: true,
         },
-        functionName: {
-            type: String,
+        function: {
+            type: Function,
             required: true,
         },
     },
 
     methods: {
         Click() {
-            console.log("Button " + this.functionName + " clicked.");
-            this.$emit("button-clicked", this.functionName);
+            this.function();
         }
     }
 }

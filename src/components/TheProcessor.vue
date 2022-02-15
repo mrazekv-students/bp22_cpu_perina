@@ -1,14 +1,14 @@
 <!--
-    A main component containing application layout.
-    Most of layouting should be done here.
+    The main component serving as core/processor of application
+    Communicates with other components and runs simulation
+    Contains application layout, most of general layouting should be done here
 !-->
 
 <template>
     <div class="horizontal-container">
         <div class="vertical-container control-container">
             <div class="horizontal-container button-container">
-                <common-button v-for="button in commonButtons" :key="button" :displayValue="button.display" :functionName="button.funcName"
-                    class="control-button" @button-clicked="OnButtonClicked"/>
+                <common-button v-for="button in commonButtons" :key="button" :displayValue="button.display" :function="button.function" class="control-button"/>
             </div>
             <div class="program-container">
                 <code-editor ref="codeEditor"/>
@@ -37,6 +37,7 @@
 import CommonButton from './common/CommonButton.vue';
 import CodeEditor from './codeEditor/CodeEditor.vue';
 import Processor from './model/Processor.vue';
+import Cpu from '@/scripts/Cpu.js';
 export default {
     name: "TheLayout",
     components: { CommonButton, CodeEditor, Processor },
@@ -44,18 +45,35 @@ export default {
     data() {
         return {
             commonButtons: [
-                {display: "|>", funcName: "start"},
-                {display: "|||", funcName: "stop"},
-                {display: "||", funcName: "pause"},
-                {display: ">", funcName: "step"}
-            ]
+                { display: "|>", function: this.StartProgram },
+                { display: "|||", function: this.StopProgram },
+                { display: "||", function: this.PauseProgram },
+                { display: ">", function: this.StepProgram }
+            ],
+            processor: null,
+            instructionPointer: 0,
+            accumulator: { value: 0 }
         }
     },
 
+    // TODO: Temp
+    created() {
+        this.processor = new Cpu(null, this.accumulator)
+    },
+
     methods: {
-        OnButtonClicked(functionName) {
-            console.log("Button " + functionName + " clicked.");
+        StartProgram() {
+            console.log("Start program");
         },
+        StopProgram() {
+            console.log("Stop program");
+        },
+        PauseProgram() {
+            console.log("Pause program");
+        },
+        StepProgram() {
+            console.log("Step in program");
+        }
     }
 }
 </script>
