@@ -1,12 +1,12 @@
 <template>
-    <the-layout style="width: 100%; height: 100%;"/>
+    <the-processor style="width: 100%; height: 100%;"/>
 </template>
 
 <script>
-import TheLayout from './components/TheLayout.vue'
+import TheProcessor from './components/TheProcessor.vue'
 export default {
     name: 'App',
-    components: { TheLayout }
+    components: { TheProcessor }
 }
 </script>
 
