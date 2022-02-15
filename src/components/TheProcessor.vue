@@ -15,7 +15,7 @@
             </div>
         </div>
         <div class="model-container">
-            <processor ref="processor"/>
+            <ram :data="[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]" />
         </div>
 
         <!-- TEST: TEST buttons !-->
@@ -34,13 +34,15 @@
 </template>
 
 <script>
+import Ram from './memory/Ram.vue';
+
 import CommonButton from './common/CommonButton.vue';
 import CodeEditor from './codeEditor/CodeEditor.vue';
-import Processor from './model/Processor.vue';
+//import Processor from './model/Processor.vue';
 import Cpu from '@/scripts/Cpu.js';
 export default {
     name: "TheLayout",
-    components: { CommonButton, CodeEditor, Processor },
+    components: { CommonButton, CodeEditor, Ram },
 
     data() {
         return {
