@@ -10,10 +10,16 @@
   },
   "dependencies": {
     "core-js": "^3.6.5",
+    "prismjs": "^1.26.0",
     "vue": "^3.0.0",
+    "vue-prism-editor": "^2.0.0-alpha.2",
     "vuex": "^4.0.0-0"
   },
+  "optionalDependencies": {
+    "fsevents": "2.1.2"
+  },
   "devDependencies": {
+    "@types/prismjs": "^1.26.0",
     "@vue/cli-plugin-babel": "~4.5.0",
     "@vue/cli-plugin-eslint": "~4.5.0",
     "@vue/cli-plugin-unit-jest": "~4.5.0",
