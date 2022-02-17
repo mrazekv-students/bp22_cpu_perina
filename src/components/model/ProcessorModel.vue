@@ -1,5 +1,5 @@
 <!--
-    A processor component
+    Visual only component for processor
 !-->
 
 <template>
@@ -11,13 +11,10 @@
 
 <script>
 export default {
-    name: "Processor",
-
-    data() {
-        return {
-            currentInstruction: "NOP",
-        }
-    },
+    name: "ProcessorModel",
+    props: {
+        currentInstruction: { type: String, default: "NOP" }
+    }
 }
 </script>
 
