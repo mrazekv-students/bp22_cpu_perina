@@ -21,7 +21,7 @@
 
         <!-- TEST: TEST buttons !-->
         <div class="vertical-container">
-            <div class="test-button" @click="$refs.codeEditor.ValidateProgram()">
+            <div class="test-button" @click="$refs.codeEditor.CompileProgram()">
                 Validate
             </div>
             <div class="test-button" @click="$refs.codeEditor.GetInstruction(5)">

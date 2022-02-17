@@ -31,6 +31,7 @@ export default {
     },
 
     created() {
+        eventHub.compileProgram = this.CompileProgram;
         eventHub.getInstruction = this.GetInstruction;
         eventHub.getLabel = this.GetLabel;
     },
@@ -44,35 +45,34 @@ export default {
 
             return Prism.highlight(code, Prism.languages.bp22);
         },
-        ValidateProgram() {
+        
+        CompileProgram() {
             this.instructionList = [];
-            this.labelDict = {}
+            this.labelDict = {};
 
-            var result = startCompilation(this.code, this.instructionList);
-
-            // Error
-            if (result.result) {
-                console.error("Error " + result.result + " on instruction " + result.instructionNumber + ": " + result.message);
+            try {
+                startCompilation(this.code, this.instructionList);
+            }
+            catch (e) {
                 // TODO: Show error for user
+                console.error(e);
+                return;
             }
-            else {
-                // Populate labelDict
-                for (var i in this.instructionList) {
-                    if (this.instructionList[i].instruction == "LABEL") {
-                        this.labelDict[this.instructionList[i].label] = i;
-                    }
+            
+            // Populate labelDict
+            for (var i in this.instructionList) {
+                if (this.instructionList[i].instruction == "LABEL") {
+                    this.labelDict[this.instructionList[i].label] = i;
                 }
-
-                console.log(this.instructionList);
-                console.log(this.labelDict);
             }
+
+            console.log(this.instructionList);
+            console.log(this.labelDict);
         },
         GetInstruction(address) {
-            console.log(this.instructionList[address]);
             return this.instructionList[address];
         },
         GetLabel(label) {
-            console.log(this.labelDict[label]);
             return this.labelDict[label];
         }
     }

@@ -17,5 +17,5 @@ BRZERO test
 BRPOS test
 BRNEG test
 MADD @0006
-IJUMP test
+IJUMP @0007
 LABEL test

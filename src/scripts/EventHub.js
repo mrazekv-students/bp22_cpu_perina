@@ -2,6 +2,7 @@ let instance;
 
 // Class used for comunication between components
 class EventHub {
+    compileProgram;
     getInstruction;
     getLabel;
     memWrite;
