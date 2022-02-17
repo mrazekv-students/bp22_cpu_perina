@@ -13,8 +13,9 @@ import 'vue-prism-editor/dist/prismeditor.min.css';
 // Highlighting library: https://prismjs.com/
 import Prism from 'prismjs/components/prism-core';
 import 'prismjs/themes/prism-dark.css'; // TODO: Study and create my own
-// Compiler
+
 import startCompilation from '@/scripts/Compiler.js';
+import eventHub from '@/scripts/EventHub.js';
 export default {
     name: "CodeEditor",
     components: { PrismEditor },
@@ -23,8 +24,15 @@ export default {
         return {
             code: "",
             instructionList: [],
-            labelDict: {}
+            labelDict: {},
+
+            eventHub: eventHub
         }
+    },
+
+    created() {
+        eventHub.getInstruction = this.GetInstruction;
+        eventHub.getLabel = this.GetLabel;
     },
 
     methods: {

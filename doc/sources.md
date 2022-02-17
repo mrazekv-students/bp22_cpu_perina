@@ -9,3 +9,4 @@ https://stackoverflow.com/questions/55316490/vue-best-practice-for-calling-a-met
 https://pietschsoft.com/post/2015/09/05/javascript-basics-how-to-create-a-dictionary-with-keyvalue-pairs
 https://github.com/egoist/vue-prism-component/issues/1
 https://stackoverflow.com/questions/42368797/how-can-i-convert-an-integer-to-hex-with-a-fix-length-in-javascript
+https://www.patterns.dev/posts/classic-design-patterns/

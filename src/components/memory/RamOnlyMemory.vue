@@ -8,15 +8,22 @@
 </template>
 
 <script>
-import RamModel from '../model/RamModel.vue'
+import RamModel from '../model/RamModel.vue';
+import eventHub from '@/scripts/EventHub.js';
 export default {
     name: "RamOnlyMemory",
     components: { RamModel },
 
     data() {
         return {
-            ramData: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]
+            ramData: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16],
+            eventHub: eventHub
         }
+    },
+
+    created() {
+        eventHub.memWrite = this.Write;
+        eventHub.memRead = this.Read;
     },
 
     methods: {

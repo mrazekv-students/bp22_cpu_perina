@@ -40,6 +40,7 @@ import CodeEditor from './codeEditor/CodeEditor.vue';
 import RamOnlyMemory from './memory/RamOnlyMemory.vue';
 import ProcessorModel from './model/ProcessorModel.vue';
 import Cpu from '@/scripts/Cpu.js';
+import eventHub from '@/scripts/EventHub.js';
 export default {
     name: "TheLayout",
     components: { CommonButton, CodeEditor, RamOnlyMemory, ProcessorModel },
@@ -54,11 +55,12 @@ export default {
             ],
             processor: null,
             instructionPointer: 0,
-            accumulator: { value: 0 }
+            accumulator: { value: 0 },
+
+            eventHub: eventHub
         }
     },
 
-    // TODO: Temp
     created() {
         this.processor = new Cpu(null, this.accumulator)
     },
