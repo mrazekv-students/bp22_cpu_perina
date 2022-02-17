@@ -15,7 +15,6 @@ import Prism from 'prismjs/components/prism-core';
 import 'prismjs/themes/prism-dark.css'; // TODO: Study and create my own
 
 import startCompilation from '@/scripts/Compiler.js';
-import eventHub from '@/scripts/EventHub.js';
 export default {
     name: "CodeEditor",
     components: { PrismEditor },
@@ -25,15 +24,11 @@ export default {
             code: "",
             instructionList: [],
             labelDict: {},
-
-            eventHub: eventHub
         }
     },
 
     created() {
-        eventHub.compileProgram = this.CompileProgram;
-        eventHub.getInstruction = this.GetInstruction;
-        eventHub.getLabel = this.GetLabel;
+        this.$emit("RegisterCompiler", { compile: this.CompileProgram, getInstruction: this.GetInstruction, getLabel: this.GetLabel })
     },
 
     methods: {

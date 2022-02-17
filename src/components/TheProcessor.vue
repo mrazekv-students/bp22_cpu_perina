@@ -11,12 +11,12 @@
                 <common-button v-for="button in commonButtons" :key="button" :displayValue="button.display" :function="button.function" class="control-button"/>
             </div>
             <div class="program-container">
-                <code-editor ref="codeEditor"/>
+                <code-editor @RegisterCompiler="RegisterCompiler"/>
             </div>
         </div>
         <div class="vertical-container model-container">
             <processor-model />
-            <ram-only-memory ref="ramOnlyMemory"/>
+            <ram-only-memory @RegisterMemory="RegisterMemory"/>
         </div>
 
         <!-- TEST: TEST buttons !-->
@@ -40,7 +40,6 @@ import CodeEditor from './codeEditor/CodeEditor.vue';
 import RamOnlyMemory from './memory/RamOnlyMemory.vue';
 import ProcessorModel from './model/ProcessorModel.vue';
 import Cpu from '@/scripts/Cpu.js';
-import eventHub from '@/scripts/EventHub.js';
 export default {
     name: "TheLayout",
     components: { CommonButton, CodeEditor, RamOnlyMemory, ProcessorModel },
@@ -53,11 +52,12 @@ export default {
                 { display: "||", function: this.PauseProgram },
                 { display: ">", function: this.StepProgram }
             ],
+            compiler: null,
+            memory: null,
             processor: null,
-            instructionPointer: 0,
-            accumulator: { value: 0 },
 
-            eventHub: eventHub
+            instructionPointer: 0,
+            accumulator: { value: 0 }
         }
     },
 
@@ -68,6 +68,7 @@ export default {
     methods: {
         StartProgram() {
             console.log("Start program");
+            this.compiler.compile();
         },
         StopProgram() {
             console.log("Stop program");
@@ -77,6 +78,13 @@ export default {
         },
         StepProgram() {
             console.log("Step in program");
+        },
+
+        RegisterCompiler(compiler) {
+            this.compiler = compiler;
+        },
+        RegisterMemory(memory) {
+            this.memory = memory;
         }
     }
 }
