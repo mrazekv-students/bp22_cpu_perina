@@ -99,7 +99,7 @@ function processInstruction(codeList, instructionList) {
             break;
 
         case Instruction.IJUMP.name:
-            result = processLabelInstruction(Instruction.IJUMP.name, codeList.shift(), instructionList);
+            result = processAddressInstrution(Instruction.IJUMP.name, codeList.shift(), instructionList);
             break;
 
         case Instruction.LABEL.name:
