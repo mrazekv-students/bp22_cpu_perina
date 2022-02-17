@@ -54,20 +54,17 @@ export default {
             ],
             compiler: null,
             memory: null,
-            processor: null,
+            cpu: null,
 
             instructionPointer: 0,
             accumulator: { value: 0 }
         }
     },
 
-    created() {
-        this.processor = new Cpu(null, this.accumulator)
-    },
-
     methods: {
         StartProgram() {
             console.log("Start program");
+            this.cpu = new Cpu(this.memory, this.accumulator);
             this.compiler.compile();
         },
         StopProgram() {

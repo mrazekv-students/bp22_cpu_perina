@@ -2,8 +2,6 @@
 
 import Instruction from "./Instruction";
 
-const ERROR_UNKNOWN = 20;
-
 export default class Cpu {
     constructor(memory, acc) {
         this.memory = memory;
@@ -11,8 +9,8 @@ export default class Cpu {
     }
 
     execute(instruction) {
-        var result = { result: 0, nextInstruction: true };
-
+        var result;
+        
         switch (instruction.instruction) {
             case Instruction.HALT.name:
                 result = this._executeHalt();
@@ -31,7 +29,7 @@ export default class Cpu {
                 break;
     
             case Instruction.NOP.name:
-                result = { result: 0, nextInstruction: true };
+                result = true;
                 break;
     
             case Instruction.OUTP.name:
@@ -87,124 +85,123 @@ export default class Cpu {
                 break;
     
             case Instruction.LABEL.name:
-                result = { result: 0, nextInstruction: true };
+                result = true;
                 break;
     
             default:
-                result = { result: ERROR_UNKNOWN, message: "Unknown instruction" };
-                break;
+                throw Error("Unknown instruction");
         }
     
         return result;
     }
 
     // Execute HALT instruction
-    // Returns result object with nextInstruction = false (stop)
+    // Returns nextInstruction = false (stop)
     _executeHalt() {
-        return { result: 0, nextInstruction: false };
+        return false;
     }
 
     // Execute NEGATE instruction
-    // Returns result object with nextInstruction = true (next instruction)
+    // Returns nextInstruction = true (next instruction)
     _executeNegate() {
         this.acc.value = -this.acc.value;
-        return { result: 0, nextInstruction: true };
+        return true;
     }
 
     // Execute ACCDEC instruction
     _executeAccdec() {
         this.acc.value -= 1;
-        return { result: 0, nextInstruction: true };
+        return true;
     }
     
     // Execute ACCINC instruction
     _executeAccinc() {
         this.acc.value += 1;
-        return { result: 0, nextInstruction: true };
+        return true;
     }
 
     // Execute OUTP instruction
     _executeOutp() {
         // TODO
-        return { result: 0, nextInstruction: true };
+        return true;
     }
 
     // Execute INP instruction
     _executeInp() {
         // TODO
-        return { result: 0, nextInstruction: true };
+        return true;
     }
 
     // Execute MLOAD instruction
     _executeMload(value) {
         this.acc.value = value;
-        return { result: 0, nextInstruction: true };
+        return true;
     }
 
     // Execute DLOAD instruction
     _executeDload(address) {
-        this.acc.value = this.memory.load(address);
-        return { result: 0, nextInstruction: true };
+        this.acc.value = this.memory.read(address);
+        return true;
     }
 
     // Execute ILOAD instruction
     _executeIload(address) {
-        var valueAddress = this.memory.load(address);
-        this.acc.value = this.memory.load(valueAddress);
-        return { result: 0, nextInstruction: true };
+        var valueAddress = this.memory.read(address);
+        this.acc.value = this.memory.read(valueAddress);
+        return true;
     }
 
     // Execute DSTORE instruction
     _executeDstore(address) {
-        this.memory.store(this.acc.value, address);
-        return { result: 0, nextInstruction: true };
+        this.memory.write(this.acc.value, address);
+        return true;
     }
 
     // Execute ISTORE instruction
     _executeIstore(address) {
-        var valueAddress = this.memory.load(address);
-        this.memory.store(this.acc.value, valueAddress);
-        return { result: 0, nextInstruction: true };
+        var valueAddress = this.memory.read(address);
+        this.memory.write(this.acc.value, valueAddress);
+        return true;
     }
 
     // Execute BRANCH instruction
     _executeBranch(label) {
-        return { result: 0, nextInstruction: label };
+        return label;
     }
 
     // Execute BRZERO instruction
     _executeBrzero(label) {
         if (this.acc.value == 0)
-            return { result: 0, nextInstruction: label };
+            return label;
         else
-            return { result: 0, nextInstruction: true };
+            return true;
     }
 
     // Execute BRPOS instruction
     _executeBrpos(label) {
         if (this.acc.value > 0)
-            return { result: 0, nextInstruction: label };
+            return label;
         else
-            return { result: 0, nextInstruction: true };
+            return true;
     }
 
     // Execute BRNEG instruction
     _executeBrneg(label) {
         if (this.acc.value < 0)
-            return { result: 0, nextInstruction: label };
+            return label;
         else
-            return { result: 0, nextInstruction: true };
+            return true;
     }
 
     // Execute MADD instruction
     _executeMadd(address) {
-        this.acc.value += this.memory.load(address);
-        return { result: 0, nextInstruction: true };
+        this.acc.value += this.memory.read(address);
+        return true;
     }
 
     // Execute IJUMP instruction
     _executeIjump(address) {
-        var ip = this.memory.label(address);
-        return { result: 0, nextInstruction: ip };
+        var ip = this.memory.read(address);
+        return ip;
     }
 }
