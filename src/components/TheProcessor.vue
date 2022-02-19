@@ -8,14 +8,14 @@
     <div class="horizontal-container">
         <div class="vertical-container control-container">
             <div class="horizontal-container button-container">
-                <common-button v-for="button in commonButtons" :key="button" :displayValue="button.display" :function="button.function" class="control-button"/>
+                <common-button v-for="button in commonButtons" :key="button" :displayValue="button.display" :function="button.function" :disabled="button.disabled" class="control-button"/>
             </div>
             <div class="program-container">
                 <code-editor @RegisterCompiler="RegisterCompiler"/>
             </div>
         </div>
         <div class="vertical-container model-container">
-            <processor-model />
+            <processor-model :currentInstruction="instruction"/>
             <ram-only-memory @RegisterMemory="RegisterMemory"/>
         </div>
 
@@ -47,25 +47,42 @@ export default {
     data() {
         return {
             commonButtons: [
-                { display: "|>", function: this.StartProgram },
-                { display: "|||", function: this.StopProgram },
-                { display: "||", function: this.PauseProgram },
-                { display: ">", function: this.StepProgram }
+                { display: "|>", function: this.StartProgram, disabled: false },
+                { display: "|||", function: this.StopProgram, disabled: true },
+                { display: "||", function: this.PauseProgram, disabled: true},
+                { display: ">", function: this.ExecuteInstruction, disabled: true }
             ],
             compiler: null,
             memory: null,
             cpu: null,
 
             instructionPointer: 0,
-            accumulator: { value: 0 }
+            accumulator: { value: 0 },
+            instruction: { instruction: "" },
+
+            isCompiled: false
         }
     },
 
     methods: {
+        // Simulation control methods
         StartProgram() {
             console.log("Start program");
+
+            // Compile program
+            try {
+                this.compiler.compile();
+                this.ProgramCompiled();
+            }
+            catch (e) {
+                console.error("Compilation failed");
+                return;
+            }
+
+            // Create CPU
             this.cpu = new Cpu(this.memory, this.accumulator);
-            this.compiler.compile();
+
+            // TODO: Program loop
         },
         StopProgram() {
             console.log("Stop program");
@@ -73,15 +90,51 @@ export default {
         PauseProgram() {
             console.log("Pause program");
         },
-        StepProgram() {
-            console.log("Step in program");
+        ExecuteInstruction() {
+            if (this.isCompiled) {
+                try {
+                    this.instruction = this.compiler.getInstruction(this.instructionPointer);
+                    var result = this.cpu.execute(this.instruction);
+
+                    console.log(this.instruction);
+
+                    // Process result
+                    if (typeof(result) == "string") {
+                        this.instructionPointer = this.compiler.getLabel(result) + 1;
+                    }
+                    else if (typeof(result) == "number") {
+                        this.instructionPointer = result;
+                    }
+                    else if (result) {
+                        this.instructionPointer++;
+                    }
+                    else {
+                        console.log("Program halted");
+                        this.instructionPointer++;
+                    }
+                }
+                catch (e) {
+                    console.error("Execution failed");
+                    return;
+                }
+            }
+            else throw Error("Program is not compiled");
         },
 
+        // Component registration methods
         RegisterCompiler(compiler) {
             this.compiler = compiler;
         },
         RegisterMemory(memory) {
             this.memory = memory;
+        },
+
+        // Other methods
+        ProgramCompiled() {
+            this.commonButtons[1].disabled = false;
+            this.commonButtons[2].disabled = false;
+            this.commonButtons[3].disabled = false;
+            this.isCompiled = true;
         }
     }
 }

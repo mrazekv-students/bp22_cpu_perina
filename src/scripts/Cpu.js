@@ -8,6 +8,7 @@ export default class Cpu {
         this.acc = acc;
     }
 
+    // Executes instruction
     execute(instruction) {
         var result;
         
@@ -153,14 +154,14 @@ export default class Cpu {
 
     // Execute DSTORE instruction
     _executeDstore(address) {
-        this.memory.write(this.acc.value, address);
+        this.memory.write(address, this.acc.value);
         return true;
     }
 
     // Execute ISTORE instruction
     _executeIstore(address) {
         var valueAddress = this.memory.read(address);
-        this.memory.write(this.acc.value, valueAddress);
+        this.memory.write(valueAddress, this.acc.value);
         return true;
     }
 

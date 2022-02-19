@@ -51,13 +51,13 @@ export default {
             catch (e) {
                 // TODO: Show error for user
                 console.error(e);
-                return;
+                throw e;
             }
             
             // Populate labelDict
             for (var i in this.instructionList) {
                 if (this.instructionList[i].instruction == "LABEL") {
-                    this.labelDict[this.instructionList[i].label] = i;
+                    this.labelDict[this.instructionList[i].label] = parseInt(i);
                 }
             }
 
@@ -65,10 +65,14 @@ export default {
             console.log(this.labelDict);
         },
         GetInstruction(address) {
-            return this.instructionList[address];
+            if (address < this.instructionList.length)
+                return this.instructionList[address];
+            else throw RangeError("Invalid instruction address");
         },
         GetLabel(label) {
-            return this.labelDict[label];
+            if (label in this.labelDict)
+                return this.labelDict[label];
+            else throw RangeError("No such label");
         }
     }
 }
