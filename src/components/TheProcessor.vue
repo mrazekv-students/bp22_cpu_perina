@@ -15,7 +15,6 @@
             </div>
         </div>
         <div class="vertical-container model-container">
-            <processor-model :currentInstruction="instruction"/>
             <ram-only-memory @RegisterMemory="RegisterMemory"/>
         </div>
     </div>
@@ -29,14 +28,14 @@ const s_ended = "ended"
 
 import CommonButton from './common/CommonButton.vue';
 import CodeEditor from './codeEditor/CodeEditor.vue';
+//import TabsContainer from './TabsContainer.vue';
 import RamOnlyMemory from './memory/RamOnlyMemory.vue';
-import ProcessorModel from './model/ProcessorModel.vue';
 
 import Cpu from '@/scripts/Cpu.js';
 import ExecutionResult from '@/scripts/ExecutionResult.js'
 export default {
     name: "TheLayout",
-    components: { CommonButton, CodeEditor, RamOnlyMemory, ProcessorModel },
+    components: { CommonButton, CodeEditor, RamOnlyMemory },
 
     data() {
         return {

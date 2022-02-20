@@ -4,14 +4,17 @@
 !-->
 
 <template>
+    <processor-model />
     <ram-model :data="ramData" />
 </template>
 
 <script>
+import ProcessorModel from '../model/ProcessorModel.vue'
 import RamModel from '../model/RamModel.vue';
 export default {
     name: "RamOnlyMemory",
-    components: { RamModel },
+    components: { ProcessorModel, RamModel },
+    emits: ["RegisterMemory"],
 
     data() {
         return {

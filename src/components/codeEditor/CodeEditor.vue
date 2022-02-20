@@ -18,6 +18,7 @@ import startCompilation from '@/scripts/Compiler.js';
 export default {
     name: "CodeEditor",
     components: { PrismEditor },
+    emits: ["RegisterCompiler"],
 
     data() {
         return {
