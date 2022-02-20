@@ -10,3 +10,4 @@ https://pietschsoft.com/post/2015/09/05/javascript-basics-how-to-create-a-dictio
 https://github.com/egoist/vue-prism-component/issues/1
 https://stackoverflow.com/questions/42368797/how-can-i-convert-an-integer-to-hex-with-a-fix-length-in-javascript
 https://www.patterns.dev/posts/classic-design-patterns/
+https://www.codegrepper.com/code-examples/javascript/vue+js+sleep

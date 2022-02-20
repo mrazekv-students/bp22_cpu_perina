@@ -14,6 +14,8 @@ export default function startCompilation(code, instructionList) {
     while (codeList.length > 0) {
         processInstruction(codeList, instructionList);
     }
+    // Program end instruction
+    instructionList.push({ instruction: "END" });
 }
 
 // Instruction switch
@@ -98,7 +100,13 @@ function processInstruction(codeList, instructionList) {
             processLabelInstruction(Instruction.LABEL.name, codeList.shift(), instructionList);
             break;
 
+        // Skip empty strings
+        case "":
+            break;
+
         default:
+            console.log(instructionList);
+            console.log(codeList);
             throw Error("Unknown instruction at " + instructionNumber);
     }
 }

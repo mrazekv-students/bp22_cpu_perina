@@ -52,10 +52,14 @@ export default {
     cursor: pointer;
     transition: all .1s ease-in-out;
 }
-.common-button:hover {
+.common-button:enabled:hover {
     transform: scale(1.1);
 }
-.common-button:active {
+.common-button:enabled:active {
     transform: scale(.90);
 }
+.common-button:disabled {
+    background: rgb(160, 160, 160);
+}
+
 </style>

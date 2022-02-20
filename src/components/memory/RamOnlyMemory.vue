@@ -20,7 +20,7 @@ export default {
     },
 
     created() {
-        this.$emit("RegisterMemory", { write: this.Write, read: this.Read });
+        this.$emit("RegisterMemory", { write: this.Write, read: this.Read, reset: this.Reset });
     },
 
     methods: {
@@ -33,6 +33,9 @@ export default {
             if (address < this.ramData.length)
                 return this.ramData[address];
             else throw RangeError("Invalid memory address")
+        },
+        Reset() {
+            this.ramData = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
         }
     }
 }

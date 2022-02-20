@@ -18,28 +18,22 @@
             <processor-model :currentInstruction="instruction"/>
             <ram-only-memory @RegisterMemory="RegisterMemory"/>
         </div>
-
-        <!-- TEST: TEST buttons !-->
-        <div class="vertical-container">
-            <div class="test-button" @click="$refs.codeEditor.CompileProgram()">
-                Validate
-            </div>
-            <div class="test-button" @click="$refs.codeEditor.GetInstruction(5)">
-                Get instruction
-            </div>
-            <div class="test-button" @click="$refs.codeEditor.GetLabel('test')">
-                Get label
-            </div>
-        </div>
     </div>
 </template>
 
 <script>
+const s_notStarted = "notStarted";
+const s_started = "started";
+const s_halted = "halted";
+const s_ended = "ended"
+
 import CommonButton from './common/CommonButton.vue';
 import CodeEditor from './codeEditor/CodeEditor.vue';
 import RamOnlyMemory from './memory/RamOnlyMemory.vue';
 import ProcessorModel from './model/ProcessorModel.vue';
+
 import Cpu from '@/scripts/Cpu.js';
+import ExecutionResult from '@/scripts/ExecutionResult.js'
 export default {
     name: "TheLayout",
     components: { CommonButton, CodeEditor, RamOnlyMemory, ProcessorModel },
@@ -55,70 +49,81 @@ export default {
             compiler: null,
             memory: null,
             cpu: null,
+            currentState: s_notStarted,
 
             instructionPointer: 0,
             accumulator: { value: 0 },
             instruction: { instruction: "" },
-
-            isCompiled: false
         }
     },
 
     methods: {
         // Simulation control methods
-        StartProgram() {
+        async StartProgram() {
             console.log("Start program");
 
             // Compile program
-            try {
-                this.compiler.compile();
-                this.ProgramCompiled();
+            if (this.currentState == s_ended) {
+                this.ChangeSimulationState(s_notStarted);
             }
-            catch (e) {
-                console.error("Compilation failed");
-                return;
+            if (this.currentState == s_notStarted) {
+                try {
+                    this.compiler.compile();
+                }
+                catch (e) {
+                    console.error("Compilation failed");
+                    return;
+                }
+
+                // Create CPU
+                this.cpu = new Cpu(this.memory, this.accumulator);
             }
+            this.ChangeSimulationState(s_started);
 
-            // Create CPU
-            this.cpu = new Cpu(this.memory, this.accumulator);
-
-            // TODO: Program loop
+            // Program loop
+            while (this.currentState == s_started) {
+                this.ExecuteInstruction();
+                await this.Sleep(500);
+            }
         },
         StopProgram() {
             console.log("Stop program");
+            this.ChangeSimulationState(s_notStarted);
         },
         PauseProgram() {
             console.log("Pause program");
+            this.ChangeSimulationState(s_halted);
         },
         ExecuteInstruction() {
-            if (this.isCompiled) {
-                try {
-                    this.instruction = this.compiler.getInstruction(this.instructionPointer);
-                    var result = this.cpu.execute(this.instruction);
+            try {
+                this.instruction = this.compiler.getInstruction(this.instructionPointer);
+                var result = this.cpu.execute(this.instruction);
 
-                    console.log(this.instruction);
+                console.log(this.instruction);
 
-                    // Process result
-                    if (typeof(result) == "string") {
-                        this.instructionPointer = this.compiler.getLabel(result) + 1;
-                    }
-                    else if (typeof(result) == "number") {
-                        this.instructionPointer = result;
-                    }
-                    else if (result) {
-                        this.instructionPointer++;
-                    }
-                    else {
-                        console.log("Program halted");
-                        this.instructionPointer++;
-                    }
+                // Process result
+                if (result.result == ExecutionResult.NextInstruction) {
+                    this.instructionPointer++;
                 }
-                catch (e) {
-                    console.error("Execution failed");
-                    return;
+                else if (result.result == ExecutionResult.MoveToLabel) {
+                    this.instructionPointer = this.compiler.getLabel(result.label) + 1;
+                }
+                else if (result.result == ExecutionResult.MoveToAddress) {
+                    this.instructionPointer = result.address;
+                }
+                else if (result.result == ExecutionResult.HaltExecution) {
+                    console.log("Program halted");
+                    this.instructionPointer++;
+                    this.ChangeSimulationState(s_halted);
+                }
+                else if (result.result == ExecutionResult.EndExecution) {
+                    console.log("Program end");
+                    this.ChangeSimulationState(s_ended);
                 }
             }
-            else throw Error("Program is not compiled");
+            catch (e) {
+                console.error("Execution failed");
+            }
         },
 
         // Component registration methods
@@ -130,11 +135,50 @@ export default {
         },
 
         // Other methods
-        ProgramCompiled() {
-            this.commonButtons[1].disabled = false;
-            this.commonButtons[2].disabled = false;
-            this.commonButtons[3].disabled = false;
-            this.isCompiled = true;
+        ChangeSimulationState(state) {
+            switch (state) {
+                case s_notStarted:
+                    this.commonButtons[0].disabled = false;
+                    this.commonButtons[1].disabled = true;
+                    this.commonButtons[2].disabled = true;
+                    this.commonButtons[3].disabled = true;
+                    this.ResetState();
+                    break;
+
+                case s_started:
+                    this.commonButtons[0].disabled = true;
+                    this.commonButtons[1].disabled = false;
+                    this.commonButtons[2].disabled = false;
+                    this.commonButtons[3].disabled = true;
+                    break;
+
+                case s_halted:
+                    this.commonButtons[0].disabled = false;
+                    this.commonButtons[1].disabled = false;
+                    this.commonButtons[2].disabled = true;
+                    this.commonButtons[3].disabled = false;
+                    break;
+
+                case s_ended:
+                    this.commonButtons[0].disabled = false;
+                    this.commonButtons[1].disabled = true;
+                    this.commonButtons[2].disabled = true;
+                    this.commonButtons[3].disabled = true;
+                    break;
+            }
+
+            this.currentState = state;
+        },
+        Sleep(ms) {
+            return new Promise((resolve) => {
+                setTimeout(resolve, ms);
+            });
+        },
+        ResetState() {
+            this.instructionPointer = 0;
+            this.accumulator = { value: 0 };
+            this.instruction = { instruction: "" };
+            this.memory.reset();
         }
     }
 }

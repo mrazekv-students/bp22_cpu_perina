@@ -1,6 +1,7 @@
 // Class implementing assembler processor
 
-import Instruction from "./Instruction";
+import Instruction from "./Instruction.js";
+import ExecutionResult from "./ExecutionResult.js";
 
 export default class Cpu {
     constructor(memory, acc) {
@@ -9,6 +10,7 @@ export default class Cpu {
     }
 
     // Executes instruction
+    // Return result object
     execute(instruction) {
         var result;
         
@@ -30,7 +32,7 @@ export default class Cpu {
                 break;
     
             case Instruction.NOP.name:
-                result = true;
+                result = this._executeNop();
                 break;
     
             case Instruction.OUTP.name:
@@ -86,7 +88,12 @@ export default class Cpu {
                 break;
     
             case Instruction.LABEL.name:
-                result = true;
+                result = this._executeLabel();
+                break;
+
+            // Special program end instruction
+            case "END":
+                result = this._endExecution();
                 break;
     
             default:
@@ -97,112 +104,125 @@ export default class Cpu {
     }
 
     // Execute HALT instruction
-    // Returns nextInstruction = false (stop)
     _executeHalt() {
-        return false;
+        return { result: ExecutionResult.HaltExecution };
     }
 
     // Execute NEGATE instruction
-    // Returns nextInstruction = true (next instruction)
     _executeNegate() {
         this.acc.value = -this.acc.value;
-        return true;
+        return { result: ExecutionResult.NextInstruction };
     }
 
     // Execute ACCDEC instruction
     _executeAccdec() {
         this.acc.value -= 1;
-        return true;
+        return { result: ExecutionResult.NextInstruction };
     }
     
     // Execute ACCINC instruction
     _executeAccinc() {
         this.acc.value += 1;
-        return true;
+        return { result: ExecutionResult.NextInstruction };
+    }
+
+    // Execute NOP instruction
+    _executeNop() {
+        return { result: ExecutionResult.NextInstruction };
     }
 
     // Execute OUTP instruction
     _executeOutp() {
         // TODO
-        return true;
+        return { result: ExecutionResult.NextInstruction };
     }
 
     // Execute INP instruction
     _executeInp() {
         // TODO
-        return true;
+        return { result: ExecutionResult.NextInstruction };
     }
 
     // Execute MLOAD instruction
     _executeMload(value) {
         this.acc.value = value;
-        return true;
+        return { result: ExecutionResult.NextInstruction };
     }
 
     // Execute DLOAD instruction
     _executeDload(address) {
         this.acc.value = this.memory.read(address);
-        return true;
+        return { result: ExecutionResult.NextInstruction };
     }
 
     // Execute ILOAD instruction
     _executeIload(address) {
         var valueAddress = this.memory.read(address);
         this.acc.value = this.memory.read(valueAddress);
-        return true;
+        return { result: ExecutionResult.NextInstruction };
     }
 
     // Execute DSTORE instruction
     _executeDstore(address) {
         this.memory.write(address, this.acc.value);
-        return true;
+        return { result: ExecutionResult.NextInstruction };
     }
 
     // Execute ISTORE instruction
     _executeIstore(address) {
         var valueAddress = this.memory.read(address);
         this.memory.write(valueAddress, this.acc.value);
-        return true;
+        return { result: ExecutionResult.NextInstruction };
     }
 
     // Execute BRANCH instruction
     _executeBranch(label) {
-        return label;
+        return { result: ExecutionResult.MoveToLabel, label: label };
     }
 
     // Execute BRZERO instruction
     _executeBrzero(label) {
         if (this.acc.value == 0)
-            return label;
+            return { result: ExecutionResult.MoveToLabel, label: label };
         else
-            return true;
+            return { result: ExecutionResult.NextInstruction };
     }
 
     // Execute BRPOS instruction
     _executeBrpos(label) {
         if (this.acc.value > 0)
-            return label;
+            return { result: ExecutionResult.MoveToLabel, label: label };
         else
-            return true;
+            return { result: ExecutionResult.NextInstruction };
     }
 
     // Execute BRNEG instruction
     _executeBrneg(label) {
         if (this.acc.value < 0)
-            return label;
+            return { result: ExecutionResult.MoveToLabel, label: label };
         else
-            return true;
+            return { result: ExecutionResult.NextInstruction };
     }
 
     // Execute MADD instruction
     _executeMadd(address) {
         this.acc.value += this.memory.read(address);
-        return true;
+        return { result: ExecutionResult.NextInstruction };
     }
 
     // Execute IJUMP instruction
     _executeIjump(address) {
         var ip = this.memory.read(address);
-        return ip;
+        return { result: ExecutionResult.MoveToAddress, address: ip };
+    }
+
+    // Execute LABEL instruction
+    _executeLabel() {
+        return { result: ExecutionResult.NextInstruction };
+    }
+
+    // End program execution
+    _endExecution() {
+        return { result: ExecutionResult.EndExecution };
     }
 }
