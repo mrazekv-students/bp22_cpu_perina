@@ -13,7 +13,7 @@
 export default {
     name: "ProcessorModel",
     props: {
-        currentInstruction: { type: String, default: "NOP" }
+        currentInstruction: { type: String, default: "" }
     }
 }
 </script>

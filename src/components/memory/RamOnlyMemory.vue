@@ -4,19 +4,30 @@
 !-->
 
 <template>
+    <processor-model :currentInstruction="instruction"/>
     <ram-model :data="ramData" />
 </template>
 
 <script>
-import RamModel from '../model/RamModel.vue'
+import ProcessorModel from '../model/ProcessorModel.vue'
+import RamModel from '../model/RamModel.vue';
 export default {
     name: "RamOnlyMemory",
-    components: { RamModel },
+    components: { ProcessorModel, RamModel },
+    emits: ["RegisterMemory"],
+
+    props: {
+        instruction: { type: String }
+    },
 
     data() {
         return {
-            ramData: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]
+            ramData: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
         }
+    },
+
+    created() {
+        this.$emit("RegisterMemory", { write: this.Write, read: this.Read, reset: this.Reset });
     },
 
     methods: {
@@ -29,6 +40,9 @@ export default {
             if (address < this.ramData.length)
                 return this.ramData[address];
             else throw RangeError("Invalid memory address")
+        },
+        Reset() {
+            this.ramData = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
         }
     }
 }

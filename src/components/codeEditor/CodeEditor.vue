@@ -13,18 +13,23 @@ import 'vue-prism-editor/dist/prismeditor.min.css';
 // Highlighting library: https://prismjs.com/
 import Prism from 'prismjs/components/prism-core';
 import 'prismjs/themes/prism-dark.css'; // TODO: Study and create my own
-// Compiler
+
 import startCompilation from '@/scripts/Compiler.js';
 export default {
     name: "CodeEditor",
     components: { PrismEditor },
+    emits: ["RegisterCompiler"],
 
     data() {
         return {
             code: "",
             instructionList: [],
-            labelDict: {}
+            labelDict: {},
         }
+    },
+
+    created() {
+        this.$emit("RegisterCompiler", { compile: this.CompileProgram, getInstruction: this.GetInstruction, getLabel: this.GetLabel })
     },
 
     methods: {
@@ -36,36 +41,39 @@ export default {
 
             return Prism.highlight(code, Prism.languages.bp22);
         },
-        ValidateProgram() {
+        
+        CompileProgram() {
             this.instructionList = [];
-            this.labelDict = {}
+            this.labelDict = {};
 
-            var result = startCompilation(this.code, this.instructionList);
-
-            // Error
-            if (result.result) {
-                console.error("Error " + result.result + " on instruction " + result.instructionNumber + ": " + result.message);
+            try {
+                startCompilation(this.code, this.instructionList);
+            }
+            catch (e) {
                 // TODO: Show error for user
+                console.error(e);
+                throw e;
             }
-            else {
-                // Populate labelDict
-                for (var i in this.instructionList) {
-                    if (this.instructionList[i].instruction == "LABEL") {
-                        this.labelDict[this.instructionList[i].label] = i;
-                    }
+            
+            // Populate labelDict
+            for (var i in this.instructionList) {
+                if (this.instructionList[i].instruction == "LABEL") {
+                    this.labelDict[this.instructionList[i].label] = parseInt(i);
                 }
-
-                console.log(this.instructionList);
-                console.log(this.labelDict);
             }
+
+            console.log(this.instructionList);
+            console.log(this.labelDict);
         },
         GetInstruction(address) {
-            console.log(this.instructionList[address]);
-            return this.instructionList[address];
+            if (address < this.instructionList.length)
+                return this.instructionList[address];
+            else throw RangeError("Invalid instruction address");
         },
         GetLabel(label) {
-            console.log(this.labelDict[label]);
-            return this.labelDict[label];
+            if (label in this.labelDict)
+                return this.labelDict[label];
+            else throw RangeError("No such label");
         }
     }
 }
