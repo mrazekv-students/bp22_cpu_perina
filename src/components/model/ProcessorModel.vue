@@ -5,7 +5,7 @@
 <template>
     <div class="vertical-container processor">
         <div>CPU</div>
-        <div>[ {{ currentInstruction.instruction }} ]</div>
+        <div>[ {{ currentInstruction }} ]</div>
     </div>
 </template>
 
@@ -13,7 +13,7 @@
 export default {
     name: "ProcessorModel",
     props: {
-        currentInstruction: { default: { instruction: "" } }
+        currentInstruction: { type: String, default: "" }
     }
 }
 </script>

@@ -4,7 +4,7 @@
 !-->
 
 <template>
-    <processor-model />
+    <processor-model :currentInstruction="instruction"/>
     <ram-model :data="ramData" />
 </template>
 
@@ -15,6 +15,10 @@ export default {
     name: "RamOnlyMemory",
     components: { ProcessorModel, RamModel },
     emits: ["RegisterMemory"],
+
+    props: {
+        instruction: { type: String }
+    },
 
     data() {
         return {

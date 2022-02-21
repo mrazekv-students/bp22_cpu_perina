@@ -11,3 +11,5 @@ https://github.com/egoist/vue-prism-component/issues/1
 https://stackoverflow.com/questions/42368797/how-can-i-convert-an-integer-to-hex-with-a-fix-length-in-javascript
 https://www.patterns.dev/posts/classic-design-patterns/
 https://www.codegrepper.com/code-examples/javascript/vue+js+sleep
+https://learnvue.co/2019/12/building-reusable-components-in-vuejs-tabs/#introduction-to-reusable-components
+https://blog.devgenius.io/how-to-build-a-tab-component-with-vue-js-3-3c06ed335b3d

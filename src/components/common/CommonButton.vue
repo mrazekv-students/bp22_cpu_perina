@@ -23,7 +23,7 @@ export default {
         },
         disabled: {
             type: Boolean,
-            default: true
+            default: false
         }
     },
 
@@ -40,10 +40,7 @@ export default {
     display: flex;
     justify-content: center;
     align-items: center;
-
-    width: 2rem;
-    height: 2rem;
-
+    
     border: 0;
     box-shadow: none;
     background: rgb(82, 82, 82);
