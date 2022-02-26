@@ -105,8 +105,6 @@ function processInstruction(codeList, instructionList) {
             break;
 
         default:
-            console.log(instructionList);
-            console.log(codeList);
             throw Error("Unknown instruction at " + instructionNumber);
     }
 }
@@ -174,5 +172,5 @@ function isKeyword(str) {
 // Check is string is number
 // Source: https://stackoverflow.com/questions/1779013/check-if-string-contains-only-digits
 function isNumber(str) {
-    return /^\d+$/.test(str);
+    return /^-?\d+$/.test(str);
 }

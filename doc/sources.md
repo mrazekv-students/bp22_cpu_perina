@@ -13,3 +13,7 @@ https://www.patterns.dev/posts/classic-design-patterns/
 https://www.codegrepper.com/code-examples/javascript/vue+js+sleep
 https://learnvue.co/2019/12/building-reusable-components-in-vuejs-tabs/#introduction-to-reusable-components
 https://blog.devgenius.io/how-to-build-a-tab-component-with-vue-js-3-3c06ed335b3d
+
+## Testing with jest
+https://vuejs.org/guide/scaling-up/testing.html#unit-testing
+https://dev.to/songta17/vue-3-with-jest-and-vue-tests-utils-introduction-5h5i
