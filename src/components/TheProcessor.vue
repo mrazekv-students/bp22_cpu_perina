@@ -121,6 +121,7 @@ export default {
             }
             catch (e) {
                 console.error("Execution failed");
+                this.ChangeSimulationState(s_ended);
             }
         },
 

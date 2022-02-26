@@ -32,12 +32,12 @@ export default {
 
     methods: {
         Write(address, data) {
-            if (address < this.ramData.length)
+            if (address < this.ramData.length && address >= 0)
                 this.ramData[address] = data;
             else throw RangeError("Invalid memory address")
         },
         Read(address) {
-            if (address < this.ramData.length)
+            if (address < this.ramData.length && address >= 0)
                 return this.ramData[address];
             else throw RangeError("Invalid memory address")
         },

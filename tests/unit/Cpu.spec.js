@@ -384,8 +384,71 @@ describe("Cpu instruction tests", () => {
         // Execute & assert
         expect(cpu.execute(instructionList.shift())).toEqual({ result: ExecutionResult.NextInstruction });
     })
-})
+});
 
 describe("CPU instruction error tests", () => {
-    
+    test("Fail at unknown instruction", () => {
+        // Prepare
+        var acc = { value: 0 };
+        var instructionList = [{ instruction: "FAIL" }, { instruction: "END" }];
+
+        const wrapper = mount(RamOnlyMemory);
+        var memory = wrapper.emitted().RegisterMemory[0][0];
+        var cpu = new Cpu(memory, acc);
+
+        // Execute & assert
+        expect(() => cpu.execute(instructionList.shift())).toThrow();
+    })
+
+    test("Fail at invalid memory read, negative address", () => {
+        // Prepare
+        var acc = { value: 0 };
+        var instructionList = [{ instruction: "DLOAD", address: -2 }, { instruction: "END" }];
+
+        const wrapper = mount(RamOnlyMemory);
+        var memory = wrapper.emitted().RegisterMemory[0][0];
+        var cpu = new Cpu(memory, acc);
+
+        // Execute & assert
+        expect(() => cpu.execute(instructionList.shift())).toThrow();
+    })
+
+    test("Fail at invalid memory read, address out-of-bounds", () => {
+        // Prepare
+        var acc = { value: 0 };
+        var instructionList = [{ instruction: "DLOAD", address: 32 }, { instruction: "END" }];
+
+        const wrapper = mount(RamOnlyMemory);
+        var memory = wrapper.emitted().RegisterMemory[0][0];
+        var cpu = new Cpu(memory, acc);
+
+        // Execute & assert
+        expect(() => cpu.execute(instructionList.shift())).toThrow();
+    })
+
+    test("Fail at invalid memory write, negative address", () => {
+        // Prepare
+        var acc = { value: 10 };
+        var instructionList = [{ instruction: "DSTORE", address: -2 }, { instruction: "END" }];
+
+        const wrapper = mount(RamOnlyMemory);
+        var memory = wrapper.emitted().RegisterMemory[0][0];
+        var cpu = new Cpu(memory, acc);
+
+        // Execute & assert
+        expect(() => cpu.execute(instructionList.shift())).toThrow();
+    })
+
+    test("Fail at invalid memory write, address out-of-bounds", () => {
+        // Prepare
+        var acc = { value: 10 };
+        var instructionList = [{ instruction: "DSTORE", address: 32 }, { instruction: "END" }];
+
+        const wrapper = mount(RamOnlyMemory);
+        var memory = wrapper.emitted().RegisterMemory[0][0];
+        var cpu = new Cpu(memory, acc);
+
+        // Execute & assert
+        expect(() => cpu.execute(instructionList.shift())).toThrow();
+    })
 })
