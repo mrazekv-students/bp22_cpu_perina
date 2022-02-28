@@ -5,7 +5,7 @@
 <template>
     <div class="horizontal-container">
         <common-button :displayValue="'RAM-Only Memory'" :function="() => ChangeCurrentTab('RamOnlyMemory')"/>
-        <common-button :displayValue="'Direct Cache'" :function="() => ChangeCurrentTab('')"/>
+        <common-button :displayValue="'Direct Cache'" :function="() => ChangeCurrentTab('DirectCacheMemory')"/>
         <common-button :displayValue="'Two-Way Cache'" :function="() => ChangeCurrentTab('')"/>
         <common-button :displayValue="'Full Cache'" :function="() => ChangeCurrentTab('')"/>
     </div>
@@ -14,10 +14,11 @@
 
 <script>
 import RamOnlyMemory from './memory/RamOnlyMemory.vue';
+import DirectCacheMemory from './memory/DirectCacheMemory.vue'
 import CommonButton from './common/CommonButton.vue';
 export default {
     name: "TabsContainer",
-    components: { RamOnlyMemory, CommonButton },
+    components: { RamOnlyMemory, DirectCacheMemory, CommonButton },
     emits: ["RegisterMemory"],
 
     props: {

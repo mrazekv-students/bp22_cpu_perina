@@ -9,7 +9,7 @@
 </template>
 
 <script>
-import ProcessorModel from '../model/ProcessorModel.vue'
+import ProcessorModel from '../model/ProcessorModel.vue';
 import RamModel from '../model/RamModel.vue';
 export default {
     name: "RamOnlyMemory",
@@ -27,6 +27,7 @@ export default {
     },
 
     created() {
+        this.Reset();
         this.$emit("RegisterMemory", { write: this.Write, read: this.Read, reset: this.Reset });
     },
 
