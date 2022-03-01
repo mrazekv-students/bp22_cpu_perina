@@ -23,7 +23,6 @@ LABEL test
 
 ## Jednoduchý program
 
-
 MLOAD 5
 LABEL loop
 DSTORE @10

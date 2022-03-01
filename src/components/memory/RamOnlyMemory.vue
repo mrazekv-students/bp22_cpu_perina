@@ -28,7 +28,7 @@ export default {
 
     created() {
         this.Reset();
-        this.$emit("RegisterMemory", { write: this.Write, read: this.Read, reset: this.Reset });
+        this.$emit("RegisterMemory", { write: this.Write, read: this.Read, flush: () => {}, reset: this.Reset });
     },
 
     methods: {

@@ -223,6 +223,7 @@ export default class Cpu {
 
     // End program execution
     _endExecution() {
+        this.memory.flush();
         return { result: ExecutionResult.EndExecution };
     }
 }
