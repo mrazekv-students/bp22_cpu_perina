@@ -4,15 +4,17 @@
 
 <template>
     <processor-model :currentInstruction="instruction"/>
+    <cache-model :data="cacheData" />
     <ram-model :data="ramData" />
 </template>
 
 <script>
 import ProcessorModel from '../model/ProcessorModel.vue';
 import RamModel from '../model/RamModel.vue';
+import CacheModel from '../model/CacheModel.vue'
 export default {
     name: "DirectCacheMemory",
-    components: { ProcessorModel, RamModel },
+    components: { ProcessorModel, RamModel, CacheModel },
     emits: ["RegisterMemory"],
 
     props: {
@@ -34,36 +36,33 @@ export default {
     methods: {
         // TODO: Data koherence, currenty write-through (not using valid bit)
         Write(address, data) {
-            if (!(address < this.ramData.length && address >= 0))
+            if (address > this.ramData.length || address < 0)
                 throw RangeError("Invalid memory address");
 
             var cacheAddress = address & 0b11;
             var cacheTag = (address & 0b1100) >> 2;
+            console.log("Write", cacheTag.toString(2), cacheAddress.toString(2));
 
-            if (this.cacheData[cacheAddress].tag == cacheTag) {
-                this.cacheData[cacheAddress].data = data;
-                this.ramData[address] = data;
-            }
-            else {
-                // TODO: Needs to be checked
-                this.cacheData[cacheAddress] = { valid: true, tag: cacheTag, data: this.ramData[address] };
-                this.cacheData[cacheAddress].data = data;
-                this.ramData[address] = data;
-            }
+
+            // TODO: Needs to be  for data koherence
+            this.cacheData[cacheAddress] = { valid: true, tag: cacheTag, data: this.ramData[address] };
+            this.cacheData[cacheAddress].data = data;
+            this.ramData[address] = data;
         },
         Read(address) {
-            if (!(address < this.ramData.length && address >= 0))
+            if (address > this.ramData.length || address < 0)
                 throw RangeError("Invalid memory address");
 
             var cacheAddress = address & 0b11;
             var cacheTag = (address & 0b1100) >> 2;
+            console.log("Read", cacheTag.toString(2), cacheAddress.toString(2));
 
             if (this.cacheData[cacheAddress].tag == cacheTag) {
-                return this.cacheData[cacheAddress];
+                return this.cacheData[cacheAddress].data;
             }
             else {
                 this.cacheData[cacheAddress] = { valid: true, tag: cacheTag, data: this.ramData[address] };
-                return this.cacheData[cacheAddress];
+                return this.cacheData[cacheAddress].data;
             }
         },
         Reset() {
