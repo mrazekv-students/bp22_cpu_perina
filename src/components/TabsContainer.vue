@@ -7,7 +7,7 @@
         <common-button :displayValue="'RAM-Only Memory'" :function="() => ChangeCurrentTab('RamOnlyMemory')"/>
         <common-button :displayValue="'Direct Cache'" :function="() => ChangeCurrentTab('DirectCacheMemory')"/>
         <common-button :displayValue="'Two-Way Cache'" :function="() => ChangeCurrentTab('TwoWayCacheMemory')"/>
-        <common-button :displayValue="'Full Cache'" :function="() => ChangeCurrentTab('')"/>
+        <common-button :displayValue="'Full Cache'" :function="() => ChangeCurrentTab('FullCacheMemory')"/>
     </div>
     <component :is="currentTab" @RegisterMemory="RegisterMemory" :instruction="instruction"/>
 </template>
@@ -17,9 +17,10 @@ import CommonButton from './common/CommonButton.vue';
 import RamOnlyMemory from './memory/RamOnlyMemory.vue';
 import DirectCacheMemory from './memory/DirectCacheMemory.vue';
 import TwoWayCacheMemory from './memory/TwoWayCacheMemory.vue';
+import FullCacheMemory from './memory/FullCacheMemory.vue'
 export default {
     name: "TabsContainer",
-    components: { CommonButton, RamOnlyMemory, DirectCacheMemory, TwoWayCacheMemory },
+    components: { CommonButton, RamOnlyMemory, DirectCacheMemory, TwoWayCacheMemory, FullCacheMemory },
     emits: ["RegisterMemory"],
 
     props: {

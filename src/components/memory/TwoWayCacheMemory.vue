@@ -38,7 +38,6 @@ export default {
     },
 
     methods: {
-        // TODO: Data koherence, currently write-through (not using valid bit)
         Write(address, data) {
             if (address > this.ramData.length || address < 0)
                 throw RangeError("Invalid memory address");
