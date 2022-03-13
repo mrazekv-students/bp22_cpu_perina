@@ -19,13 +19,14 @@ BRPOS test
 BRNEG test
 MADD @0006
 IJUMP @0007
-LABEL test
 
 ## Jednoduchý program
 
+;This is simple test program
 MLOAD 5
-LABEL loop
-DSTORE @10
-ACCDEC
-ISTORE @10
-BRPOS loop
+loop:               ; Simple loop
+    DSTORE @10
+    ACCDEC
+    ISTORE @10
+    BRPOS loop      ; Return back
+    ; End of program

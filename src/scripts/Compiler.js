@@ -5,15 +5,20 @@ import Instruction from "./Instruction";
 let instructionNumber = 0;
 
 // Starts compilation of `code`, resulting internal code is stored in `instructionList`
-// Returns result object
 export default function startCompilation(code, instructionList) {
-    var codeList = code.split(/\s+/);
+    // Split into lines
+    var codeLines = code.split('\n');
     instructionNumber = 0;
 
     // Compilation loop
-    while (codeList.length > 0) {
-        processInstruction(codeList, instructionList);
+    while (codeLines.length > 0) {
+        // Split into words
+        var codeWords = codeLines.shift().split(/\s+/);
+        while (codeWords.length > 0) {
+            processInstruction(codeWords, instructionList);
+        }
     }
+
     // Program end instruction
     instructionList.push({ instruction: "END" });
 }
@@ -21,7 +26,20 @@ export default function startCompilation(code, instructionList) {
 // Instruction switch
 function processInstruction(codeList, instructionList) {
     var instruction = codeList.shift();
+
+    // Check if comment (starts with ';') - ignore rest of line
+    if (instruction.startsWith(';')) {
+        codeList.length = 0;
+        return;
+    }
+
     instructionNumber++;
+
+    // Check if label (ends with ':')
+    if (instruction.endsWith(':')) {
+        processLabelInstruction(Instruction.LABEL.name, instruction.slice(0, -1), instructionList);
+        return;
+    }
 
     switch (instruction.toUpperCase()) {
         case Instruction.HALT.name:
@@ -94,10 +112,6 @@ function processInstruction(codeList, instructionList) {
 
         case Instruction.IJUMP.name:
             processAddressInstrution(Instruction.IJUMP.name, codeList.shift(), instructionList);
-            break;
-
-        case Instruction.LABEL.name:
-            processLabelInstruction(Instruction.LABEL.name, codeList.shift(), instructionList);
             break;
 
         // Skip empty strings
