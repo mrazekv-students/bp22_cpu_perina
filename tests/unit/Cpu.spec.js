@@ -95,8 +95,35 @@ describe("Cpu instruction tests", () => {
         expect(cpu.execute(instructionList.shift())).toEqual({ result: ExecutionResult.NextInstruction });
     })
 
-    // TODO: OUTP
-    // TODO: INP
+    test("Execute OUTP instruction", () => {
+        // Prepare
+        var acc = { value: 0 };
+        var instructionList = [{ instruction: "OUTP" }];
+
+        const wrapper = mount(RamOnlyMemory);
+        var memory = wrapper.emitted().RegisterMemory[0][0];
+        var cpu = new Cpu(memory, acc);
+
+        // Execute & assert
+        expect(cpu.execute(instructionList.shift())).toEqual({ result: ExecutionResult.NextInstruction });
+    })
+
+    test("Execute INP instruction", () => {
+        // Prepare
+        var acc = { value: -1 };
+        var instructionList = [{ instruction: "INP" }];
+
+        const wrapper = mount(RamOnlyMemory);
+        var memory = wrapper.emitted().RegisterMemory[0][0];
+        var cpu = new Cpu(memory, acc);
+
+        // Execute
+        var result = cpu.execute(instructionList.shift());
+
+        // Assert
+        expect(acc.value).toBeGreaterThanOrEqual(0);
+        expect(result).toEqual({ result: ExecutionResult.NextInstruction });
+    })
 
     test("Execute MLOAD instruction", () => {
         // Prepare

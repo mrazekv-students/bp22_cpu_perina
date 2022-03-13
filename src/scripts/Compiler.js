@@ -61,11 +61,11 @@ function processInstruction(codeList, instructionList) {
             break;
 
         case Instruction.OUTP.name:
-            processAddressInstrution(Instruction.OUTP.name, codeList.shift(), instructionList);
+            processParameterlessInstruction(Instruction.OUTP.name, instructionList);
             break;
 
         case Instruction.INP.name:
-            processAddressInstrution(Instruction.INP.name, codeList.shift(), instructionList);
+            processParameterlessInstruction(Instruction.INP.name, instructionList);
             break;
 
         case Instruction.MLOAD.name:
