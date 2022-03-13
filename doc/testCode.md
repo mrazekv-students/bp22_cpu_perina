@@ -19,6 +19,7 @@ BRPOS test
 BRNEG test
 MADD @0006
 IJUMP @0007
+:test
 
 ## Jednoduchý program
 
