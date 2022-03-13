@@ -33,8 +33,6 @@ function processInstruction(codeList, instructionList) {
         return;
     }
 
-    instructionNumber++;
-
     // Check if label (ends with ':')
     if (instruction.endsWith(':')) {
         processLabelInstruction(Instruction.LABEL.name, instruction.slice(0, -1), instructionList);
@@ -126,12 +124,14 @@ function processInstruction(codeList, instructionList) {
 // Processes instruction with no parameters
 // Returns result object
 function processParameterlessInstruction(instruction, instructionList) {
+    instructionNumber++;
     instructionList.push({ instruction: instruction });
 }
 
 // Processes instruction with address parameter
 // Returns result object
 function processAddressInstrution(instruction, parameter, instructionList) {
+    instructionNumber++;
     // Check if address
     if (isAddress(parameter)) {
         parameter = parseInt(parameter.substring(1));
@@ -144,6 +144,7 @@ function processAddressInstrution(instruction, parameter, instructionList) {
 // Processes instruction with value parameter
 // Returns result object
 function processValueInstruction(instruction, parameter, instructionList) {
+    instructionNumber++;
     // Check if value
     if (isNumber(parameter)) {
         parameter = parseInt(parameter);
@@ -156,6 +157,7 @@ function processValueInstruction(instruction, parameter, instructionList) {
 // Processes instruction with label parameter
 // Returns result object
 function processLabelInstruction(instruction, parameter, instructionList) {
+    instructionNumber++;
     // Check if not instruction keyword
     if (!isKeyword(parameter)) {
         instructionList.push({ instruction: instruction, label: parameter })
