@@ -1,11 +1,33 @@
 <!DOCTYPE html>
-<html lang="">
+<html lang="cs">
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
-    <link rel="icon" href="<%= BASE_URL %>favicon.ico">
+    <link rel="stylesheet" href="//use.fontawesome.com/releases/v6.1.0/css/all.css">
     <title><%= htmlWebpackPlugin.options.title %></title>
+    <style>
+      :root{
+        --backgroundColor: #424242;
+        --fontColor: #D6D6D6;
+        --mainColor: #168B53;
+        --mainColorDisabled: #84A193;
+        --scrollColor: #57a07d;
+        --scrollColorLighten: #68be95;
+        --programBackgroundColor: #202020;
+      }
+
+      ::-webkit-scrollbar {
+        width: 15px;
+      }
+      ::-webkit-scrollbar-thumb {
+        background: var(--scrollColor); 
+        border-radius: 10px;
+      }
+      ::-webkit-scrollbar-thumb:hover {
+        background: var(--scrollColorLighten);
+      }
+    </style>
   </head>
   <body>
     <noscript>

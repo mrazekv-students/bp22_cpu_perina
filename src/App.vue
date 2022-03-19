@@ -26,12 +26,8 @@ body {
     margin: 0;
     overflow: hidden;
     display: flex;
-
-    border-style: dotted;
-    border-width: 2px;
-
-    background: #3A3A40;
-    color: #D6D6D6;
+    background: var(--backgroundColor);
+    color: var(--fontColor);
 }
 
 .horizontal-container {

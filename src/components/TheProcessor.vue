@@ -8,7 +8,7 @@
     <div class="horizontal-container">
         <div class="vertical-container control-container">
             <div class="horizontal-container button-container">
-                <common-button v-for="button in commonButtons" :key="button" :displayValue="button.display" :function="button.function" :disabled="button.disabled" class="control-button"/>
+                <icon-button v-for="button in controlButtons" :key="button" :displayIcon="button.display" :function="button.function" :disabled="button.disabled" class="control-button"/>
             </div>
             <div class="program-container">
                 <code-editor @RegisterCompiler="RegisterCompiler"/>
@@ -26,7 +26,7 @@ const s_started = "started";
 const s_halted = "halted";
 const s_ended = "ended"
 
-import CommonButton from './common/CommonButton.vue';
+import IconButton from './common/IconButton.vue';
 import CodeEditor from './codeEditor/CodeEditor.vue';
 import TabsContainer from './TabsContainer.vue';
 
@@ -34,15 +34,15 @@ import Cpu from '@/scripts/Cpu.js';
 import ExecutionResult from '@/scripts/ExecutionResult.js'
 export default {
     name: "TheLayout",
-    components: { CommonButton, CodeEditor, TabsContainer },
+    components: { IconButton, CodeEditor, TabsContainer },
 
     data() {
         return {
-            commonButtons: [
-                { display: "|>", function: this.StartProgram, disabled: false },
-                { display: "|||", function: this.StopProgram, disabled: true },
-                { display: "||", function: this.PauseProgram, disabled: true},
-                { display: ">", function: this.ExecuteInstruction, disabled: true }
+            controlButtons: [
+                { display: "fa-solid fa-play", function: this.StartProgram, disabled: false },
+                { display: "fa-solid fa-stop", function: this.StopProgram, disabled: true },
+                { display: "fa-solid fa-pause", function: this.PauseProgram, disabled: true},
+                { display: "fa-solid fa-forward-step", function: this.ExecuteInstruction, disabled: true }
             ],
             compiler: null,
             memory: null,
@@ -76,6 +76,7 @@ export default {
                 // Create CPU
                 this.cpu = new Cpu(this.memory, this.accumulator);
             }
+            console.log("X")
             this.ChangeSimulationState(s_started);
 
             // Program loop
@@ -137,32 +138,32 @@ export default {
         ChangeSimulationState(state) {
             switch (state) {
                 case s_notStarted:
-                    this.commonButtons[0].disabled = false;
-                    this.commonButtons[1].disabled = true;
-                    this.commonButtons[2].disabled = true;
-                    this.commonButtons[3].disabled = true;
+                    this.controlButtons[0].disabled = false;
+                    this.controlButtons[1].disabled = true;
+                    this.controlButtons[2].disabled = true;
+                    this.controlButtons[3].disabled = true;
                     this.ResetState();
                     break;
 
                 case s_started:
-                    this.commonButtons[0].disabled = true;
-                    this.commonButtons[1].disabled = false;
-                    this.commonButtons[2].disabled = false;
-                    this.commonButtons[3].disabled = true;
+                    this.controlButtons[0].disabled = true;
+                    this.controlButtons[1].disabled = false;
+                    this.controlButtons[2].disabled = false;
+                    this.controlButtons[3].disabled = true;
                     break;
 
                 case s_halted:
-                    this.commonButtons[0].disabled = false;
-                    this.commonButtons[1].disabled = false;
-                    this.commonButtons[2].disabled = true;
-                    this.commonButtons[3].disabled = false;
+                    this.controlButtons[0].disabled = false;
+                    this.controlButtons[1].disabled = false;
+                    this.controlButtons[2].disabled = true;
+                    this.controlButtons[3].disabled = false;
                     break;
 
                 case s_ended:
-                    this.commonButtons[0].disabled = false;
-                    this.commonButtons[1].disabled = true;
-                    this.commonButtons[2].disabled = true;
-                    this.commonButtons[3].disabled = true;
+                    this.controlButtons[0].disabled = false;
+                    this.controlButtons[1].disabled = true;
+                    this.controlButtons[2].disabled = true;
+                    this.controlButtons[3].disabled = true;
                     break;
             }
 
@@ -186,6 +187,7 @@ export default {
 <style>
 .control-container {
     width: 30%;
+    min-width: 450px;
     height: 100%;
 }
 .button-container {
@@ -194,15 +196,18 @@ export default {
     align-items: center;
 
     width: 100%;
-    height: 10%;
-
-    background: red;
 }
 .program-container {
-    width: 100%;
-    height: 90%;
+    width: 85%;
+    height: 100%;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 5%;
 
-    background: darkslategray;
+    overflow-y: auto;
+    border: solid 5px var(--mainColor);
+    border-radius: 10px;
+    background: var(--programBackgroundColor);
 }
 .model-container {
     display: flex;
@@ -216,17 +221,16 @@ export default {
 }
 
 .control-button {
-    width: 4.5rem;
-    height: 4.5rem;
-    margin: 0.3rem;
+    width: 5rem;
+    height: 5rem;
+    margin-top: 2rem;
+    margin-bottom: 1rem;
 
     font-size: 3rem;
-    font-weight: bold;
+    border-radius: 10px;
+    background: var(--mainColor);
 }
-.test-button {
-    width: 6rem;
-    height: 3rem;
-    margin: 0.2rem;
-    background: black;
+.control-button + .control-button {
+    margin-left: 1rem;
 }
 </style>

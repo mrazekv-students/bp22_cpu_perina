@@ -1,10 +1,10 @@
 <!--
-    A common button.
+    An icon button.
 !-->
 
 <template>
-    <button class="common-button" :disabled="disabled" @click="Click">
-        {{ displayValue }}
+    <button class="icon-button" :disabled="disabled" @click="Click">
+        <i :class="displayIcon"/>
     </button>
 </template>
 
@@ -13,7 +13,7 @@ export default {
     name: "CommonButton",
 
     props: {
-        displayValue: {
+        displayIcon: {
             type: String,
             required: true,
         },
@@ -36,7 +36,7 @@ export default {
 </script>
 
 <style>
-.common-button {
+.icon-button {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -45,18 +45,22 @@ export default {
     box-shadow: none;
     background: var(--mainColor);
     user-select: none;
+    font-family: 'Font Awesome\ 5 Free';
 
     color: inherit;
     cursor: pointer;
     transition: all .1s ease-in-out;
 }
-.common-button:enabled:hover {
+.icon-button i {
+    font-style: normal;
+}
+.icon-button:enabled:hover {
     transform: scale(1.1);
 }
-.common-button:enabled:active {
+.icon-button:enabled:active {
     transform: scale(.90);
 }
-.common-button:disabled {
+.icon-button:disabled {
     background: var(--mainColorDisabled);
 }
 
