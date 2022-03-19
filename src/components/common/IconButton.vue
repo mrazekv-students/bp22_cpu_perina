@@ -62,6 +62,7 @@ export default {
 }
 .icon-button:disabled {
     background: var(--mainColorDisabled);
+    cursor: initial;
 }
 
 </style>

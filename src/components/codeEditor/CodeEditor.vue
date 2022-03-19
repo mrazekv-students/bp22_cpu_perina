@@ -12,9 +12,10 @@ import { PrismEditor } from 'vue-prism-editor';
 import 'vue-prism-editor/dist/prismeditor.min.css';
 // Highlighting library: https://prismjs.com/
 import Prism from 'prismjs/components/prism-core';
-import 'prismjs/themes/prism-dark.css'; // TODO: Study and create my own
 
 import startCompilation from '@/scripts/Compiler.js';
+import { bp22Highlight } from './bp22/bp22Highlighting.js';
+import './bp22/bp22Style.css';
 export default {
     name: "CodeEditor",
     components: { PrismEditor },
@@ -34,11 +35,7 @@ export default {
 
     methods: {
         HighlightCode(code) {
-            // TODO: Define all highlighting, move to its own file
-            Prism.languages.bp22 = {
-                'operator': /\b(?:HALT|NEGATE|ACCDEC|ACCINC|NOP|OUTP|INP|MLOAD|DLOAD|ILOAD|DSTORE|ISTORE|BRANCH|BRZERO|BRPOS|BRNEG|MADD|IJUMP|LABEL)\b/i,
-            };
-
+            Prism.languages.bp22 = bp22Highlight;
             return Prism.highlight(code, Prism.languages.bp22);
         },
         

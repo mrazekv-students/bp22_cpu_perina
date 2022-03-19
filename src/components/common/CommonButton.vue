@@ -58,6 +58,7 @@ export default {
 }
 .common-button:disabled {
     background: var(--mainColorDisabled);
+    cursor: initial;
 }
 
 </style>

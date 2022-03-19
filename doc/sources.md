@@ -22,3 +22,4 @@ https://dev.to/songta17/vue-3-with-jest-and-vue-tests-utils-introduction-5h5i
 https://vuetifyjs.com/en/styles/colors/#material-colors
 https://fontawesome.com/
 https://www.w3schools.com/howto/howto_css_custom_scrollbar.asp
+https://github.com/PrismJS/prism-themes
