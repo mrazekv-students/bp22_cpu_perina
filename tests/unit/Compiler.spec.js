@@ -49,7 +49,7 @@ describe("Compilers tests", () => {
     })
 
     test("Compile single label instruction", () => {
-        var code = "LABEL test";
+        var code = "test:";
         var instructionList = [];
 
         startCompilation(code, instructionList);
@@ -58,7 +58,7 @@ describe("Compilers tests", () => {
     })
 
     test("Compile multiple label instructions", () => {
-        var code = "LABEL test BRANCH test BRZERO someLabel";
+        var code = "test: BRANCH test BRZERO someLabel";
         var instructionList = [];
 
         startCompilation(code, instructionList);
@@ -85,7 +85,7 @@ describe("Compilers tests", () => {
     })
 
     test("Compile multiple various instructions", () => {
-        var code = "MLOAD 5 LABEL loop DSTORE @10 ACCDEC ISTORE @10 BRPOS loop";
+        var code = "MLOAD 5 loop: DSTORE @10 ACCDEC ISTORE @10 BRPOS loop";
         var instructionList = [];
 
         startCompilation(code, instructionList);
@@ -94,12 +94,21 @@ describe("Compilers tests", () => {
     })
 
     test("Compile multiple various instructions with line breaks", () => {
-        var code = "MLOAD 5\nLABEL loop\nDSTORE @10\nACCDEC\nISTORE @10\nBRPOS loop";
+        var code = "MLOAD 5\nloop:\nDSTORE @10\nACCDEC\nISTORE @10\nBRPOS loop";
         var instructionList = [];
 
         startCompilation(code, instructionList);
 
         expect(instructionList).toEqual([{ instruction: "MLOAD", value: 5 }, { instruction: "LABEL", label: "loop" }, { instruction: "DSTORE", address: 10 }, { instruction: "ACCDEC"}, { instruction: "ISTORE", address: 10 }, { instruction: "BRPOS", label: "loop" }, { instruction: "END" }]);
+    })
+
+    test("Compile code with comments", () => {
+        var code = ";Test and test\nNOP ; test\nNOP\n; test NOP";
+        var instructionList = [];
+
+        startCompilation(code, instructionList);
+
+        expect(instructionList).toEqual([{ instruction: "NOP" }, { instruction: "NOP" }, { instruction: "END" }]);
     })
 
     test("Fail at unknown instruction", () => {
@@ -152,14 +161,14 @@ describe("Compilers tests", () => {
     })
 
     test("Fail at invalid label parameter, is keyword", () => {
-        var code = "NOP LABEL accinc NOP";
+        var code = "NOP accinc: NOP";
         var instructionList = [];
 
         expect(() => startCompilation(code, instructionList)).toThrow();
     })
 
-    test("Fail at missing label parameter", () => {
-        var code = "NOP LABEL NOP";
+    test("Fail at instruction broken by comment", () => {
+        var code = "NOP\n MLOAD ; 5\n NOP";
         var instructionList = [];
 
         expect(() => startCompilation(code, instructionList)).toThrow();
