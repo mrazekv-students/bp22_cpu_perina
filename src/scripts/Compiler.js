@@ -5,15 +5,20 @@ import Instruction from "./Instruction";
 let instructionNumber = 0;
 
 // Starts compilation of `code`, resulting internal code is stored in `instructionList`
-// Returns result object
 export default function startCompilation(code, instructionList) {
-    var codeList = code.split(/\s+/);
+    // Split into lines
+    var codeLines = code.split('\n');
     instructionNumber = 0;
 
     // Compilation loop
-    while (codeList.length > 0) {
-        processInstruction(codeList, instructionList);
+    while (codeLines.length > 0) {
+        // Split into words
+        var codeWords = codeLines.shift().split(/\s+/);
+        while (codeWords.length > 0) {
+            processInstruction(codeWords, instructionList);
+        }
     }
+
     // Program end instruction
     instructionList.push({ instruction: "END" });
 }
@@ -21,7 +26,18 @@ export default function startCompilation(code, instructionList) {
 // Instruction switch
 function processInstruction(codeList, instructionList) {
     var instruction = codeList.shift();
-    instructionNumber++;
+
+    // Check if comment (starts with ';') - ignore rest of line
+    if (instruction.startsWith(';')) {
+        codeList.length = 0;
+        return;
+    }
+
+    // Check if label (ends with ':')
+    if (instruction.endsWith(':')) {
+        processLabelInstruction(Instruction.LABEL.name, instruction.slice(0, -1), instructionList);
+        return;
+    }
 
     switch (instruction.toUpperCase()) {
         case Instruction.HALT.name:
@@ -45,11 +61,11 @@ function processInstruction(codeList, instructionList) {
             break;
 
         case Instruction.OUTP.name:
-            processAddressInstrution(Instruction.OUTP.name, codeList.shift(), instructionList);
+            processParameterlessInstruction(Instruction.OUTP.name, instructionList);
             break;
 
         case Instruction.INP.name:
-            processAddressInstrution(Instruction.INP.name, codeList.shift(), instructionList);
+            processParameterlessInstruction(Instruction.INP.name, instructionList);
             break;
 
         case Instruction.MLOAD.name:
@@ -96,10 +112,6 @@ function processInstruction(codeList, instructionList) {
             processAddressInstrution(Instruction.IJUMP.name, codeList.shift(), instructionList);
             break;
 
-        case Instruction.LABEL.name:
-            processLabelInstruction(Instruction.LABEL.name, codeList.shift(), instructionList);
-            break;
-
         // Skip empty strings
         case "":
             break;
@@ -112,12 +124,14 @@ function processInstruction(codeList, instructionList) {
 // Processes instruction with no parameters
 // Returns result object
 function processParameterlessInstruction(instruction, instructionList) {
+    instructionNumber++;
     instructionList.push({ instruction: instruction });
 }
 
 // Processes instruction with address parameter
 // Returns result object
 function processAddressInstrution(instruction, parameter, instructionList) {
+    instructionNumber++;
     // Check if address
     if (isAddress(parameter)) {
         parameter = parseInt(parameter.substring(1));
@@ -130,6 +144,7 @@ function processAddressInstrution(instruction, parameter, instructionList) {
 // Processes instruction with value parameter
 // Returns result object
 function processValueInstruction(instruction, parameter, instructionList) {
+    instructionNumber++;
     // Check if value
     if (isNumber(parameter)) {
         parameter = parseInt(parameter);
@@ -142,6 +157,7 @@ function processValueInstruction(instruction, parameter, instructionList) {
 // Processes instruction with label parameter
 // Returns result object
 function processLabelInstruction(instruction, parameter, instructionList) {
+    instructionNumber++;
     // Check if not instruction keyword
     if (!isKeyword(parameter)) {
         instructionList.push({ instruction: instruction, label: parameter })

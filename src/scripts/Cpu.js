@@ -131,15 +131,14 @@ export default class Cpu {
         return { result: ExecutionResult.NextInstruction };
     }
 
-    // Execute OUTP instruction
+    // Execute OUTP instruction - NOP
     _executeOutp() {
-        // TODO
         return { result: ExecutionResult.NextInstruction };
     }
 
-    // Execute INP instruction
+    // Execute INP instruction - ACC = Random(0 - 1023)
     _executeInp() {
-        // TODO
+        this.acc.value = Math.floor(Math.random() * 1024);
         return { result: ExecutionResult.NextInstruction };
     }
 

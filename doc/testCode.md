@@ -6,8 +6,8 @@ NEGATE
 ACCDEC
 ACCINC
 NOP
-OUTP @0000
-INP @0001
+OUTP
+INP
 MLOAD 4086
 DLOAD @0002
 ILOAD @0003
@@ -19,13 +19,15 @@ BRPOS test
 BRNEG test
 MADD @0006
 IJUMP @0007
-LABEL test
+:test
 
 ## Jednoduchý program
 
+;This is simple test program
 MLOAD 5
-LABEL loop
-DSTORE @10
-ACCDEC
-ISTORE @10
-BRPOS loop
+loop:               ; Simple loop
+    DSTORE @10
+    ACCDEC
+    ISTORE @10
+    BRPOS loop      ; Return back
+    ; End of program
