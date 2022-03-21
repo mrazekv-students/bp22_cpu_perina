@@ -194,7 +194,6 @@ export default {
     display: flex;
     justify-content: center;
     align-items: center;
-
     width: 100%;
 }
 .program-container {
@@ -213,11 +212,8 @@ export default {
     display: flex;
     justify-content: center;
     align-items: center;
-    
     width: 70%;
     height: 100%;
-
-    background: blue;
 }
 
 .control-button {
