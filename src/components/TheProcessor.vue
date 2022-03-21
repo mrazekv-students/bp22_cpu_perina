@@ -188,20 +188,21 @@ export default {
 .control-container {
     width: 30%;
     min-width: 450px;
-    height: 100%;
+    margin-top: 2rem;
+    margin-bottom: 2rem;
 }
 .button-container {
     display: flex;
     justify-content: center;
     align-items: center;
     width: 100%;
+    margin-bottom: 1rem;
 }
 .program-container {
     width: 85%;
     height: 100%;
     margin-left: auto;
     margin-right: auto;
-    margin-bottom: 5%;
 
     overflow-y: auto;
     border: solid 5px var(--mainColor);
@@ -210,18 +211,16 @@ export default {
 }
 .model-container {
     display: flex;
-    justify-content: center;
     align-items: center;
     width: 70%;
-    height: 100%;
+    margin-top: 3.2rem;
+    margin-bottom: 2rem;
+    margin-right: 2rem;
 }
 
 .control-button {
     width: 5rem;
     height: 5rem;
-    margin-top: 2rem;
-    margin-bottom: 1rem;
-
     font-size: 3rem;
     border-radius: 10px;
     background: var(--mainColor);

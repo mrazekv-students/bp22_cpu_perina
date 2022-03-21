@@ -9,7 +9,7 @@
         <common-button :displayValue="'Two-Way Cache'" :function="() => ChangeCurrentTab('TwoWayCacheMemory')" :class="'tab-button ' + activeTab['TwoWayCacheMemory']"/>
         <common-button :displayValue="'Full Cache'" :function="() => ChangeCurrentTab('FullCacheMemory')" :class="'tab-button ' + activeTab['FullCacheMemory']"/>
     </div>
-    <div class="tab-container">
+    <div class="tab-container vertical-container">
         <component :is="currentTab" @RegisterMemory="RegisterMemory" :instruction="instruction"/>
     </div>
 </template>
@@ -56,8 +56,10 @@ export default {
 
 <style>
 .tab-container {
+    justify-content: center;
+    align-items: center;
     width: 100%;
-    padding: 2rem;
+    height: 100%;
     border: solid 5px var(--mainColor);
     border-radius: 10px;
 }
