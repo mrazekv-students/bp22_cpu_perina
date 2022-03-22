@@ -24,10 +24,10 @@ IJUMP @0007
 ## Jednoduchý program
 
 ;This is simple test program
-MLOAD 5
+  MLOAD 5
 loop:               ; Simple loop
-    DSTORE @10
-    ACCDEC
-    ISTORE @10
-    BRPOS loop      ; Return back
-    ; End of program
+  DSTORE @10
+  ACCDEC
+  ISTORE @10
+  BRPOS loop      ; Return back
+  ; End of program

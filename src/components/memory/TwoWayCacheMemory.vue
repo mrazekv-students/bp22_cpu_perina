@@ -3,7 +3,7 @@
 !-->
 
 <template>
-    <processor-model :currentInstruction="instruction"/>
+    <processor-model :instruction="instruction" :instuctionPointer="instructionPointer" :accumulator="accumulator"/>
     <div class="horizontal-container">
         <cache-model :data="cacheData[0]" />
         <cache-model :data="cacheData[1]" />
@@ -22,7 +22,9 @@ export default {
     emits: ["RegisterMemory"],
 
     props: {
-        instruction: { type: String }
+        instruction: { type: String },
+        instructionPointer: { type: Number },
+        accumulator: { type: Number}
     },
 
     data() {

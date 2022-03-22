@@ -4,30 +4,52 @@
 
 <template>
     <div class="vertical-container processor">
-        <div>CPU</div>
-        <div>[ {{ currentInstruction }} ]</div>
+        <span class="title">CPU</span>
+        <register-label :value="instruction" class="current-instruction"/>
+        <div class="horizontal-container registers">
+            <register-label label="IP" :value="instuctionPointer"/>
+            <register-label label="ACC" :value="accumulator"/>
+        </div>
     </div>
 </template>
 
 <script>
+import RegisterLabel from '../common/RegisterLabel.vue'
 export default {
     name: "ProcessorModel",
+    components: { RegisterLabel },
     props: {
-        currentInstruction: { type: String, default: "" }
+        instruction: { type: String },
+        instuctionPointer: { type: Number },
+        accumulator: { type: Number }
     }
 }
 </script>
 
 <style>
 .processor {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
     align-items: center;
+    width: 18rem;
+    height: auto;
+    padding: 0.5rem 1rem;
 
-    width: 27%;
-    height: 15%;
-
-    background: red;
+    border: solid 8px var(--mainColor);
+    border-radius: 20px;
+    background: var(--mainColorDark);
+}
+.processor>.title {
+    font-size: 2.5rem;
+    font-weight: bold;
+    text-transform: uppercase;
+    margin-bottom: 0.5rem;
+}
+.processor>.registers {
+    width: 100%;
+    margin-top: 0.5rem;
+    justify-content: space-between;
+}
+.processor>.current-instruction>.value {
+    min-width: 6em;
+    text-align: center;
 }
 </style>

@@ -61,7 +61,7 @@ export default {
     transform: scale(.90);
 }
 .icon-button:disabled {
-    background: var(--mainColorDisabled);
+    background: var(--mainColorLight);
     cursor: initial;
 }
 

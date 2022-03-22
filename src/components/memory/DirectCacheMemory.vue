@@ -3,7 +3,7 @@
 !-->
 
 <template>
-    <processor-model :currentInstruction="instruction"/>
+    <processor-model :instruction="instruction" :instuctionPointer="instructionPointer" :accumulator="accumulator"/>
     <cache-model :data="cacheData" />
     <ram-model :data="ramData" />
 </template>
@@ -19,7 +19,9 @@ export default {
     emits: ["RegisterMemory"],
 
     props: {
-        instruction: { type: String }
+        instruction: { type: String },
+        instructionPointer: { type: Number },
+        accumulator: { type: Number}
     },
 
     data() {

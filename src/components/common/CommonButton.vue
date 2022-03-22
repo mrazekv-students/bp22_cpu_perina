@@ -56,7 +56,7 @@ export default {
     transition: all .1s ease-in-out;
 }
 .common-button:disabled {
-    background: var(--mainColorDisabled);
+    background: var(--mainColorLight);
     cursor: initial;
 }
 

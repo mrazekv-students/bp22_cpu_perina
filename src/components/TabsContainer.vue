@@ -10,8 +10,8 @@
         <common-button :displayValue="'Full Cache'" :function="() => ChangeCurrentTab('FullCacheMemory')" :class="'tab-button ' + activeTab['FullCacheMemory']"/>
         <cycle-counter/>
     </div>
-    <div class="tab-container vertical-container">
-        <component :is="currentTab" @RegisterMemory="RegisterMemory" :instruction="instruction"/>
+    <div class="vertical-container tab-container">
+        <component :is="currentTab" @RegisterMemory="RegisterMemory" :instruction="instruction" :instructionPointer="instructionPointer" :accumulator="accumulator"/>
     </div>
 </template>
 
@@ -28,7 +28,9 @@ export default {
     emits: ["RegisterMemory"],
 
     props: {
-        instruction: { type: String }
+        instruction: { type: String },
+        instructionPointer: { type: Number },
+        accumulator: { type: Number}
     },
 
     data() {
@@ -58,10 +60,10 @@ export default {
 
 <style>
 .tab-container {
-    justify-content: center;
     align-items: center;
     width: 100%;
     height: 100%;
+    padding: 1.5rem;
     margin-right: 2rem;
     border: solid 5px var(--mainColor);
     border-radius: 10px;
@@ -83,7 +85,7 @@ export default {
     font-size: 1.4rem;
     font-weight: bold;
     text-transform: uppercase;
-    background: var(--mainColorDisabled);
+    background: var(--mainColorLight);
 }
 .tab-button:hover {
     transform: scaleY(120%);

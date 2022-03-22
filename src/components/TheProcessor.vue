@@ -15,7 +15,7 @@
             </div>
         </div>
         <div class="vertical-container model-container">
-            <tabs-container @RegisterMemory="RegisterMemory" :instruction="instruction.instruction"/>
+            <tabs-container @RegisterMemory="RegisterMemory" :instruction="instruction.instruction" :instructionPointer="instructionPointer" :accumulator="accumulator.value"/>
         </div>
     </div>
 </template>
@@ -51,7 +51,7 @@ export default {
 
             instructionPointer: 0,
             accumulator: { value: 0 },
-            instruction: { instruction: "" },
+            instruction: { instruction: "INST" },
         }
     },
 
@@ -177,7 +177,7 @@ export default {
         ResetState() {
             this.instructionPointer = 0;
             this.accumulator = { value: 0 };
-            this.instruction = { instruction: "" };
+            this.instruction = { instruction: "INST" };
             this.memory.reset();
         }
     }
@@ -214,7 +214,7 @@ export default {
     align-items: center;
     width: 70%;
     min-width: 800px;
-    margin-top: 3.2rem;
+    margin-top: 3.5rem;
     margin-bottom: 2rem;
 }
 
