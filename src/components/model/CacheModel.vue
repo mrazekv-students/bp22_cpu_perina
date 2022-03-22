@@ -4,11 +4,17 @@
 
 <template>
     <table class="cache">
+        <tr>
+            <th class="address"> Address </th>
+            <th class="valid"> V </th>
+            <th class="tag"> Tag </th>
+            <th class="value"> Data </th>
+        </tr>
         <tr v-for="n in data.length" :key="n">
-            <td class="cache-address"> {{ "0x" + (n - 1).toString(16).toUpperCase() }} </td>
-            <td class="cache-valid"> {{ data[n - 1].valid ? "T" : "F" }} </td>
-            <td class="cache-tag"> {{ "0x" + data[n - 1].tag.toString(16).toUpperCase() }} </td>
-            <td class="cache-value"> {{ data[n - 1].data }} </td>
+            <td class="address"> {{ "0x" + (n - 1).toString(16).toUpperCase() }} </td>
+            <td class="valid"> {{ data[n - 1].valid ? "T" : "F" }} </td>
+            <td class="tag"> {{ "0x" + data[n - 1].tag.toString(16).toUpperCase() }} </td>
+            <td class="value"> {{ data[n - 1].data }} </td>
         </tr>
     </table>
 </template>
@@ -25,29 +31,49 @@ export default {
 
 <style>
 .cache {
-    border: solid 2px;
-    border-collapse: collapse;
-
-    background: dimgray;
+    margin-top: 1rem;
+    border-top: solid 8px var(--mainColor);
+    border-bottom: solid 8px var(--mainColor);
+    border-radius: 10px;
+    border-spacing: 0;
+    overflow: hidden;
+}
+.cache tr {
+    background: var(--mainColorDark);
+}
+.cache tr:nth-child(even) {
+    background: var(--mainColorDarkDark);
+}
+.cache th {
+    padding: 0.1rem 0.5rem;
+    font-weight: bold;
+    text-transform: uppercase;
+    background: var(--mainColor);
 }
 .cache td {
-    border: solid 2px;
+    padding: 0.1rem;
+    border-left: solid 2px var(--mainColor);
+}
+.cache td:last-child {
+    border-right: solid 2px var(--mainColor);
 }
 
-.cache-address {
-    width: 3rem;
-    text-align: center;
+.cache td.address {
+    width: 6rem;
+    padding-right: 0.5rem;
+    text-align: right;
+    color: var(--fontColorFaded);
 }
-.cache-valid {
+.cache td.valid {
     width: 2rem;
     text-align: center;
 }
-.cache-tag {
-    width: 3rem;
+.cache td.tag {
+    width: 4rem;
     text-align: center;
 }
-.cache-value {
+.cache td.value {
     width: 6rem;
-    padding-left: 0.2rem;
+    padding-left: 0.5rem;
 }
 </style>
