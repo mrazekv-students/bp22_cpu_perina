@@ -205,8 +205,10 @@ export default {
     margin-right: auto;
 
     overflow-y: auto;
-    border: solid 5px var(--mainColor);
-    border-radius: 10px;
+    border: solid 15px var(--mainColor);
+    border-left-width: 3px;
+    border-right-width: 3px;
+    border-radius: 15px;
     background: var(--programBackgroundColor);
 }
 .model-container {

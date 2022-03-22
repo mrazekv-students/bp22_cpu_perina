@@ -33,7 +33,9 @@ export default {
     height: auto;
     padding: 0.5rem 1rem;
 
-    border: solid 8px var(--mainColor);
+    border: solid 10px var(--mainColor);
+    border-left-width: 5px;
+    border-right-width: 5px;
     border-radius: 20px;
     background: var(--mainColorDark);
 }

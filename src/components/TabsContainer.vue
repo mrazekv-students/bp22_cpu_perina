@@ -63,10 +63,12 @@ export default {
     align-items: center;
     width: 100%;
     height: 100%;
-    padding: 1.5rem;
+    padding: 1rem;
     margin-right: 2rem;
-    border: solid 5px var(--mainColor);
-    border-radius: 10px;
+    border: solid 15px var(--mainColor);
+    border-left-width: 3px;
+    border-right-width: 3px;
+    border-radius: 15px;
 }
 .tab-button-row {
     justify-content:flex-start;
@@ -85,7 +87,7 @@ export default {
     font-size: 1.4rem;
     font-weight: bold;
     text-transform: uppercase;
-    background: var(--mainColorLight);
+    background: var(--mainColorLightDark);
 }
 .tab-button:hover {
     transform: scaleY(120%);
