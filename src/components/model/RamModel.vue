@@ -4,9 +4,13 @@
 
 <template>
     <table class="ram">
+        <tr>
+            <th class="address"> Address </th>
+            <th class="value"> Data </th>
+        </tr>
         <tr v-for="n in data.length" :key="n">
-            <td class="ram-address"> {{ "0x" + (n - 1).toString(16).toUpperCase() }} </td>
-            <td class="ram-value"> {{ data[n - 1] }} </td>
+            <td class="address"> {{ "0x" + (n - 1).toString(16).toUpperCase() }} </td>
+            <td class="value"> {{ data[n - 1] }} </td>
         </tr>
     </table>
 </template>
@@ -23,21 +27,41 @@ export default {
 
 <style>
 .ram {
-    border: solid 2px;
-    border-collapse: collapse;
-
-    background: dimgray;
+    margin-top: 1rem;
+    border-top: solid 8px var(--mainColor);
+    border-bottom: solid 8px var(--mainColor);
+    border-radius: 10px;
+    border-spacing: 0;
+    overflow: hidden;
+}
+.ram tr {
+    background: var(--mainColorDark);
+}
+.ram tr:nth-child(even) {
+    background: var(--mainColorDarkDark);
+}
+.ram th {
+    padding: 0.1rem 0.5rem;
+    font-weight: bold;
+    text-transform: uppercase;
+    background: var(--mainColor);
 }
 .ram td {
-    border: solid 2px;
+    padding: 0.1rem;
+    border-left: solid 2px var(--mainColor);
+}
+.ram td + td {
+    border-right: solid 2px var(--mainColor);
 }
 
-.ram-address {
-    width: 3rem;
-    text-align: center;
-}
-.ram-value {
+.ram td.address {
     width: 6rem;
-    padding-left: 0.2rem;
+    padding-right: 0.5rem;
+    text-align: right;
+    color: var(--fontColorFaded);
+}
+.ram td.value {
+    width: 6rem;
+    padding-left: 0.5rem;
 }
 </style>
