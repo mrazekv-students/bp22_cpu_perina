@@ -213,9 +213,9 @@ export default {
     display: flex;
     align-items: center;
     width: 70%;
+    min-width: 800px;
     margin-top: 3.2rem;
     margin-bottom: 2rem;
-    margin-right: 2rem;
 }
 
 .control-button {

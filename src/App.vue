@@ -24,8 +24,8 @@ export default {
 }
 body {
     margin: 0;
-    overflow: hidden;
     display: flex;
+    overflow-y: hidden;
     background: var(--backgroundColor);
     color: var(--fontColor);
 }
