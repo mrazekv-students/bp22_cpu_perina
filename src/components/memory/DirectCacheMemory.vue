@@ -44,7 +44,7 @@ export default {
             var cacheAddress = address & 0b11;
             var cacheTag = (address & 0b1100) >> 2;
 
-            // TODO: Data koherence, currently using valid-bit
+            // Data koherence: valid-bit
             // Memory block is in cache
             if (this.cacheData[cacheAddress].tag == cacheTag) {
                 this.cacheData[cacheAddress] = UpdateCache(cacheTag, data);

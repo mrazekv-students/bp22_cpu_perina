@@ -5,7 +5,7 @@
 <template>
     <table class="ram">
         <tr>
-            <th class="address"> Address </th>
+            <th class="address"> Addr. </th>
             <th class="value"> Data </th>
         </tr>
         <tr v-for="n in data.length" :key="n">
@@ -27,12 +27,13 @@ export default {
 
 <style>
 .ram {
-    margin-top: 1rem;
-    border-top: solid 8px var(--mainColor);
-    border-bottom: solid 8px var(--mainColor);
+    max-height: 80%;
+    border-top: solid 10px var(--mainColor);
+    border-bottom: solid 10px var(--mainColor);
     border-radius: 10px;
     border-spacing: 0;
     overflow: hidden;
+    overflow-y: auto;
 }
 .ram tr {
     background: var(--mainColorDark);
@@ -55,13 +56,13 @@ export default {
 }
 
 .ram td.address {
-    width: 6rem;
+    width: 5rem;
     padding-right: 0.5rem;
     text-align: right;
     color: var(--fontColorFaded);
 }
 .ram td.value {
-    width: 6rem;
+    width: 5rem;
     padding-left: 0.5rem;
 }
 </style>

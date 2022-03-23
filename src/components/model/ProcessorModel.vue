@@ -29,7 +29,7 @@ export default {
 <style>
 .processor {
     align-items: center;
-    width: 18rem;
+    width: 16rem;
     height: auto;
     padding: 0.5rem 1rem;
 

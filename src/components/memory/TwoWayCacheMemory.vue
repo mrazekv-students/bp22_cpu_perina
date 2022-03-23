@@ -4,7 +4,7 @@
 
 <template>
     <processor-model :instruction="instruction" :instuctionPointer="instructionPointer" :accumulator="accumulator"/>
-    <div class="horizontal-container">
+    <div class="vertical-container">
         <cache-model :data="cacheData[0]" />
         <cache-model :data="cacheData[1]" />
     </div>
@@ -47,7 +47,7 @@ export default {
             var cacheAddress = address & 0b01;
             var cacheTag = (address & 0b1110) >> 1;
 
-            // TODO: Data koherence, currently using valid-bit
+            // Data koherence: valid-bit
             // Memory block is in cache
             for (var i = 0; i < this.cacheData.length; i++) {
                 if (this.cacheData[i][cacheAddress].tag == cacheTag) {
@@ -57,7 +57,7 @@ export default {
             }
 
             // Not in cache
-            // TODO: Selection of victim, currently random
+            // Selection of victim: random
             var id = Math.random() < 0.5 ? 0 : 1;
             // Current memory block valid - can overwrite
             if (this.cacheData[id][cacheAddress].valid) {
@@ -88,7 +88,7 @@ export default {
             }
 
             // Not in cache
-            // TODO: Selection of victim, currently random
+            // Selection of victim: random
             var id = Math.random() < 0.5 ? 0 : 1;
             // Current memory block valid - can overwrite
             if (this.cacheData[id][cacheAddress].valid) {

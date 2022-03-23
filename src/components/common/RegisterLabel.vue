@@ -29,15 +29,15 @@ export default {
     color: var(--fontColorFaded);
 }
 .register-label>.value {
+    display: inline-block;
+    min-width: 3em;
     padding: 0.2rem 0.5rem;
     border: solid 4px var(--mainColor);
     border-top-width: 1px;
     border-bottom-width: 1px;
     border-radius: 5px;
 
-    min-width: 3.5em;
-    display: inline-block;
-
     font-family: Fira code, Fira Mono, Consolas, Menlo, Courier, monospace;
+    background: var(--programBackgroundColor);
 }
 </style>

@@ -10,7 +10,7 @@
         <common-button :displayValue="'Full Cache'" :function="() => ChangeCurrentTab('FullCacheMemory')" :class="'tab-button ' + activeTab['FullCacheMemory']"/>
         <cycle-counter/>
     </div>
-    <div class="vertical-container tab-container">
+    <div class="horizontal-container tab-container">
         <component :is="currentTab" @RegisterMemory="RegisterMemory" :instruction="instruction" :instructionPointer="instructionPointer" :accumulator="accumulator"/>
     </div>
 </template>
@@ -101,10 +101,5 @@ export default {
 .tab-button:hover span, 
 .tab-button.active span {
     transform: scaleY(83.33%);
-}
-
-.test {
-    align-self: flex-end;
-    margin-left: auto;
 }
 </style>

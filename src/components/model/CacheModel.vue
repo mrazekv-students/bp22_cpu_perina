@@ -5,7 +5,7 @@
 <template>
     <table class="cache">
         <tr>
-            <th class="address"> Address </th>
+            <th class="address"> Addr. </th>
             <th class="valid"> V </th>
             <th class="tag"> Tag </th>
             <th class="value"> Data </th>
@@ -31,12 +31,16 @@ export default {
 
 <style>
 .cache {
-    margin-top: 1rem;
-    border-top: solid 8px var(--mainColor);
-    border-bottom: solid 8px var(--mainColor);
+    max-height: 80%;
+    border-top: solid 10px var(--mainColor);
+    border-bottom: solid 10px var(--mainColor);
     border-radius: 10px;
     border-spacing: 0;
     overflow: hidden;
+    overflow-y: auto;
+}
+.cache + .cache {
+    margin-top: 1rem;
 }
 .cache tr {
     background: var(--mainColorDark);
@@ -59,21 +63,21 @@ export default {
 }
 
 .cache td.address {
-    width: 6rem;
+    width: 5rem;
     padding-right: 0.5rem;
     text-align: right;
     color: var(--fontColorFaded);
 }
 .cache td.valid {
-    width: 2rem;
+    width: 2.5rem;
     text-align: center;
 }
 .cache td.tag {
-    width: 4rem;
+    width: 5rem;
     text-align: center;
 }
 .cache td.value {
-    width: 6rem;
+    width: 5rem;
     padding-left: 0.5rem;
 }
 </style>

@@ -41,7 +41,7 @@ export default {
             if (address > this.ramData.length || address < 0)
                 throw RangeError("Invalid memory address");
 
-            // TODO: Data koherence, currently using valid-bit
+            // Data koherence: valid-bit
             // Memory block is in cache
             for (var i = 0; i < this.cacheData.length; i++) {
                 if (this.cacheData[i].tag == address) {
@@ -51,7 +51,7 @@ export default {
             }
 
             // Not in cache
-            // TODO: Selection of victim, currently random
+            // Selection of victim: random
             var id = Math.floor(Math.random() * 4);
             // Current memory block valid - can overwrite
             if (this.cacheData[id].valid) {
@@ -78,7 +78,7 @@ export default {
             }
 
             // Not in cache
-            // TODO: Selection of victim, currently random
+            // Selection of victim: random
             var id = Math.floor(Math.random() * 4);
             // Current memory block valid - can ovewrite
             if (this.cacheData[id].valid) {
