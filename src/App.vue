@@ -1,5 +1,5 @@
 <template>
-    <the-processor style="width: 100%; height: 100%;"/>
+    <the-processor/>
 </template>
 
 <script>

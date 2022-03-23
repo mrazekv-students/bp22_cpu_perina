@@ -5,17 +5,23 @@
 !-->
 
 <template>
-    <div class="horizontal-container">
-        <div class="vertical-container control-container">
-            <div class="horizontal-container button-container">
-                <icon-button v-for="button in controlButtons" :key="button" :displayIcon="button.display" :function="button.function" :disabled="button.disabled" class="control-button"/>
+    <div class="vertical-container" style="height: 100%">
+        <the-title :title="'Cache Simulator'" :author="'Daniel Peřina'" :organisation="'Brno University of Technology'" :suborganisation="'Faculty of Information Technology'" :date="'2022'"/>
+
+        <div class="horizontal-container main-container">
+            <div class="vertical-container control-container">
+                <div class="horizontal-container button-container">
+                    <icon-button v-for="button in controlButtons" :key="button" :displayIcon="button.display" :function="button.function" :disabled="button.disabled" class="control-button"/>
+                </div>
+
+                <div class="program-container">
+                    <code-editor @RegisterCompiler="RegisterCompiler"/>
+                </div>
             </div>
-            <div class="program-container">
-                <code-editor @RegisterCompiler="RegisterCompiler"/>
+
+            <div class="vertical-container model-container">
+                <tabs-container @RegisterMemory="RegisterMemory" :instruction="instruction.instruction" :instructionPointer="instructionPointer" :accumulator="accumulator.value"/>
             </div>
-        </div>
-        <div class="vertical-container model-container">
-            <tabs-container @RegisterMemory="RegisterMemory" :instruction="instruction.instruction" :instructionPointer="instructionPointer" :accumulator="accumulator.value"/>
         </div>
     </div>
 </template>
@@ -29,12 +35,13 @@ const s_ended = "ended"
 import IconButton from './common/IconButton.vue';
 import CodeEditor from './codeEditor/CodeEditor.vue';
 import TabsContainer from './TabsContainer.vue';
+import TheTitle from './TheTitle.vue'
 
 import Cpu from '@/scripts/Cpu.js';
 import ExecutionResult from '@/scripts/ExecutionResult.js'
 export default {
     name: "TheLayout",
-    components: { IconButton, CodeEditor, TabsContainer },
+    components: { IconButton, CodeEditor, TabsContainer, TheTitle },
 
     data() {
         return {
@@ -185,11 +192,14 @@ export default {
 </script>
 
 <style>
+.main-container {
+    height: 100%;
+    padding-top: 1rem;
+    padding-bottom: 1.5rem;
+}
 .control-container {
     width: 30%;
     min-width: 450px;
-    margin-top: 2rem;
-    margin-bottom: 2rem;
 }
 .button-container {
     display: flex;
@@ -216,8 +226,7 @@ export default {
     align-items: center;
     width: 70%;
     min-width: 800px;
-    margin-top: 3.5rem;
-    margin-bottom: 2rem;
+    margin-top: 1.5rem;
 }
 
 .control-button {
