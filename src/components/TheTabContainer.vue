@@ -23,7 +23,7 @@ import DirectCacheMemory from './memory/DirectCacheMemory.vue';
 import TwoWayCacheMemory from './memory/TwoWayCacheMemory.vue';
 import FullCacheMemory from './memory/FullCacheMemory.vue'
 export default {
-    name: "TabsContainer",
+    name: "TheTabContainer",
     components: { CommonButton, CycleCounter, RamOnlyMemory, DirectCacheMemory, TwoWayCacheMemory, FullCacheMemory },
     emits: ["RegisterMemory"],
 

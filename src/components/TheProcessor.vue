@@ -20,7 +20,7 @@
             </div>
 
             <div class="vertical-container model-container">
-                <tabs-container @RegisterMemory="RegisterMemory" :instruction="instruction.instruction" :instructionPointer="instructionPointer" :accumulator="accumulator.value"/>
+                <the-tab-container @RegisterMemory="RegisterMemory" :instruction="instruction.instruction" :instructionPointer="instructionPointer" :accumulator="accumulator.value"/>
             </div>
         </div>
     </div>
@@ -34,14 +34,14 @@ const s_ended = "ended"
 
 import IconButton from './common/IconButton.vue';
 import CodeEditor from './codeEditor/CodeEditor.vue';
-import TabsContainer from './TabsContainer.vue';
+import TheTabContainer from './TheTabContainer.vue';
 import TheTitle from './TheTitle.vue'
 
 import Cpu from '@/scripts/Cpu.js';
 import ExecutionResult from '@/scripts/ExecutionResult.js'
 export default {
     name: "TheLayout",
-    components: { IconButton, CodeEditor, TabsContainer, TheTitle },
+    components: { IconButton, CodeEditor, TheTabContainer, TheTitle },
 
     data() {
         return {
@@ -219,7 +219,7 @@ export default {
     border-left-width: 3px;
     border-right-width: 3px;
     border-radius: 15px;
-    background: var(--programBackgroundColor);
+    background: var(--consoleColor);
 }
 .model-container {
     display: flex;

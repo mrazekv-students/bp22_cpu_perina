@@ -38,6 +38,6 @@ export default {
     border-radius: 5px;
 
     font-family: Fira code, Fira Mono, Consolas, Menlo, Courier, monospace;
-    background: var(--programBackgroundColor);
+    background: var(--consoleColor);
 }
 </style>
