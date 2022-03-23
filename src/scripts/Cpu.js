@@ -1,7 +1,7 @@
 // Class implementing assembler processor
 
-import Instruction from "./Instruction.js";
-import ExecutionResult from "./ExecutionResult.js";
+import Instruction from "./enums/Instruction.js";
+import ExecutionResult from "./enums/ExecutionResult.js";
 
 export default class Cpu {
     constructor(memory, acc) {

@@ -1,6 +1,6 @@
 // Methods for compiling assembly code in code editor
 
-import Instruction from "./Instruction";
+import Instruction from "./enums/Instruction";
 
 let instructionNumber = 0;
 

@@ -35,10 +35,11 @@ const s_ended = "ended"
 import IconButton from './common/IconButton.vue';
 import CodeEditor from './codeEditor/CodeEditor.vue';
 import TheTabContainer from './TheTabContainer.vue';
-import TheTitle from './TheTitle.vue'
+import TheTitle from './TheTitle.vue';
 
 import Cpu from '@/scripts/Cpu.js';
-import ExecutionResult from '@/scripts/ExecutionResult.js'
+import ExecutionResult from '@/scripts/enums/ExecutionResult.js';
+import sleep from '@/scripts/Sleep.js';
 export default {
     name: "TheLayout",
     components: { IconButton, CodeEditor, TheTabContainer, TheTitle },
@@ -89,7 +90,7 @@ export default {
             // Program loop
             while (this.currentState == s_started) {
                 this.ExecuteInstruction();
-                await this.Sleep(500);
+                await sleep(500);
             }
         },
         StopProgram() {
@@ -175,11 +176,6 @@ export default {
             }
 
             this.currentState = state;
-        },
-        Sleep(ms) {
-            return new Promise((resolve) => {
-                setTimeout(resolve, ms);
-            });
         },
         ResetState() {
             this.instructionPointer = 0;
