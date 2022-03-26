@@ -4,18 +4,24 @@
 
 <template>
     <processor-model :instruction="instruction" :instuctionPointer="instructionPointer" :accumulator="accumulator"/>
+    <connector :id="0" :width="4" @RegisterConnector="RegisterConnector"/>
     <cache-model :data="cacheData" />
+    <connector :id="1" :width="4" @RegisterConnector="RegisterConnector"/>
     <ram-model :data="ramData" />
 </template>
 
 <script>
 import ProcessorModel from '../model/ProcessorModel.vue';
 import CacheModel from '../model/CacheModel.vue';
-import RamModel from '../model/RamModel.vue'
-import { ReadRam, UpdateCache } from '@/scripts/MemoryUtils.js';
+import RamModel from '../model/RamModel.vue';
+import Connector from '../model/Connector.vue';
+
+import MemoryUtils from '@/scripts/MemoryUtils.js';
+import Sleep from '@/scripts/Sleep.js';
+import CacheBlock from '@/scripts/CacheBlock.js';
 export default {
     name: "FullCacheMemory",
-    components: { ProcessorModel, CacheModel, RamModel },
+    components: { ProcessorModel, CacheModel, RamModel, Connector },
     emits: ["RegisterMemory"],
 
     props: {
@@ -27,7 +33,10 @@ export default {
     data() {
         return {
             ramData: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-            cacheData: [{valid: true, tag: 0, data: 0}, {valid: true, tag: 0, data: 0}, {valid: true, tag: 0, data: 0}, {valid: true, tag: 0, data: 0}]
+            cacheData: [new CacheBlock(), new CacheBlock(), new CacheBlock(), new CacheBlock()],
+            connectorCpuCache: { fromCpuToMemory: null, fromMemoryToCpu: null },
+            connectorCacheMem: { fromCpuToMemory: null, fromMemoryToCpu: null },
+            memoryUtils: null
         }
     },
 
@@ -37,7 +46,7 @@ export default {
     },
 
     methods: {
-        Write(address, data) {
+        async Write(address, data) {
             if (address > this.ramData.length || address < 0)
                 throw RangeError("Invalid memory address");
 
@@ -45,7 +54,7 @@ export default {
             // Memory block is in cache
             for (var i = 0; i < this.cacheData.length; i++) {
                 if (this.cacheData[i].tag == address) {
-                    this.cacheData[i] = UpdateCache(address, data);
+                    await this.memoryUtils.writeToCache(i, address, data);
                     return;
                 }
             }
@@ -55,25 +64,27 @@ export default {
             var id = Math.floor(Math.random() * 4);
             // Current memory block valid - can overwrite
             if (this.cacheData[id].valid) {
-                this.cacheData[id] = ReadRam(address, this.ramData[address]);
-                this.cacheData[id] = UpdateCache(address, data);
+                await this.memoryUtils.readFromRam(id, address, address);
+                await this.memoryUtils.writeToCache(id, address, data);
             }
             // Current memory block not valid - must save
             else {
-                this.ramData[this.cacheData[id].tag] = this.cacheData[id].data;
+                var ramAddress = this.cacheData[id].tag;
 
-                this.cacheData[id] = ReadRam(address, this.ramData[address]);
-                this.cacheData[id] = UpdateCache(address, data);
+                await this.memoryUtils.writeToRam(id, ramAddress);
+                await Sleep(this.connectorFadeTime);
+                await this.memoryUtils.readFromRam(id, address, address);
+                await this.memoryUtils.writeToCache(id, address, data);
             }
         },
-        Read(address) {
+        async Read(address) {
             if (address > this.ramData.length || address < 0)
                 throw RangeError("Invalid memory address");
 
             // Check in cache
             for (var i = 0; i < this.cacheData.length; i++) {
                 if (this.cacheData[i].tag == address) {
-                    return this.cacheData[i].data;
+                    return await this.memoryUtils.readFromCache(i);
                 }
             }
 
@@ -82,15 +93,17 @@ export default {
             var id = Math.floor(Math.random() * 4);
             // Current memory block valid - can ovewrite
             if (this.cacheData[id].valid) {
-                this.cacheData[id] = ReadRam(address, this.ramData[address]);
-                return this.cacheData[id].data;
+                await this.memoryUtils.readFromRam(id, address, address);
+                return await this.memoryUtils.readFromCache(id);
             }
             // Current memory block not valid - must save
             else {
-                this.ramData[this.cacheData[id].tag] = this.cacheData[id].data;
+                var ramAddress = this.cacheData[id].tag;
 
-                this.cacheData[id] = ReadRam(address, this.ramData[address]);
-                return this.cacheData[id].data;
+                await this.memoryUtils.writeToRam(id, ramAddress);
+                await Sleep(this.connectorFadeTime);
+                await this.memoryUtils.readFromRam(id, address, address);
+                return await this.memoryUtils.readFromCache(id);
             }
         },
         Flush() {
@@ -101,7 +114,12 @@ export default {
         },
         Reset() {
             this.ramData = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
-            this.cacheData = [{valid: true, tag: 0, data: 0}, {valid: true, tag: 0, data: 0}, {valid: true, tag: 0, data: 0}, {valid: true, tag: 0, data: 0}];
+            this.cacheData = [new CacheBlock(), new CacheBlock(), new CacheBlock(), new CacheBlock()];
+            this.memoryUtils = new MemoryUtils(this.ramData, this.cacheData, this.connectorCpuCache, this.connectorCacheMem, this);
+        },
+        RegisterConnector(id, connector) {
+            if (id == 0) this.connectorCpuCache = connector;
+            else if (id == 1) this.connectorCacheMem = connector;
         }
     }
 }

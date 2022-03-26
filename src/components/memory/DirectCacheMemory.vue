@@ -16,9 +16,9 @@ import RamModel from '../model/RamModel.vue';
 import CacheModel from '../model/CacheModel.vue';
 import Connector from '../model/Connector.vue';
 
-import { ReadFromRam, WriteToRam, ReadFromCache, WriteToCache, GetRamAddressFromCache } from '@/scripts/MemoryUtils.js';
-import Sleep from '@/scripts/Sleep.js';
+import MemoryUtils from '@/scripts/MemoryUtils.js';
 import CacheBlock from '@/scripts/CacheBlock.js';
+import Sleep from '@/scripts/Sleep.js';
 export default {
     name: "DirectCacheMemory",
     components: { ProcessorModel, RamModel, CacheModel, Connector },
@@ -35,7 +35,8 @@ export default {
             ramData: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
             cacheData: [new CacheBlock(), new CacheBlock(), new CacheBlock(), new CacheBlock()],
             connectorCpuCache: { fromCpuToMemory: null, fromMemoryToCpu: null },
-            connectorCacheMem: { fromCpuToMemory: null, fromMemoryToCpu: null }
+            connectorCacheMem: { fromCpuToMemory: null, fromMemoryToCpu: null },
+            memoryUtils: null
         }
     },
 
@@ -55,23 +56,23 @@ export default {
             // Data koherence: valid-bit
             // Memory block is in cache
             if (this.cacheData[cacheAddress].tag == cacheTag) {
-                await WriteToCache(this.cacheData[cacheAddress], cacheTag, data, this.connectorCpuCache, this);
+                await this.memoryUtils.writeToCache(cacheAddress, cacheTag, data);
             }
             // Not in cache
             else {
                 // Current memory block valid - can overwrite
                 if (this.cacheData[cacheAddress].valid) {
-                    await ReadFromRam(this.cacheData[cacheAddress], cacheTag, this.ramData[address], this.connectorCacheMem, this);
-                    await WriteToCache(this.cacheData[cacheAddress], cacheTag, data, this.connectorCpuCache, this);
+                    await this.memoryUtils.readFromRam(cacheAddress, address, cacheTag);
+                    await this.memoryUtils.writeToCache(cacheAddress, cacheTag, data);
                 }
                 // Current memory block not valid - must save
                 else {
-                    var ramAddress = GetRamAddressFromCache(cacheAddress, this.cacheData[cacheAddress].tag, 2);
+                    var ramAddress = this.memoryUtils.getRamAddressFromCache(cacheAddress, this.cacheData[cacheAddress].tag, 2);
 
-                    await WriteToRam(this.cacheData[cacheAddress], this.ramData, ramAddress, this.connectorCacheMem, this)
+                    await this.memoryUtils.writeToRam(cacheAddress, ramAddress);
                     await Sleep(this.connectorFadeTime);
-                    await ReadFromRam(this.cacheData[cacheAddress], cacheTag, this.ramData[address], this.connectorCacheMem, this)
-                    await WriteToCache(this.cacheData[cacheAddress], cacheTag, data, this.connectorCpuCache, this);
+                    await this.memoryUtils.readFromRam(cacheAddress, address, cacheTag);
+                    await this.memoryUtils.writeToCache(cacheAddress, cacheTag, data);
                 }
             }
         },
@@ -84,29 +85,29 @@ export default {
 
             // Check in cache
             if (this.cacheData[cacheAddress].tag == cacheTag) {
-                return await ReadFromCache(this.cacheData[cacheAddress], this.connectorCpuCache, this);
+                return await this.memoryUtils.readFromCache(cacheAddress);
             }
             // Not in cache
             else {
                 // Current memory block valid - can overwrite
                 if (this.cacheData[cacheAddress].valid) {
-                    await ReadFromRam(this.cacheData[cacheAddress], cacheTag, this.ramData[address], this.connectorCacheMem)
-                    return await ReadFromCache(this.cacheData[cacheAddress], this.connectorCpuCache, this);
+                    await this.memoryUtils.readFromRam(cacheAddress, address, cacheTag);
+                    return await this.memoryUtils.readFromCache(cacheAddress);
                 }
                 // Current memory block not valid - must save
                 else {
-                    var ramAddress = GetRamAddressFromCache(cacheAddress, this.cacheData[cacheAddress].tag, 2);
+                    var ramAddress = this.memoryUtils.getRamAddressFromCache(cacheAddress, this.cacheData[cacheAddress].tag, 2);
 
-                    await WriteToRam(this.cacheData[cacheAddress], this.ramData, ramAddress, this.connectorCacheMem)
+                    await this.memoryUtils.writeToRam(cacheAddress, ramAddress);
                     await Sleep(this.connectorFadeTime);
-                    await ReadFromRam(this.cacheData[cacheAddress], cacheTag, this.ramData[address], this.connectorCacheMem, this)
-                    return await ReadFromCache(this.cacheData[cacheAddress], this.connectorCpuCache, this);
+                    await this.memoryUtils.readFromRam(cacheAddress, address, cacheTag);
+                    return await this.memoryUtils.readFromCache(cacheAddress);
                 }
             }
         },
         Flush() {
             for (var i = 0; i < this.cacheData.length; i++) {
-                var address = GetRamAddressFromCache(i, this.cacheData[i].tag, 2);
+                var address = this.memoryUtils.getRamAddressFromCache(i, this.cacheData[i].tag, 2);
                 this.ramData[address] = this.cacheData[i].data;
                 this.cacheData[i].valid = true;
             }
@@ -114,12 +115,11 @@ export default {
         Reset() {
             this.ramData = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
             this.cacheData = [new CacheBlock(), new CacheBlock(), new CacheBlock(), new CacheBlock()];
+            this.memoryUtils = new MemoryUtils(this.ramData, this.cacheData, this.connectorCpuCache, this.connectorCacheMem, this);
         },
         RegisterConnector(id, connector) {
-            if (id == 0)
-                this.connectorCpuCache = connector;
-            else if (id == 1)
-                this.connectorCacheMem = connector;
+            if (id == 0) this.connectorCpuCache = connector;
+            else if (id == 1) this.connectorCacheMem = connector;
         }
     }
 }

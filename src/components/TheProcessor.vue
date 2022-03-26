@@ -84,6 +84,7 @@ export default {
                 // Create CPU
                 this.cpu = new Cpu(this.memory, this.accumulator);
             }
+            this.memory.reset();
             this.ChangeSimulationState(s_started);
 
             // Program loop

@@ -98,24 +98,12 @@ export default {
     box-sizing: content-box;
     background: var(--mainColorDarkDark);
 }
+.connector + .connector {
+    margin-top: 4rem;
+}
 .connector>.bar {
     height: 1rem;
     width: 1rem;
     background: var(--fontColor);
-}
-.connector>.bar-full {
-    transform: scaleX(4);
-    transition: transform .5s ease-in-out;
-}
-.connector>.bar-left {
-    transform-origin: left;
-}
-.connector>.bar-right {
-    transform-origin: right;
-}
-.connector>.bar-fade {
-    opacity: 0%;
-    transform: scaleX(0);
-    transition: opacity .5s ease-in-out, transform 0s linear .4s;
 }
 </style>
