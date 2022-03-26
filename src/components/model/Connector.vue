@@ -3,8 +3,9 @@
 !-->
 
 <template>
-    <div class="connector" :style="'width: ' + width + 'rem'">
-        <div :class="'bar ' + barState"></div>
+    <div class="connector" :style="connectorStyle">
+        <div class="bar" :style="barStyle">
+        </div>
     </div>
 </template>
 
@@ -21,8 +22,19 @@ export default {
 
     data() {
         return {
-            barState: "bar-empty"
+            connectorStyle: {
+                width: this.width + 'rem'
+            },
+            barStyle: {
+                width: '0rem',
+                opacity: 1,
+                'margin-left': 'initial'
+            }
         }
+    },
+
+    computed: {
+        maxWidth() { return (this.width + 'rem'); }
     },
 
     created() {
@@ -30,15 +42,51 @@ export default {
     },
 
     methods: {
-        async FromCpuToMemory(delay) {
-            this.barState = "bar-full bar-left";
-            await sleep(delay);
-            this.barState = "bar-fade bar-left";
+        async FromCpuToMemory(fillTime, fadeTime) {
+            // Fill from left to right
+            this.barStyle['margin-left'] = 'initial';
+
+            // Fill bar
+            var i = 5;
+            var fillBar = setInterval(() => {
+                this.barStyle.width = ((i / fillTime) * this.width) + 'rem';
+                i += 5;
+            }, 5);
+            await sleep(fillTime).then(() => clearInterval(fillBar));
+
+            // Fadeout
+            var fadeOut = setInterval(() => {
+                this.barStyle.opacity = i / fadeTime;
+                i -= 5;
+            }, 5);
+            await sleep(fadeTime).then(() => clearInterval(fadeOut));
+
+            // Reset
+            this.barStyle.width = '0rem';
+            this.barStyle.opacity = 1;
         },
-        async FromMemoryToCpu(delay) {
-            this.barState = "bar-full bar-right";
-            await sleep(delay);
-            this.barState = "bar-fade bar-right";
+        async FromMemoryToCpu(fillTime, fadeTime) {
+            // Fill from right to left
+            this.barStyle['margin-left'] = 'auto';
+
+            // Fill bar
+            var i = 5;
+            var fillBar = setInterval(() => {
+                this.barStyle.width = ((i / fillTime) * this.width) + 'rem';
+                i += 5;
+            }, 5);
+            await sleep(fillTime).then(() => clearInterval(fillBar));
+
+            // Fadeout
+            var fadeOut = setInterval(() => {
+                this.barStyle.opacity = i / fadeTime;
+                i -= 5;
+            }, 5);
+            await sleep(fadeTime).then(() => clearInterval(fadeOut));
+
+            // Reset
+            this.barStyle.width = '0rem';
+            this.barStyle.opacity = 1;
         }
     }
 }
@@ -46,16 +94,15 @@ export default {
 
 <style>
 .connector {
-    width: 4rem;
-    height: 2rem;
-    border-top: solid 0.5rem var(--mainColor);
-    border-bottom: solid 0.5rem var(--mainColor);
+    height: 1rem;
+    border-top: solid 5px var(--mainColor);
+    border-bottom: solid 5px var(--mainColor);
+    box-sizing: content-box;
     background: var(--mainColorDarkDark);
 }
 .connector>.bar {
     height: 1rem;
     width: 1rem;
-    transform: scaleX(0);
     background: var(--fontColor);
 }
 .connector>.bar-full {

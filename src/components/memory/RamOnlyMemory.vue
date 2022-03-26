@@ -5,7 +5,7 @@
 
 <template>
     <processor-model :instruction="instruction" :instuctionPointer="instructionPointer" :accumulator="accumulator"/>
-    <connector :id="0" @RegisterConnector="RegisterConnector"/>
+    <connector :id="0" @RegisterConnector="RegisterConnector" :width="4"/>
     <ram-model :data="ramData" />
 </template>
 
@@ -38,13 +38,13 @@ export default {
 
     methods: {
         Write(address, data) {
-            this.connector.fromCpuToMemory(500);
+            this.connector.fromCpuToMemory(300, 500);
             if (address < this.ramData.length && address >= 0)
                 this.ramData[address] = data;
             else throw RangeError("Invalid memory address")
         },
         Read(address) {
-            this.connector.fromMemoryToCpu(500);
+            this.connector.fromMemoryToCpu(300, 500);
             if (address < this.ramData.length && address >= 0)
                 return this.ramData[address];
             else throw RangeError("Invalid memory address")
