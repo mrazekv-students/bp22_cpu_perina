@@ -11,7 +11,7 @@ export default class Cpu {
 
     // Executes instruction
     // Return result object
-    execute(instruction) {
+    async execute(instruction) {
         var result;
         
         switch (instruction.instruction) {
@@ -48,19 +48,19 @@ export default class Cpu {
                 break;
     
             case Instruction.DLOAD.name:
-                result = this._executeDload(instruction.address);
+                result = await this._executeDload(instruction.address);
                 break;
     
             case Instruction.ILOAD.name:
-                result = this._executeIload(instruction.address);
+                result = await this._executeIload(instruction.address);
                 break;
     
             case Instruction.DSTORE.name:
-                result = this._executeDstore(instruction.address);
+                result = await this._executeDstore(instruction.address);
                 break;
     
             case Instruction.ISTORE.name:
-                result = this._executeIstore(instruction.address);
+                result = await this._executeIstore(instruction.address);
                 break;
     
             case Instruction.BRANCH.name:
@@ -80,11 +80,11 @@ export default class Cpu {
                 break;
     
             case Instruction.MADD.name:
-                result = this._executeMadd(instruction.address);
+                result = await this._executeMadd(instruction.address);
                 break;
     
             case Instruction.IJUMP.name:
-                result = this._executeIjump(instruction.address);
+                result = await this._executeIjump(instruction.address);
                 break;
     
             case Instruction.LABEL.name:
@@ -149,28 +149,28 @@ export default class Cpu {
     }
 
     // Execute DLOAD instruction
-    _executeDload(address) {
-        this.acc.value = this.memory.read(address);
+    async _executeDload(address) {
+        this.acc.value = await this.memory.read(address);
         return { result: ExecutionResult.NextInstruction };
     }
 
     // Execute ILOAD instruction
-    _executeIload(address) {
-        var valueAddress = this.memory.read(address);
-        this.acc.value = this.memory.read(valueAddress);
+    async _executeIload(address) {
+        var valueAddress = await this.memory.read(address);
+        this.acc.value = await this.memory.read(valueAddress);
         return { result: ExecutionResult.NextInstruction };
     }
 
     // Execute DSTORE instruction
-    _executeDstore(address) {
-        this.memory.write(address, this.acc.value);
+    async _executeDstore(address) {
+        await this.memory.write(address, this.acc.value);
         return { result: ExecutionResult.NextInstruction };
     }
 
     // Execute ISTORE instruction
-    _executeIstore(address) {
-        var valueAddress = this.memory.read(address);
-        this.memory.write(valueAddress, this.acc.value);
+    async _executeIstore(address) {
+        var valueAddress = await this.memory.read(address);
+        await this.memory.write(valueAddress, this.acc.value);
         return { result: ExecutionResult.NextInstruction };
     }
 
@@ -204,14 +204,14 @@ export default class Cpu {
     }
 
     // Execute MADD instruction
-    _executeMadd(address) {
-        this.acc.value += this.memory.read(address);
+    async _executeMadd(address) {
+        this.acc.value += await this.memory.read(address);
         return { result: ExecutionResult.NextInstruction };
     }
 
     // Execute IJUMP instruction
-    _executeIjump(address) {
-        var ip = this.memory.read(address);
+    async _executeIjump(address) {
+        var ip = await this.memory.read(address);
         return { result: ExecutionResult.MoveToAddress, address: ip };
     }
 

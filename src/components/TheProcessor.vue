@@ -39,7 +39,7 @@ import TheTitle from './TheTitle.vue';
 
 import Cpu from '@/scripts/Cpu.js';
 import ExecutionResult from '@/scripts/enums/ExecutionResult.js';
-import sleep from '@/scripts/Sleep.js';
+import Sleep from '@/scripts/Sleep.js';
 export default {
     name: "TheLayout",
     components: { IconButton, CodeEditor, TheTabContainer, TheTitle },
@@ -84,13 +84,12 @@ export default {
                 // Create CPU
                 this.cpu = new Cpu(this.memory, this.accumulator);
             }
-            console.log("X")
             this.ChangeSimulationState(s_started);
 
             // Program loop
             while (this.currentState == s_started) {
-                this.ExecuteInstruction();
-                await sleep(500);
+                await this.ExecuteInstruction();
+                await Sleep(500);
             }
         },
         StopProgram() {
@@ -101,10 +100,10 @@ export default {
             console.log("Pause program");
             this.ChangeSimulationState(s_halted);
         },
-        ExecuteInstruction() {
+        async ExecuteInstruction() {
             try {
                 this.instruction = this.compiler.getInstruction(this.instructionPointer);
-                var result = this.cpu.execute(this.instruction);
+                var result = await this.cpu.execute(this.instruction);
 
                 console.log(this.instruction);
 
@@ -129,7 +128,9 @@ export default {
                 }
             }
             catch (e) {
+                // TODO: Error message
                 console.error("Execution failed");
+                console.error(e);
                 this.ChangeSimulationState(s_ended);
             }
         },

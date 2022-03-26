@@ -44,6 +44,7 @@ export default {
     methods: {
         async FromCpuToMemory(fillTime, fadeTime) {
             // Fill from left to right
+            this.ResetBar();
             this.barStyle['margin-left'] = 'initial';
 
             // Fill bar
@@ -59,14 +60,11 @@ export default {
                 this.barStyle.opacity = i / fadeTime;
                 i -= 5;
             }, 5);
-            await sleep(fadeTime).then(() => clearInterval(fadeOut));
-
-            // Reset
-            this.barStyle.width = '0rem';
-            this.barStyle.opacity = 1;
+            sleep(fadeTime).then(() => clearInterval(fadeOut));
         },
         async FromMemoryToCpu(fillTime, fadeTime) {
             // Fill from right to left
+            this.ResetBar();
             this.barStyle['margin-left'] = 'auto';
 
             // Fill bar
@@ -83,8 +81,8 @@ export default {
                 i -= 5;
             }, 5);
             await sleep(fadeTime).then(() => clearInterval(fadeOut));
-
-            // Reset
+        },
+        ResetBar() {
             this.barStyle.width = '0rem';
             this.barStyle.opacity = 1;
         }

@@ -1,4 +1,10 @@
 import { createApp } from 'vue'
 import App from './App.vue'
 
-createApp(App).mount('#app')
+const app = createApp(App);
+
+// Globals
+app.config.globalProperties.connectorFillTime = 300;
+app.config.globalProperties.connectorFadeTime = 500;
+
+app.mount('#app');

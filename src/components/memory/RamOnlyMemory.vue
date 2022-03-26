@@ -5,14 +5,14 @@
 
 <template>
     <processor-model :instruction="instruction" :instuctionPointer="instructionPointer" :accumulator="accumulator"/>
-    <connector :id="0" @RegisterConnector="RegisterConnector" :width="4"/>
+    <connector :id="0" :width="4" @RegisterConnector="RegisterConnector"/>
     <ram-model :data="ramData" />
 </template>
 
 <script>
 import ProcessorModel from '../model/ProcessorModel.vue';
 import RamModel from '../model/RamModel.vue';
-import Connector from '../model/Connector.vue'
+import Connector from '../model/Connector.vue';
 export default {
     name: "RamOnlyMemory",
     components: { ProcessorModel, RamModel, Connector },
@@ -37,22 +37,25 @@ export default {
     },
 
     methods: {
-        Write(address, data) {
-            this.connector.fromCpuToMemory(300, 500);
+        async Write(address, data) {
             if (address < this.ramData.length && address >= 0)
+            {
+                await this.connector.fromCpuToMemory(this.connectorFillTime, this.connectorFadeTime);
                 this.ramData[address] = data;
+            }
             else throw RangeError("Invalid memory address")
         },
-        Read(address) {
-            this.connector.fromMemoryToCpu(300, 500);
+        async Read(address) {
             if (address < this.ramData.length && address >= 0)
+            {
+                await this.connector.fromMemoryToCpu(this.connectorFillTime, this.connectorFadeTime);
                 return this.ramData[address];
+            }
             else throw RangeError("Invalid memory address")
         },
         Reset() {
             this.ramData = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
         },
-
         RegisterConnector(id, connector) {
             this.connector = connector;
         }
