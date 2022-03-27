@@ -67,7 +67,6 @@ export default {
                 if (this.cacheData[cacheAddress].valid) {
                     this.ramModel.highlight(address, this.highlightFadeTime);
                     await this.memoryUtils.readFromRam(cacheAddress, address, cacheTag);
-                    console.log("XXXXXXX");
                     this.cacheModel.highlight(cacheAddress, this.highlightFadeTime);
 
                     await this.memoryUtils.writeToCache(cacheAddress, cacheTag, data);

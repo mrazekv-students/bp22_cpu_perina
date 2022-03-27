@@ -10,7 +10,6 @@
 </template>
 
 <script>
-import Sleep from '@/scripts/Sleep.js'
 export default {
     name: "Connector",
     emits: ["RegisterConnector"],
@@ -29,7 +28,9 @@ export default {
                 width: '0rem',
                 opacity: 1,
                 'margin-left': 'initial'
-            }
+            },
+            fillBar: { interval: null, timeout: null },
+            fadeOut: { interval: null, timeout: null }
         }
     },
 
@@ -40,47 +41,63 @@ export default {
     methods: {
         async FromCpuToMemory(fillTime, fadeTime) {
             // Fill from left to right
-            this.ResetBar();
-            this.barStyle['margin-left'] = 'initial';
-
-            // Fill bar
-            var i = 10;
-            var fillBar = setInterval(() => {
-                this.barStyle.width = ((i / fillTime) * this.width) + 'rem';
-                i += 10;
-            }, 10);
-            await Sleep(fillTime).then(() => clearInterval(fillBar));
-
-            // Fadeout
-            var fadeOut = setInterval(() => {
-                this.barStyle.opacity = i / fadeTime;
-                i -= 10;
-            }, 10);
-            Sleep(fadeTime).then(() => clearInterval(fadeOut));
+            this.ResetIntervals();
+            this.ResetBar("initial");
+            await this.AnimateBar(fillTime, fadeTime);
         },
         async FromMemoryToCpu(fillTime, fadeTime) {
             // Fill from right to left
-            this.ResetBar();
-            this.barStyle['margin-left'] = 'auto';
-
+            this.ResetIntervals();
+            this.ResetBar("auto");
+            await this.AnimateBar(fillTime, fadeTime);
+        },
+        async AnimateBar(fillTime, fadeTime) {
             // Fill bar
             var i = 10;
-            var fillBar = setInterval(() => {
+            this.fillBar.interval = setInterval(() => {
                 this.barStyle.width = ((i / fillTime) * this.width) + 'rem';
                 i += 10;
             }, 10);
-            await Sleep(fillTime).then(() => clearInterval(fillBar));
+            var promise = new Promise((resolve) => {
+                this.fillBar.timeout = setTimeout(() => {
+                    clearInterval(this.fillBar.interval);
+                    this.fillBar.interval = null;
+                    this.fillBar.timeout = null;
+
+                    resolve();
+                }, fillTime);
+            });
+            await promise;
 
             // Fadeout
-            var fadeOut = setInterval(() => {
+            this.fadeOut.interval = setInterval(() => {
                 this.barStyle.opacity = i / fadeTime;
                 i -= 10;
             }, 10);
-            Sleep(fadeTime).then(() => clearInterval(fadeOut));
+            this.fadeOut.timeout = setTimeout(() => {
+                clearInterval(this.fadeOut.interval);
+                this.fadeOut.interval = null;
+                this.fadeOut.timeout = null;
+            }, fadeTime);
         },
-        ResetBar() {
+        ResetBar(alignment) {
             this.barStyle.width = '0rem';
             this.barStyle.opacity = 1;
+            this.barStyle['margin-left'] = alignment;
+        },
+        ResetIntervals() {
+            if (this.fillBar.interval != null) {
+                clearInterval(this.fillBar.interval);
+                clearTimeout(this.fillBar.timeout)
+                this.fillBar.interval = null;
+                this.fillBar.timeout = null;
+            }
+            if (this.fadeOut.interval != null) {
+                clearInterval(this.fadeOut.interval);
+                clearTimeout(this.fadeOut.timeout);
+                this.fadeOut.interval = null;
+                this.fadeOut.timeout = null;
+            }
         }
     }
 }

@@ -20,7 +20,6 @@
 </template>
 
 <script>
-import Sleep from '@/scripts/Sleep.js'
 export default {
     name: "RamModel",
     emits: ["RegisterRam"],
@@ -33,9 +32,10 @@ export default {
     data() {
         return {
             rowStyle: {
-                background: this.highlightColor + "ff"
+                background: this.highlightColor + "00"
             },
             highlightId: -1,
+            fadeOut: { interval: null, timeout: null},
         }
     },
 
@@ -45,19 +45,33 @@ export default {
 
     methods: {
         HighlightRow(id, fadeTime) {
+            this.ResetIntervals();
+            this.ResetHighlight();
             this.highlightId = id;
 
             var i = fadeTime;
             var fadeHex;
-            var fadeOut = setInterval(() => {
+            this.fadeOut.interval = setInterval(() => {
                 fadeHex = (Math.floor((i / fadeTime) * 255)).toString(16).padStart(2, '0');
                 this.rowStyle.background = this.highlightColor + fadeHex;
                 i -= 10;
             }, 10);
-            Sleep(fadeTime).then(() => { 
-                clearInterval(fadeOut);
-                this.rowStyle.background = this.highlightColor + "00";
-            });
+            this.fadeOut.timeout = setTimeout(() => {
+                clearInterval(this.fadeOut.interval);
+                this.fadeOut.interval = null;
+                this.fadeOut.timeout = null;
+            }, fadeTime);
+        },
+        ResetHighlight() {
+            this.rowStyle.background = this.highlightColor + "00";
+        },
+        ResetIntervals() {
+            if (this.fadeOut.interval != null) {
+                clearInterval(this.fadeOut.interval);
+                clearTimeout(this.fadeOut.timeout);
+                this.fadeOut.interval = null;
+                this.fadeOut.timeout = null;
+            }
         }
     }
 }
