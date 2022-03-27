@@ -52,8 +52,8 @@ export default {
                 { display: "fa-solid fa-pause", function: this.PauseProgram, disabled: true},
                 { display: "fa-solid fa-forward-step", function: this.ExecuteInstruction, disabled: true }
             ],
-            compiler: null,
-            memory: null,
+            compiler: { compile: null, getInstruction: null, getLabel: null },
+            memory: { write: null, read: null, flush: null, initialize: null },
             cpu: null,
             currentState: s_notStarted,
 
@@ -82,9 +82,9 @@ export default {
                 }
 
                 // Create CPU
+                this.Initialize();
                 this.cpu = new Cpu(this.memory, this.accumulator);
             }
-            this.memory.reset();
             this.ChangeSimulationState(s_started);
 
             // Program loops
@@ -95,6 +95,7 @@ export default {
         },
         StopProgram() {
             console.log("Stop program");
+            this.Initialize();
             this.ChangeSimulationState(s_notStarted);
         },
         PauseProgram() {
@@ -152,7 +153,6 @@ export default {
                     this.controlButtons[1].disabled = true;
                     this.controlButtons[2].disabled = true;
                     this.controlButtons[3].disabled = true;
-                    this.ResetState();
                     break;
 
                 case s_started:
@@ -179,11 +179,11 @@ export default {
 
             this.currentState = state;
         },
-        ResetState() {
+        Initialize() {
             this.instructionPointer = 0;
             this.accumulator = { value: 0 };
             this.instruction = { instruction: "INST" };
-            this.memory.reset();
+            this.memory.initialize();
         }
     }
 }

@@ -33,7 +33,7 @@ export default {
     },
 
     created() {
-        this.$emit("RegisterMemory", { write: this.Write, read: this.Read, flush: () => {}, reset: this.Reset });
+        this.$emit("RegisterMemory", { write: this.Write, read: this.Read, flush: () => {}, initialize: this.Initialize });
     },
 
     methods: {
@@ -55,7 +55,7 @@ export default {
             }
             else throw RangeError("Invalid memory address")
         },
-        Reset() {
+        Initialize() {
             this.ramData = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
         },
 
