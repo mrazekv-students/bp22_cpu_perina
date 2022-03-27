@@ -9,18 +9,57 @@
             <th class="value"> Data </th>
         </tr>
         <tr v-for="n in data.length" :key="n">
-            <td class="address"> {{ "0x" + (n - 1).toString(16).toUpperCase() }} </td>
-            <td class="value"> {{ data[n - 1] }} </td>
+            <td class="address" :style="highlightId == (n - 1) ? rowStyle : ''">
+                {{ "0x" + (n - 1).toString(16).toUpperCase() }}
+            </td>
+            <td class="value" :style="highlightId == (n - 1) ? rowStyle : ''">
+                {{ data[n - 1] }}
+            </td>
         </tr>
     </table>
 </template>
 
 <script>
+import Sleep from '@/scripts/Sleep.js'
 export default {
     name: "RamModel",
+    emits: ["RegisterRam"],
 
     props: {
-        data: { type: Array, required: true }
+        data: { type: Array, required: true },
+        highlightColor: { type: String, default: "#8b161c" }
+    },
+
+    data() {
+        return {
+            rowStyle: {
+                background: this.highlightColor + "ff",
+            },
+            highlightId: -1,
+        }
+    },
+
+    created() {
+        this.$emit("RegisterRam", { highlight: this.HighlightRow });
+        console.log(this.highlightColor);
+    },
+
+    methods: {
+        HighlightRow(id, fadeTime) {
+            this.highlightId = id;
+
+            var i = fadeTime;
+            var fadeHex;
+            var fadeOut = setInterval(() => {
+                fadeHex = (Math.floor((i / fadeTime) * 255)).toString(16).padStart(2, '0');
+                this.rowStyle.background = this.highlightColor + fadeHex;
+                i -= 5;
+            }, 5);
+            Sleep(fadeTime).then(() => { 
+                clearInterval(fadeOut);
+                this.rowStyle.background = this.highlightColor + "00";
+            });
+        }
     }
 }
 </script>

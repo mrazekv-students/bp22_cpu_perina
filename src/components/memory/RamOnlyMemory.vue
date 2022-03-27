@@ -6,7 +6,7 @@
 <template>
     <processor-model :instruction="instruction" :instuctionPointer="instructionPointer" :accumulator="accumulator"/>
     <connector :id="0" :width="4" @RegisterConnector="RegisterConnector"/>
-    <ram-model :data="ramData" />
+    <ram-model :data="ramData" @RegisterRam="RegisterRam"/>
 </template>
 
 <script>
@@ -27,7 +27,8 @@ export default {
     data() {
         return {
             ramData: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-            connector: { fromCpuToMemory: null, fromMemoryToCpu: null }
+            connector: { fromCpuToMemory: null, fromMemoryToCpu: null },
+            ramModel: { highlight: null }
         }
     },
 
@@ -41,6 +42,7 @@ export default {
             if (address < this.ramData.length && address >= 0)
             {
                 await this.connector.fromCpuToMemory(this.connectorFillTime, this.connectorFadeTime);
+                this.ramModel.highlight(address, this.highlightFadeTime);
                 this.ramData[address] = data;
             }
             else throw RangeError("Invalid memory address")
@@ -48,6 +50,7 @@ export default {
         async Read(address) {
             if (address < this.ramData.length && address >= 0)
             {
+                this.ramModel.highlight(address, this.highlightFadeTime);
                 await this.connector.fromMemoryToCpu(this.connectorFillTime, this.connectorFadeTime);
                 return this.ramData[address];
             }
@@ -56,8 +59,12 @@ export default {
         Reset() {
             this.ramData = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
         },
+
         RegisterConnector(id, connector) {
             this.connector = connector;
+        },
+        RegisterRam(ram) {
+            this.ramModel = ram;
         }
     }
 }

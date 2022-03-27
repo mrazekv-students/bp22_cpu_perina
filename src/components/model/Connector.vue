@@ -10,7 +10,7 @@
 </template>
 
 <script>
-import sleep from '@/scripts/Sleep.js'
+import Sleep from '@/scripts/Sleep.js'
 export default {
     name: "Connector",
     emits: ["RegisterConnector"],
@@ -33,10 +33,6 @@ export default {
         }
     },
 
-    computed: {
-        maxWidth() { return (this.width + 'rem'); }
-    },
-
     created() {
         this.$emit("RegisterConnector", this.id, { fromCpuToMemory: this.FromCpuToMemory, fromMemoryToCpu: this.FromMemoryToCpu });
     },
@@ -53,14 +49,14 @@ export default {
                 this.barStyle.width = ((i / fillTime) * this.width) + 'rem';
                 i += 5;
             }, 5);
-            await sleep(fillTime).then(() => clearInterval(fillBar));
+            await Sleep(fillTime).then(() => clearInterval(fillBar));
 
             // Fadeout
             var fadeOut = setInterval(() => {
                 this.barStyle.opacity = i / fadeTime;
                 i -= 5;
             }, 5);
-            sleep(fadeTime).then(() => clearInterval(fadeOut));
+            Sleep(fadeTime).then(() => clearInterval(fadeOut));
         },
         async FromMemoryToCpu(fillTime, fadeTime) {
             // Fill from right to left
@@ -73,14 +69,14 @@ export default {
                 this.barStyle.width = ((i / fillTime) * this.width) + 'rem';
                 i += 5;
             }, 5);
-            await sleep(fillTime).then(() => clearInterval(fillBar));
+            await Sleep(fillTime).then(() => clearInterval(fillBar));
 
             // Fadeout
             var fadeOut = setInterval(() => {
                 this.barStyle.opacity = i / fadeTime;
                 i -= 5;
             }, 5);
-            await sleep(fadeTime).then(() => clearInterval(fadeOut));
+            await Sleep(fadeTime).then(() => clearInterval(fadeOut));
         },
         ResetBar() {
             this.barStyle.width = '0rem';
