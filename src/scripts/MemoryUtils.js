@@ -18,56 +18,55 @@ export default class MemoryUtils {
 
     // Read from RAM to cache
     async readFromRam(cacheAddress, ramAddress, tag, path) {
-        if (typeof path == "undefined") {
-            this.ramModel.highlight(ramAddress, this.config.highlightFadeTime);
+        this.ramModel.highlight(ramAddress, this.config.highlightFadeTime);
 
+        if (typeof path == "undefined") {
             await this.connectorCacheMem.fromMemoryToCpu(this.config.connectorFillTime, this.config.connectorFadeTime);
             this.cache[cacheAddress].update(true, tag, this.ram[ramAddress]);
-
             this.cacheModel.highlight(cacheAddress, this.config.highlightFadeTime)
         }
         else {
-            this.ramModel.highlight(ramAddress, this.config.highlightFadeTime);
-
             await this.connectorCacheMem[path].fromMemoryToCpu(this.config.connectorFillTime, this.config.connectorFadeTime);
             this.cache[path][cacheAddress].update(true, tag, this.ram[ramAddress]);
-            
             this.cacheModel[path].highlight(cacheAddress, this.config.highlightFadeTime)
         }
+
+        this.config.cycleCounter.value += this.config.cycleCosts.ramAccess;
     }
 
     // Write from cache to RAM
     async writeToRam(cacheAddress, ramAddress, path) {
         if (typeof path == "undefined") {
             this.cacheModel.highlight(cacheAddress, this.config.highlightFadeTime);
-
             await this.connectorCacheMem.fromCpuToMemory(this.config.connectorFillTime, this.config.connectorFadeTime);
             this.ram[ramAddress] = this.cache[cacheAddress].data;
-
-            this.ramModel.highlight(ramAddress, this.config.highlightFadeTime);
         }
         else {
             this.cacheModel[path].highlight(cacheAddress, this.config.highlightFadeTime);
-
             await this.connectorCacheMem[path].fromCpuToMemory(this.config.connectorFillTime, this.config.connectorFadeTime);
             this.ram[ramAddress] = this.cache[path][cacheAddress].data;
-
-            this.ramModel.highlight(ramAddress, this.config.highlightFadeTime);
         }
+
+        this.ramModel.highlight(ramAddress, this.config.highlightFadeTime);
+        this.config.cycleCounter.value += this.config.cycleCosts.ramAccess;
     }
 
     // Read from cache
     async readFromCache(cacheAddress, path) {
+        var returnVal;
         if (typeof path == "undefined") {
             this.cacheModel.highlight(cacheAddress, this.config.highlightFadeTime);
             await this.connectorCpuCache.fromMemoryToCpu(this.config.connectorFillTime, this.config.connectorFadeTime);
-            return this.cache[cacheAddress].data;    
+            returnVal = this.cache[cacheAddress].data;    
         }
         else {
             this.cacheModel[path].highlight(cacheAddress, this.config.highlightFadeTime);
             await this.connectorCpuCache[path].fromMemoryToCpu(this.config.connectorFillTime, this.config.connectorFadeTime);
-            return this.cache[path][cacheAddress].data;
+            returnVal = this.cache[path][cacheAddress].data;
         }
+
+        this.config.cycleCounter.value += this.config.cycleCosts.cacheAccess;    
+        return returnVal;
     }
 
     // Write to cache
@@ -82,5 +81,7 @@ export default class MemoryUtils {
             this.cache[path][cacheAddress].update(false, tag, data);
             this.cacheModel[path].highlight(cacheAddress, this.config.highlightFadeTime);   
         }
+        
+        this.config.cycleCounter.value += this.config.cycleCosts.cacheAccess;
     }
 }

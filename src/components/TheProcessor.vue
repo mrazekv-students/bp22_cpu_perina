@@ -83,7 +83,7 @@ export default {
 
                 // Create CPU
                 this.Initialize();
-                this.cpu = new Cpu(this.memory, this.accumulator);
+                this.cpu = new Cpu(this.memory, this.accumulator, this.cycleCounter);
             }
             this.ChangeSimulationState(s_started);
 
@@ -183,6 +183,7 @@ export default {
             this.instructionPointer = 0;
             this.accumulator = { value: 0 };
             this.instruction = { instruction: "INST" };
+            this.cycleCounter.value = 0;
             this.memory.initialize();
         }
     }

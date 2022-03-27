@@ -12,15 +12,14 @@
 <script>
 export default {
     name: "CycleCounter",
-    
-    data() {
-        return {
-            cycleCounter: 0 // TODO
-        }
+
+    props: {
+        cycles: { required: true }
     },
+    
     computed: {
         cycleCounterFormat() {
-            return this.cycleCounter.toLocaleString(undefined)
+            return this.cycles.toLocaleString(undefined)
         }
     }
 }

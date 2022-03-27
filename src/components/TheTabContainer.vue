@@ -8,7 +8,7 @@
         <common-button :displayValue="'Direct Cache'" :function="() => ChangeCurrentTab('DirectCacheMemory')" :class="'tab-button ' + activeTab['DirectCacheMemory']"/>
         <common-button :displayValue="'Two-Way Cache'" :function="() => ChangeCurrentTab('TwoWayCacheMemory')" :class="'tab-button ' + activeTab['TwoWayCacheMemory']"/>
         <common-button :displayValue="'Full Cache'" :function="() => ChangeCurrentTab('FullCacheMemory')" :class="'tab-button ' + activeTab['FullCacheMemory']"/>
-        <cycle-counter/>
+        <cycle-counter :cycles="this.cycleCounter.value"/>
     </div>
     <div class="horizontal-container tab-container">
         <component :is="currentTab" @RegisterMemory="RegisterMemory" :instruction="instruction" :instructionPointer="instructionPointer" :accumulator="accumulator"/>

@@ -42,6 +42,7 @@ export default {
             {
                 await this.connector.fromCpuToMemory(this.connectorFillTime, this.connectorFadeTime);
                 this.ramModel.highlight(address, this.highlightFadeTime);
+                this.cycleCounter.value += this.cycleCosts.ramAccess;
                 this.ramData[address] = data;
             }
             else throw RangeError("Invalid memory address")
@@ -49,6 +50,7 @@ export default {
         async Read(address) {
             if (address < this.ramData.length && address >= 0)
             {
+                this.cycleCounter.value += this.cycleCosts.ramAccess;
                 this.ramModel.highlight(address, this.highlightFadeTime);
                 await this.connector.fromMemoryToCpu(this.connectorFillTime, this.connectorFadeTime);
                 return this.ramData[address];

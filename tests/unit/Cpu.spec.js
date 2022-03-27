@@ -1,8 +1,10 @@
 // Test for CPU
 import { mount  } from '@vue/test-utils'
 import Cpu from '@/scripts/Cpu.js'
-import ExecutionResult from '@/scripts/ExecutionResult'
+import ExecutionResult from '@/scripts/enums/ExecutionResult'
 import RamOnlyMemory from '@/components/memory/RamOnlyMemory.vue'
+
+// TODO: Fix tests, ram only memory awaits break tests
 
 describe("Cpu instruction tests", () => {
     test("Execute no instructions", () => {

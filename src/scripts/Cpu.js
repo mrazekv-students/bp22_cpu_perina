@@ -4,9 +4,10 @@ import Instruction from "./enums/Instruction.js";
 import ExecutionResult from "./enums/ExecutionResult.js";
 
 export default class Cpu {
-    constructor(memory, acc) {
+    constructor(memory, acc, cycleCounter) {
         this.memory = memory;
         this.acc = acc;
+        this.cycleCounter = cycleCounter;
     }
 
     // Executes instruction
@@ -105,112 +106,138 @@ export default class Cpu {
 
     // Execute HALT instruction
     _executeHalt() {
+        this.cycleCounter.value += 1;
         return { result: ExecutionResult.HaltExecution };
     }
 
     // Execute NEGATE instruction
     _executeNegate() {
+        this.cycleCounter.value += 1
         this.acc.value = -this.acc.value;
         return { result: ExecutionResult.NextInstruction };
     }
 
     // Execute ACCDEC instruction
     _executeAccdec() {
+        this.cycleCounter.value += 1
         this.acc.value -= 1;
         return { result: ExecutionResult.NextInstruction };
     }
     
     // Execute ACCINC instruction
     _executeAccinc() {
+        this.cycleCounter.value += 1
         this.acc.value += 1;
         return { result: ExecutionResult.NextInstruction };
     }
 
     // Execute NOP instruction
     _executeNop() {
+        this.cycleCounter.value += 1
         return { result: ExecutionResult.NextInstruction };
     }
 
     // Execute OUTP instruction - NOP
     _executeOutp() {
+        this.cycleCounter.value += 1
         return { result: ExecutionResult.NextInstruction };
     }
 
     // Execute INP instruction - ACC = Random(0 - 1023)
     _executeInp() {
+        this.cycleCounter.value += 1
         this.acc.value = Math.floor(Math.random() * 1024);
         return { result: ExecutionResult.NextInstruction };
     }
 
     // Execute MLOAD instruction
     _executeMload(value) {
+        this.cycleCounter.value += 1
         this.acc.value = value;
         return { result: ExecutionResult.NextInstruction };
     }
 
     // Execute DLOAD instruction
     async _executeDload(address) {
+        this.cycleCounter.value += 1
         this.acc.value = await this.memory.read(address);
         return { result: ExecutionResult.NextInstruction };
     }
 
     // Execute ILOAD instruction
     async _executeIload(address) {
+        this.cycleCounter.value += 1
         var valueAddress = await this.memory.read(address);
+        this.cycleCounter.value += 1
         this.acc.value = await this.memory.read(valueAddress);
         return { result: ExecutionResult.NextInstruction };
     }
 
     // Execute DSTORE instruction
     async _executeDstore(address) {
+        this.cycleCounter.value += 1
         await this.memory.write(address, this.acc.value);
         return { result: ExecutionResult.NextInstruction };
     }
 
     // Execute ISTORE instruction
     async _executeIstore(address) {
+        this.cycleCounter.value += 1
         var valueAddress = await this.memory.read(address);
+        this.cycleCounter.value += 1
         await this.memory.write(valueAddress, this.acc.value);
         return { result: ExecutionResult.NextInstruction };
     }
 
     // Execute BRANCH instruction
     _executeBranch(label) {
+        this.cycleCounter.value += 1
         return { result: ExecutionResult.MoveToLabel, label: label };
     }
 
     // Execute BRZERO instruction
     _executeBrzero(label) {
-        if (this.acc.value == 0)
+        this.cycleCounter.value += 1
+        if (this.acc.value == 0) {
+            this.cycleCounter.value += 1
             return { result: ExecutionResult.MoveToLabel, label: label };
+        }
         else
             return { result: ExecutionResult.NextInstruction };
     }
 
     // Execute BRPOS instruction
     _executeBrpos(label) {
-        if (this.acc.value > 0)
+        this.cycleCounter.value += 1
+        if (this.acc.value > 0) {
+            this.cycleCounter.value += 1
             return { result: ExecutionResult.MoveToLabel, label: label };
+        }
         else
             return { result: ExecutionResult.NextInstruction };
     }
 
     // Execute BRNEG instruction
     _executeBrneg(label) {
-        if (this.acc.value < 0)
+        this.cycleCounter.value += 1
+        if (this.acc.value < 0) {
+            this.cycleCounter.value += 1
             return { result: ExecutionResult.MoveToLabel, label: label };
+        }
         else
             return { result: ExecutionResult.NextInstruction };
     }
 
     // Execute MADD instruction
     async _executeMadd(address) {
+        this.cycleCounter.value += 1
         this.acc.value += await this.memory.read(address);
         return { result: ExecutionResult.NextInstruction };
     }
 
     // Execute IJUMP instruction
     async _executeIjump(address) {
+        this.cycleCounter.value += 1
         var ip = await this.memory.read(address);
         return { result: ExecutionResult.MoveToAddress, address: ip };
     }

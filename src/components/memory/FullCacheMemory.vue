@@ -53,6 +53,7 @@ export default {
             // Data koherence: valid-bit
             // Memory block is in cache
             for (var i = 0; i < this.cacheData.length; i++) {
+                this.cycleCounter.value += this.cycleCosts.cacheCheck;
                 if (this.cacheData[i].tag == address) {
                     await this.memoryUtils.writeToCache(i, address, data);
                     return;
@@ -82,6 +83,7 @@ export default {
 
             // Check in cache
             for (var i = 0; i < this.cacheData.length; i++) {
+                this.cycleCounter.value += this.cycleCosts.cacheCheck;
                 if (this.cacheData[i].tag == address) {
                     return await this.memoryUtils.readFromCache(i);
                 }
