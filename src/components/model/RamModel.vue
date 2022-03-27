@@ -33,7 +33,7 @@ export default {
     data() {
         return {
             rowStyle: {
-                background: this.highlightColor + "ff",
+                background: this.highlightColor + "ff"
             },
             highlightId: -1,
         }
@@ -41,7 +41,6 @@ export default {
 
     created() {
         this.$emit("RegisterRam", { highlight: this.HighlightRow });
-        console.log(this.highlightColor);
     },
 
     methods: {
@@ -53,8 +52,8 @@ export default {
             var fadeOut = setInterval(() => {
                 fadeHex = (Math.floor((i / fadeTime) * 255)).toString(16).padStart(2, '0');
                 this.rowStyle.background = this.highlightColor + fadeHex;
-                i -= 5;
-            }, 5);
+                i -= 10;
+            }, 10);
             Sleep(fadeTime).then(() => { 
                 clearInterval(fadeOut);
                 this.rowStyle.background = this.highlightColor + "00";

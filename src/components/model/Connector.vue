@@ -44,18 +44,18 @@ export default {
             this.barStyle['margin-left'] = 'initial';
 
             // Fill bar
-            var i = 5;
+            var i = 10;
             var fillBar = setInterval(() => {
                 this.barStyle.width = ((i / fillTime) * this.width) + 'rem';
-                i += 5;
-            }, 5);
+                i += 10;
+            }, 10);
             await Sleep(fillTime).then(() => clearInterval(fillBar));
 
             // Fadeout
             var fadeOut = setInterval(() => {
                 this.barStyle.opacity = i / fadeTime;
-                i -= 5;
-            }, 5);
+                i -= 10;
+            }, 10);
             Sleep(fadeTime).then(() => clearInterval(fadeOut));
         },
         async FromMemoryToCpu(fillTime, fadeTime) {
@@ -64,19 +64,19 @@ export default {
             this.barStyle['margin-left'] = 'auto';
 
             // Fill bar
-            var i = 5;
+            var i = 10;
             var fillBar = setInterval(() => {
                 this.barStyle.width = ((i / fillTime) * this.width) + 'rem';
-                i += 5;
-            }, 5);
+                i += 10;
+            }, 10);
             await Sleep(fillTime).then(() => clearInterval(fillBar));
 
             // Fadeout
             var fadeOut = setInterval(() => {
                 this.barStyle.opacity = i / fadeTime;
-                i -= 5;
-            }, 5);
-            await Sleep(fadeTime).then(() => clearInterval(fadeOut));
+                i -= 10;
+            }, 10);
+            Sleep(fadeTime).then(() => clearInterval(fadeOut));
         },
         ResetBar() {
             this.barStyle.width = '0rem';

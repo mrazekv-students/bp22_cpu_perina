@@ -87,10 +87,10 @@ export default {
             this.memory.reset();
             this.ChangeSimulationState(s_started);
 
-            // Program loop
+            // Program loops
             while (this.currentState == s_started) {
                 await this.ExecuteInstruction();
-                await Sleep(500);
+                await Sleep(this.instructionWaitTime);
             }
         },
         StopProgram() {
