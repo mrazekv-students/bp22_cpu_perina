@@ -9,14 +9,14 @@
         <connector :id="2" :width="4" @RegisterConnector="RegisterConnector"/>
     </div>
     <div class="vertical-container">
-        <cache-model :data="cacheData[0]" />
-        <cache-model :data="cacheData[1]" />
+        <cache-model :data="cacheData[0]" :id="0" @RegisterCache="RegisterCache"/>
+        <cache-model :data="cacheData[1]" :id="1" @RegisterCache="RegisterCache"/>
     </div>
     <div class="vertical-container">
         <connector :id="1" :width="4" @RegisterConnector="RegisterConnector"/>
         <connector :id="3" :width="4" @RegisterConnector="RegisterConnector"/>
     </div>
-    <ram-model :data="ramData" />
+    <ram-model :data="ramData" @RegisterRam="RegisterRam"/>
 </template>
 
 <script>
@@ -26,7 +26,6 @@ import RamModel from '../model/RamModel.vue';
 import Connector from '../model/Connector.vue';
 
 import MemoryUtils from '@/scripts/MemoryUtils.js';
-import Sleep from '@/scripts/Sleep.js';
 import CacheBlock from '@/scripts/CacheBlock.js';
 export default {
     name: "TwoWayCacheMemory",
@@ -45,12 +44,13 @@ export default {
             cacheData: [[new CacheBlock(), new CacheBlock()], [new CacheBlock(), new CacheBlock()]],
             connectorCpuCache: [],
             connectorCacheMem: [],
+            cacheModel: [],
+            ramModel: { highlight: null },
             memoryUtils: null
         }
     },
 
     created() {
-        this.Reset();
         this.$emit("RegisterMemory", { write: this.Write, read: this.Read, flush: this.Flush, reset: this.Reset });
     },
 
@@ -84,7 +84,6 @@ export default {
                 var ramAddress = this.memoryUtils.getRamAddressFromCache(cacheAddress, this.cacheData[id][cacheAddress].tag, 1);
                 
                 await this.memoryUtils.writeToRam(cacheAddress, ramAddress, id);
-                await Sleep(this.connectorFadeTime);
                 await this.memoryUtils.readFromRam(cacheAddress, address, cacheTag, id);
                 await this.memoryUtils.writeToCache(cacheAddress, cacheTag, data, id);
             }
@@ -116,7 +115,6 @@ export default {
                 var ramAddress = this.memoryUtils.getRamAddressFromCache(cacheAddress, this.cacheData[id][cacheAddress].tag, 1);
                 
                 await this.memoryUtils.writeToRam(cacheAddress, ramAddress, id);
-                await Sleep(this.connectorFadeTime);
                 await this.memoryUtils.readFromRam(cacheAddress, address, cacheTag, id);
                 return await this.memoryUtils.readFromCache(cacheAddress, id);
             }
@@ -133,11 +131,18 @@ export default {
         Reset() {
             this.ramData = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
             this.cacheData = [[new CacheBlock(), new CacheBlock()], [new CacheBlock(), new CacheBlock()]];
-            this.memoryUtils = new MemoryUtils(this.ramData, this.cacheData, this.connectorCpuCache, this.connectorCacheMem, this);
+            this.memoryUtils = new MemoryUtils(this.ramData, this.cacheData, this.ramModel, this.cacheModel, this.connectorCpuCache, this.connectorCacheMem, this);
         },
+
         RegisterConnector(id, connector) {
             if (id % 2 == 0) this.connectorCpuCache[Math.floor(id / 2)] = connector;
             else if (id % 2 == 1) this.connectorCacheMem[Math.floor(id / 2)] = connector;
+        },
+        RegisterRam(ram) {
+            this.ramModel = ram;
+        },
+        RegisterCache(cache, id) {
+            this.cacheModel[id] = cache;
         }
     }
 }

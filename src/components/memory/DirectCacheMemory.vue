@@ -18,7 +18,6 @@ import Connector from '../model/Connector.vue';
 
 import MemoryUtils from '@/scripts/MemoryUtils.js';
 import CacheBlock from '@/scripts/CacheBlock.js';
-import Sleep from '@/scripts/Sleep.js';
 export default {
     name: "DirectCacheMemory",
     components: { ProcessorModel, RamModel, CacheModel, Connector },
@@ -43,7 +42,6 @@ export default {
     },
 
     created() {
-        this.Reset();
         this.$emit("RegisterMemory", { write: this.Write, read: this.Read, flush: this.Flush, reset: this.Reset });
     },
 
@@ -59,34 +57,21 @@ export default {
             // Memory block is in cache
             if (this.cacheData[cacheAddress].tag == cacheTag) {
                 await this.memoryUtils.writeToCache(cacheAddress, cacheTag, data);
-                this.cacheModel.highlight(cacheAddress, this.highlightFadeTime);
             }
             // Not in cache
             else {
                 // Current memory block valid - can overwrite
                 if (this.cacheData[cacheAddress].valid) {
-                    this.ramModel.highlight(address, this.highlightFadeTime);
                     await this.memoryUtils.readFromRam(cacheAddress, address, cacheTag);
-                    this.cacheModel.highlight(cacheAddress, this.highlightFadeTime);
-
                     await this.memoryUtils.writeToCache(cacheAddress, cacheTag, data);
-                    this.cacheModel.highlight(cacheAddress, this.highlightFadeTime);
                 }
                 // Current memory block not valid - must save
                 else {
                     var ramAddress = this.memoryUtils.getRamAddressFromCache(cacheAddress, this.cacheData[cacheAddress].tag, 2);
 
-                    this.cacheModel.highlight(cacheAddress, this.highlightFadeTime);
                     await this.memoryUtils.writeToRam(cacheAddress, ramAddress);
-                    this.ramModel.highlight(ramAddress, this.highlightFadeTime);
-
-                    await Sleep(this.connectorFadeTime);
-                    this.ramModel.highlight(address, this.highlightFadeTime);
                     await this.memoryUtils.readFromRam(cacheAddress, address, cacheTag);
-                    this.cacheModel.highlight(cacheAddress, this.highlightFadeTime);
-
                     await this.memoryUtils.writeToCache(cacheAddress, cacheTag, data);
-                    this.cacheModel.highlight(cacheAddress, this.highlightFadeTime);
                 }
             }
         },
@@ -99,34 +84,21 @@ export default {
 
             // Check in cache
             if (this.cacheData[cacheAddress].tag == cacheTag) {
-                this.cacheModel.highlight(cacheAddress, this.highlightFadeTime);
                 return await this.memoryUtils.readFromCache(cacheAddress);
             }
             // Not in cache
             else {
                 // Current memory block valid - can overwrite
                 if (this.cacheData[cacheAddress].valid) {
-                    this.ramModel.highlight(address, this.highlightFadeTime);
                     await this.memoryUtils.readFromRam(cacheAddress, address, cacheTag);
-                    this.cacheModel.highlight(cacheAddress, this.highlightFadeTime);
-
-                    this.cacheModel.highlight(cacheAddress, this.highlightFadeTime);
                     return await this.memoryUtils.readFromCache(cacheAddress);
                 }
                 // Current memory block not valid - must save
                 else {
                     var ramAddress = this.memoryUtils.getRamAddressFromCache(cacheAddress, this.cacheData[cacheAddress].tag, 2);
 
-                    this.cacheModel.highlight(cacheAddress, this.highlightFadeTime);
                     await this.memoryUtils.writeToRam(cacheAddress, ramAddress);
-                    this.ramModel.highlight(ramAddress, this.highlightFadeTime);
-
-                    await Sleep(this.connectorFadeTime);
-                    this.ramModel.highlight(address, this.highlightFadeTime);
                     await this.memoryUtils.readFromRam(cacheAddress, address, cacheTag);
-                    this.cacheModel.highlight(cacheAddress, this.highlightFadeTime);
-
-                    this.cacheModel.highlight(cacheAddress, this.highlightFadeTime);
                     return await this.memoryUtils.readFromCache(cacheAddress);
                 }
             }
@@ -141,7 +113,7 @@ export default {
         Reset() {
             this.ramData = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
             this.cacheData = [new CacheBlock(), new CacheBlock(), new CacheBlock(), new CacheBlock()];
-            this.memoryUtils = new MemoryUtils(this.ramData, this.cacheData, this.connectorCpuCache, this.connectorCacheMem, this);
+            this.memoryUtils = new MemoryUtils(this.ramData, this.cacheData, this.ramModel, this.cacheModel, this.connectorCpuCache, this.connectorCacheMem, this);
         },
 
         RegisterConnector(id, connector) {

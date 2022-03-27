@@ -34,6 +34,7 @@ export default {
 
     props: {
         data: { type: Array, required: true },
+        id: { type: Number, default: 0 },
         highlightColor: { type: String, default: "#8b161c" }
     },
 
@@ -48,7 +49,7 @@ export default {
     },
 
     created() {
-        this.$emit("RegisterCache", { highlight: this.HighlightRow })
+        this.$emit("RegisterCache", { highlight: this.HighlightRow }, this.id);
     },
 
     methods: {
