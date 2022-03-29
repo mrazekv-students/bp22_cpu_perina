@@ -17,6 +17,8 @@ https://blog.devgenius.io/how-to-build-a-tab-component-with-vue-js-3-3c06ed335b3
 ## Testing with jest
 https://vuejs.org/guide/scaling-up/testing.html#unit-testing
 https://dev.to/songta17/vue-3-with-jest-and-vue-tests-utils-introduction-5h5i
+https://stackoverflow.com/questions/51214631/how-to-mock-global-vue-js-variable-in-jest-test
+https://stackoverflow.com/questions/47144187/can-you-write-async-tests-that-expect-tothrow
 
 ## Style
 https://vuetifyjs.com/en/styles/colors/#material-colors
