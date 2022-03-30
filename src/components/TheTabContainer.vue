@@ -11,7 +11,9 @@
         <cycle-counter :cycles="this.cycleCounter.value"/>
     </div>
     <div class="horizontal-container tab-container">
-        <component :is="currentTab" @RegisterMemory="RegisterMemory" :instruction="instruction" :instructionPointer="instructionPointer" :accumulator="accumulator"/>
+        <component :is="currentTab" @RegisterMemory="RegisterMemory"
+            :instruction="instruction" :instructionPointer="instructionPointer"
+            :accumulator="accumulator" :addressPointer="addressPointer"/>
     </div>
 </template>
 
@@ -30,7 +32,8 @@ export default {
     props: {
         instruction: { type: String },
         instructionPointer: { type: Number },
-        accumulator: { type: Number}
+        accumulator: { type: Number},
+        addressPointer: { type: Number }
     },
 
     data() {

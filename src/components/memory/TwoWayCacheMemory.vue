@@ -3,7 +3,8 @@
 !-->
 
 <template>
-    <processor-model :instruction="instruction" :instuctionPointer="instructionPointer" :accumulator="accumulator"/>
+    <processor-model :instruction="instruction" :instuctionPointer="instructionPointer"
+        :accumulator="accumulator" :addressPointer="addressPointer"/>
     <div class="vertical-container">
         <connector :id="0" :width="4" @RegisterConnector="RegisterConnector"/>
         <connector :id="2" :width="4" @RegisterConnector="RegisterConnector"/>
@@ -35,7 +36,8 @@ export default {
     props: {
         instruction: { type: String },
         instructionPointer: { type: Number },
-        accumulator: { type: Number}
+        accumulator: { type: Number},
+        addressPointer: { type: Number }
     },
 
     computed: {

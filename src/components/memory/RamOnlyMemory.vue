@@ -4,7 +4,8 @@
 !-->
 
 <template>
-    <processor-model :instruction="instruction" :instuctionPointer="instructionPointer" :accumulator="accumulator"/>
+    <processor-model :instruction="instruction" :instuctionPointer="instructionPointer"
+        :accumulator="accumulator" :addressPointer="addressPointer"/>
     <connector :id="0" :width="4" @RegisterConnector="RegisterConnector"/>
     <ram-model :data="ramData" @RegisterRam="RegisterRam"/>
 </template>
@@ -21,7 +22,8 @@ export default {
     props: {
         instruction: { type: String },
         instructionPointer: { type: Number },
-        accumulator: { type: Number}
+        accumulator: { type: Number},
+        addressPointer: { type: Number }
     },
 
     data() {

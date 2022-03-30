@@ -3,7 +3,8 @@
 !-->
 
 <template>
-    <processor-model :instruction="instruction" :instuctionPointer="instructionPointer" :accumulator="accumulator"/>
+    <processor-model :instruction="instruction" :instuctionPointer="instructionPointer"
+        :accumulator="accumulator" :addressPointer="addressPointer"/>
     <connector :id="0" :width="4" @RegisterConnector="RegisterConnector"/>
     <cache-model :data="cacheData" :tagLength="tagLength" @RegisterCache="RegisterCache"/>
     <connector :id="1" :width="4" @RegisterConnector="RegisterConnector"/>
@@ -26,7 +27,8 @@ export default {
     props: {
         instruction: { type: String },
         instructionPointer: { type: Number },
-        accumulator: { type: Number}
+        accumulator: { type: Number},
+        addressPointer: { type: Number }
     },
 
     computed: {

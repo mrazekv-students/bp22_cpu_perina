@@ -10,6 +10,7 @@
             <register-label label="IP" :value="instuctionPointer"/>
             <register-label label="ACC" :value="accumulator"/>
         </div>
+        <register-label label="AP" :value="addressPointerString" class="address-pointer" />
     </div>
 </template>
 
@@ -18,10 +19,17 @@ import RegisterLabel from '../common/RegisterLabel.vue'
 export default {
     name: "ProcessorModel",
     components: { RegisterLabel },
+
     props: {
         instruction: { type: String },
         instuctionPointer: { type: Number },
-        accumulator: { type: Number }
+        accumulator: { type: Number },
+        addressPointer: { type: Number, default: 0 }
+    },
+    computed: {
+        addressPointerString() {
+            return `0x${this.addressPointer.toString(16).toUpperCase()}`
+        }
     }
 }
 </script>
@@ -50,8 +58,17 @@ export default {
     margin-top: 0.5rem;
     justify-content: space-between;
 }
+
 .processor>.current-instruction>.value {
     min-width: 6em;
     text-align: center;
+}
+
+.processor>.address-pointer {
+    margin-left: auto;
+    margin-top: 0.3rem;
+}
+.processor>.address-pointer>.value {
+    min-width: 6rem;
 }
 </style>

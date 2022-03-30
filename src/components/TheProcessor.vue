@@ -20,7 +20,9 @@
             </div>
 
             <div class="vertical-container model-container">
-                <the-tab-container @RegisterMemory="RegisterMemory" :instruction="instruction.instruction" :instructionPointer="instructionPointer" :accumulator="accumulator.value"/>
+                <the-tab-container @RegisterMemory="RegisterMemory"
+                    :instruction="instruction.instruction" :instructionPointer="instructionPointer"
+                    :accumulator="accumulator.value" :addressPointer="addressPointer.value"/>
             </div>
         </div>
     </div>
@@ -59,6 +61,7 @@ export default {
 
             instructionPointer: 0,
             accumulator: { value: 0 },
+            addressPointer: { value: 0 },
             instruction: { instruction: "INST" },
         }
     },
@@ -83,7 +86,7 @@ export default {
 
                 // Create CPU
                 this.Initialize();
-                this.cpu = new Cpu(this.memory, this.accumulator, this.cycleCounter);
+                this.cpu = new Cpu(this.memory, this.accumulator, this.addressPointer, this.cycleCounter);
             }
             this.ChangeSimulationState(s_started);
 
@@ -182,6 +185,7 @@ export default {
         Initialize() {
             this.instructionPointer = 0;
             this.accumulator = { value: 0 };
+            this.addressPointer = { value: 0 };
             this.instruction = { instruction: "INST" };
             this.cycleCounter.value = 0;
             this.memory.initialize();
