@@ -61,8 +61,18 @@ export default {
             }
 
             // Not in cache
-            // Selection of victim: random
-            var id = Math.floor(Math.random() * 4);
+            // Selection of victim: check if unused, then random
+            var id = null;
+            for (var j = 0; j < this.cacheData.length; j++) {
+                if (this.cacheData[j].isEmpty) {
+                    id = j;
+                    break;
+                }
+            }
+            if (id == null) {
+                id = Math.floor(Math.random() * 4);
+            }
+
             // Current memory block valid - can overwrite
             if (this.cacheData[id].valid) {
                 await this.memoryUtils.writeToCache(id, address, data);
@@ -88,8 +98,18 @@ export default {
             }
 
             // Not in cache
-            // Selection of victim: random
-            var id = Math.floor(Math.random() * 4);
+            // Selection of victim: check if unused, then random
+            var id = null;
+            for (var j = 0; j < this.cacheData.length; j++) {
+                if (this.cacheData[j].isEmpty) {
+                    id = j;
+                    break;
+                }
+            }
+            if (id == null) {
+                id = Math.floor(Math.random() * 4);
+            }
+
             // Current memory block valid - can ovewrite
             if (this.cacheData[id].valid) {
                 await this.memoryUtils.readFromRam(id, address, address);
