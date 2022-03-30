@@ -3,12 +3,14 @@
 !-->
 
 <template>
-    <div class="horizontal-container title-container">
-        <h1 class="title"> {{ title }} </h1>
-        <div class="vertical-container additional-info">
-            <span> {{ organisation }} </span>
-            <span> {{ suborganisation }} </span>
-            <span> {{ authorDate }} </span>
+    <div class="horizontal-container title-bar">
+        <div class="horizontal-container title-container">
+            <h1 class="title"> {{ title }} </h1>
+            <div class="vertical-container additional-info">
+                <span> {{ organisation }} </span>
+                <span> {{ suborganisation }} </span>
+                <span> {{ authorDate }} </span>
+            </div>
         </div>
     </div>
 </template>
@@ -34,14 +36,16 @@ export default {
 </script>
 
 <style>
-.title-container {
+.title-bar {
+    justify-content: center;
     width: 100%;
-    min-width: 1250px;
-    padding-top: 0.5rem;
-    padding-bottom: 0.5rem;
-    padding-left: 2rem;
-    padding-right: 0.4rem;
     background: var(--mainColor);
+}
+.title-container {
+    justify-content: space-between;
+    width: 100%;
+    max-width: 1400px;
+    padding: 0.5rem;
 }
 .title-container>.title {
     font-size: 3rem;
@@ -49,7 +53,6 @@ export default {
     text-transform: uppercase;
 }
 .title-container>.additional-info {
-    margin-left: auto;
     align-items: flex-end;
     color: var(--scrollColorLight);
 }

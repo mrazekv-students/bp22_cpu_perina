@@ -102,13 +102,18 @@ export default {
 
 <style>
 .cache {
-    max-height: 80%;
+    display: block;
+    max-height: 45%;
     border-top: solid 10px var(--mainColor);
     border-bottom: solid 10px var(--mainColor);
     border-radius: 10px;
     border-spacing: 0;
+    white-space: nowrap;
     overflow: hidden;
     overflow-y: auto;
+}
+.cache::-webkit-scrollbar {
+    background: var(--mainColor);
 }
 .cache + .cache {
     margin-top: 1rem;
@@ -119,12 +124,16 @@ export default {
 .cache tr:nth-child(even) {
     background: var(--mainColorDarkDark);
 }
+
 .cache th {
     padding: 0.1rem 0.5rem;
     font-weight: bold;
     text-transform: uppercase;
     background: var(--mainColor);
+    position: sticky;
+    top: 0;
 }
+
 .cache td {
     padding: 0.1rem;
     border-left: solid 2px var(--mainColor);

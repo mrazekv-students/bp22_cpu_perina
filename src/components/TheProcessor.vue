@@ -5,10 +5,10 @@
 !-->
 
 <template>
-    <div class="vertical-container" style="height: 100%">
+    <div class="vertical-container main-container">
         <the-title :title="'Cache Simulator'" :author="'Daniel Peřina'" :organisation="'Brno University of Technology'" :suborganisation="'Faculty of Information Technology'" :date="'2022'"/>
 
-        <div class="horizontal-container main-container">
+        <div class="horizontal-container app-container">
             <div class="vertical-container control-container">
                 <div class="horizontal-container button-container">
                     <icon-button v-for="button in controlButtons" :key="button" :displayIcon="button.display" :function="button.function" :disabled="button.disabled" class="control-button"/>
@@ -193,25 +193,28 @@ export default {
 <style>
 .main-container {
     height: 100%;
+}
+.app-container {
+    height: 100%;
+    width: 100%;
+    max-width: 1400px;
     padding-top: 1rem;
     padding-bottom: 1.5rem;
+    margin-left: auto;
+    margin-right: auto;
 }
 .control-container {
+    align-items: center;
     width: 30%;
-    min-width: 450px;
 }
 .button-container {
-    display: flex;
     justify-content: center;
-    align-items: center;
     width: 100%;
     margin-bottom: 1rem;
 }
 .program-container {
     width: 85%;
     height: 100%;
-    margin-left: auto;
-    margin-right: auto;
 
     overflow-y: auto;
     border: solid 15px var(--mainColor);
@@ -224,7 +227,6 @@ export default {
     display: flex;
     align-items: center;
     width: 70%;
-    min-width: 800px;
     margin-top: 1.5rem;
 }
 

@@ -25,3 +25,4 @@ https://vuetifyjs.com/en/styles/colors/#material-colors
 https://fontawesome.com/
 https://www.w3schools.com/howto/howto_css_custom_scrollbar.asp
 https://github.com/PrismJS/prism-themes
+https://stackoverflow.com/questions/8970362/setting-a-max-height-on-a-table/13131562#comment22980817_13131562

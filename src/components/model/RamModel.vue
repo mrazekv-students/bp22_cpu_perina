@@ -87,13 +87,18 @@ export default {
 
 <style>
 .ram {
-    max-height: 80%;
+    display: block;
+    max-height: 90%;
     border-top: solid 10px var(--mainColor);
     border-bottom: solid 10px var(--mainColor);
     border-radius: 10px;
     border-spacing: 0;
+    white-space: nowrap;
     overflow: hidden;
     overflow-y: auto;
+}
+.ram::-webkit-scrollbar {
+    background: var(--mainColor);
 }
 .ram tr {
     background: var(--mainColorDark);
@@ -101,12 +106,16 @@ export default {
 .ram tr:nth-child(even) {
     background: var(--mainColorDarkDark);
 }
+
 .ram th {
     padding: 0.1rem 0.5rem;
     font-weight: bold;
     text-transform: uppercase;
     background: var(--mainColor);
+    position: sticky;
+    top: 0;
 }
+
 .ram td {
     padding: 0.1rem;
     border-left: solid 2px var(--mainColor);

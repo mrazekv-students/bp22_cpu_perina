@@ -16,6 +16,7 @@ export default {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     width: 100%;
+    min-width: 1300px;
     height: 100vh;
 }
 * {
@@ -23,7 +24,6 @@ export default {
     box-sizing: border-box;
 }
 body {
-    margin: 0;
     display: flex;
     overflow-y: hidden;
     background: var(--backgroundColor);
