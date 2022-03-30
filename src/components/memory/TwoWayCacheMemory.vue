@@ -77,7 +77,6 @@ export default {
             var id = Math.random() < 0.5 ? 0 : 1;
             // Current memory block valid - can overwrite
             if (this.cacheData[id][cacheAddress].valid) {
-                await this.memoryUtils.readFromRam(cacheAddress, address, cacheTag, id);
                 await this.memoryUtils.writeToCache(cacheAddress, cacheTag, data, id);
             }
             // Current memory block not valid - must save
@@ -85,7 +84,6 @@ export default {
                 var ramAddress = this.memoryUtils.getRamAddressFromCache(cacheAddress, this.cacheData[id][cacheAddress].tag, 1);
                 
                 await this.memoryUtils.writeToRam(cacheAddress, ramAddress, id);
-                await this.memoryUtils.readFromRam(cacheAddress, address, cacheTag, id);
                 await this.memoryUtils.writeToCache(cacheAddress, cacheTag, data, id);
             }
         },

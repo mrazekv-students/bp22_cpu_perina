@@ -63,7 +63,6 @@ export default {
             else {
                 // Current memory block valid - can overwrite
                 if (this.cacheData[cacheAddress].valid) {
-                    await this.memoryUtils.readFromRam(cacheAddress, address, cacheTag);
                     await this.memoryUtils.writeToCache(cacheAddress, cacheTag, data);
                 }
                 // Current memory block not valid - must save
@@ -71,7 +70,6 @@ export default {
                     var ramAddress = this.memoryUtils.getRamAddressFromCache(cacheAddress, this.cacheData[cacheAddress].tag, 2);
 
                     await this.memoryUtils.writeToRam(cacheAddress, ramAddress);
-                    await this.memoryUtils.readFromRam(cacheAddress, address, cacheTag);
                     await this.memoryUtils.writeToCache(cacheAddress, cacheTag, data);
                 }
             }
