@@ -5,7 +5,7 @@
 <template>
     <processor-model :instruction="instruction" :instuctionPointer="instructionPointer" :accumulator="accumulator"/>
     <connector :id="0" :width="4" @RegisterConnector="RegisterConnector"/>
-    <cache-model :data="cacheData" @RegisterCache="RegisterCache"/>
+    <cache-model :data="cacheData" :tagLength="tagLength" @RegisterCache="RegisterCache"/>
     <connector :id="1" :width="4" @RegisterConnector="RegisterConnector"/>
     <ram-model :data="ramData" @RegisterRam="RegisterRam"/>
 </template>
@@ -27,6 +27,12 @@ export default {
         instruction: { type: String },
         instructionPointer: { type: Number },
         accumulator: { type: Number}
+    },
+
+    computed: {
+        tagLength() {
+            return Math.floor(Math.log2(this.ramData.length + 1)) - Math.floor(Math.log2(this.cacheData.length + 1));
+        }
     },
 
     data() {

@@ -78,7 +78,7 @@ export default {
 
 <style>
 .code-editor {
-    font-family: Fira code, Fira Mono, Consolas, Menlo, Courier, monospace;
+    font-family: Consolas, Courier, monospace;
     font-size: 14px;
     line-height: 1.5;
     padding: 5px;

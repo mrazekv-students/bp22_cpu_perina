@@ -5,20 +5,20 @@
 <template>
     <table class="cache">
         <tr>
-            <th class="address"> Addr. </th>
+            <th class="address"> Address </th>
             <th class="valid"> V </th>
             <th class="tag"> Tag </th>
             <th class="value"> Data </th>
         </tr>
         <tr v-for="n in data.length" :key="n">
             <td class="address" :style="highlightId == (n - 1) ? rowStyle : ''">
-                {{ "0x" + (n - 1).toString(16).toUpperCase() }}
+                {{ FormatAddress(n - 1) }}
             </td>
             <td class="valid" :style="highlightId == (n - 1) ? rowStyle : ''">
                 {{ data[n - 1].valid ? "T" : "F" }}
             </td>
             <td class="tag" :style="highlightId == (n - 1) ? rowStyle : ''">
-                {{ "0x" + data[n - 1].tag.toString(16).toUpperCase() }}
+                {{ FormatTag(data[n - 1].tag) }}
             </td>
             <td class="value" :style="highlightId == (n - 1) ? rowStyle : ''">
                 {{ data[n - 1].data }}
@@ -33,8 +33,9 @@ export default {
     emits: ["RegisterCache"],
 
     props: {
-        data: { type: Array, required: true },
         id: { type: Number, default: 0 },
+        data: { type: Array, required: true },
+        tagLength: { type: Number, default: 1 },
         highlightColor: { type: String, default: "#8b161c" }
     },
 
@@ -53,6 +54,19 @@ export default {
     },
 
     methods: {
+        FormatAddress(address) {
+            var bitCount = Math.floor(Math.log2(this.data.length + 1));
+
+            var string = `0x${address.toString(16).padStart(bitCount / 4, '0').toUpperCase()}`;
+            string += ` (${address.toString(2).padStart(bitCount, '0')})`;
+            return string;
+        },
+        FormatTag(tag) {
+            var string = `0x${tag.toString(16).padStart(this.tagLength / 4, '0').toUpperCase()}`;
+            string += ` (${tag.toString(2).padStart(this.tagLength, '0')})`;
+            return string;
+        },
+
         HighlightRow(id, fadeTime) {
             this.ResetIntervals();
             this.ResetHighlight();
@@ -120,9 +134,12 @@ export default {
 }
 
 .cache td.address {
-    width: 5rem;
+    width: fit-content;
+    min-width: 5rem;
     padding-right: 0.5rem;
+    padding-left: 0.5rem;
     text-align: right;
+    font-family: Consolas, Courier, monospace;
     color: var(--fontColorFaded);
 }
 .cache td.valid {
@@ -130,7 +147,11 @@ export default {
     text-align: center;
 }
 .cache td.tag {
-    width: 5rem;
+    width: fit-content;
+    min-width: 5rem;
+    padding-right: 0.5rem;
+    padding-left: 0.5rem;
+    font-family: Consolas, Courier, monospace;
     text-align: center;
 }
 .cache td.value {

@@ -9,8 +9,8 @@
         <connector :id="2" :width="4" @RegisterConnector="RegisterConnector"/>
     </div>
     <div class="vertical-container">
-        <cache-model :data="cacheData[0]" :id="0" @RegisterCache="RegisterCache"/>
-        <cache-model :data="cacheData[1]" :id="1" @RegisterCache="RegisterCache"/>
+        <cache-model :id="0" :data="cacheData[0]" :tagLength="tagLength" @RegisterCache="RegisterCache"/>
+        <cache-model :id="1" :data="cacheData[1]" :tagLength="tagLength" @RegisterCache="RegisterCache"/>
     </div>
     <div class="vertical-container">
         <connector :id="1" :width="4" @RegisterConnector="RegisterConnector"/>
@@ -36,6 +36,12 @@ export default {
         instruction: { type: String },
         instructionPointer: { type: Number },
         accumulator: { type: Number}
+    },
+
+    computed: {
+        tagLength() {
+            return Math.floor(Math.log2(this.ramData.length + 1)) - Math.floor(Math.log2(this.cacheData.length + 1));
+        }
     },
 
     data() {

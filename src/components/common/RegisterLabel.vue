@@ -37,7 +37,7 @@ export default {
     border-bottom-width: 1px;
     border-radius: 5px;
 
-    font-family: Fira code, Fira Mono, Consolas, Menlo, Courier, monospace;
+    font-family: Consolas, Courier, monospace;
     background: var(--consoleColor);
 }
 </style>
