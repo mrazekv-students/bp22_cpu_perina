@@ -54,7 +54,7 @@ export default {
                 { display: "fa-solid fa-pause", function: this.PauseProgram, disabled: true},
                 { display: "fa-solid fa-forward-step", function: this.ExecuteInstruction, disabled: true }
             ],
-            compiler: { compile: null, getInstruction: null, getLabel: null },
+            compiler: { compile: null, getInstruction: null, getLabel: null, getNextLine: null, highlightLine: null },
             memory: { write: null, read: null, flush: null, initialize: null },
             cpu: null,
             currentState: s_notStarted,
@@ -62,7 +62,7 @@ export default {
             instructionPointer: 0,
             accumulator: { value: 0 },
             addressPointer: { value: 0 },
-            instruction: { instruction: "INST" },
+            instruction: { instruction: "INST", line: 0 },
         }
     },
 
@@ -89,6 +89,7 @@ export default {
                 this.cpu = new Cpu(this.memory, this.accumulator, this.addressPointer, this.cycleCounter);
             }
             this.ChangeSimulationState(s_started);
+            this.compiler.highlightLine(-1);
 
             // Program loops
             while (this.currentState == s_started) {
@@ -98,15 +99,22 @@ export default {
         },
         StopProgram() {
             console.log("Stop program");
-            this.Initialize();
+            this.compiler.highlightLine(-1);
             this.ChangeSimulationState(s_notStarted);
+            this.Initialize();
         },
         PauseProgram() {
             console.log("Pause program");
+            this.compiler.highlightLine(this.compiler.getNextLine(this.instructionPointer));
             this.ChangeSimulationState(s_halted);
         },
         async ExecuteInstruction() {
             try {
+                if (this.currentState == s_halted) {
+                    this.controlButtons[3].disabled = true;
+                }
+
+                // Execute instruction
                 this.instruction = this.compiler.getInstruction(this.instructionPointer);
                 var result = await this.cpu.execute(this.instruction);
 
@@ -129,7 +137,14 @@ export default {
                 }
                 else if (result.result == ExecutionResult.EndExecution) {
                     console.log("Program end");
+                    this.compiler.highlightLine(-1);
                     this.ChangeSimulationState(s_ended);
+                }
+
+                // Highlight current line if going manually
+                if (this.currentState == s_halted) {
+                    this.compiler.highlightLine(this.compiler.getNextLine(this.instructionPointer));
+                    this.controlButtons[3].disabled = false;
                 }
             }
             catch (e) {

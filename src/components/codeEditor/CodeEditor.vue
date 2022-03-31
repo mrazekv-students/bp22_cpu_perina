@@ -3,7 +3,7 @@
 !-->
 
 <template>
-    <prism-editor class="code-editor" v-model="code" :highlight="HighlightCode" line-numbers />
+    <prism-editor class="code-editor" v-model="code" :highlight="HighlightCode" :line-numbers="true" :autoStyleLineNumbers="true" />
 </template>
 
 <script>
@@ -26,17 +26,43 @@ export default {
             code: "",
             instructionList: [],
             labelDict: {},
+            highlightedLine: -1
         }
     },
 
     created() {
-        this.$emit("RegisterCompiler", { compile: this.CompileProgram, getInstruction: this.GetInstruction, getLabel: this.GetLabel })
+        this.$emit("RegisterCompiler", { 
+            compile: this.CompileProgram, 
+            getInstruction: this.GetInstruction, 
+            getLabel: this.GetLabel, 
+            getNextLine: this.GetNextLine, 
+            highlightLine: this.HighlightLine })
     },
 
     methods: {
         HighlightCode(code) {
             Prism.languages.bp22 = bp22Highlight;
             return Prism.highlight(code, Prism.languages.bp22);
+        },
+        HighlightLine(lineNumber) {
+            // Remove highlighting
+            if (this.highlightedLine >= 0 )
+            {
+                var oldLine = this.$el.querySelector(`.prism-editor__line-number:nth-child(${this.highlightedLine + 1})`);
+                if (!oldLine) return;
+                oldLine.classList.remove('highlight-line');
+            }
+
+            this.highlightedLine = lineNumber;
+
+            // Highlight
+            if (lineNumber >= 0)
+            {
+                var newLine = this.$el.querySelector(`.prism-editor__line-number:nth-child(${lineNumber + 1})`);
+                if (!newLine) return;
+                newLine.classList.add('highlight-line');
+            }
+            
         },
         
         CompileProgram() {
@@ -71,6 +97,11 @@ export default {
             if (label in this.labelDict)
                 return this.labelDict[label];
             else throw RangeError("No such label");
+        },
+        GetNextLine(address) {
+            if (address < this.instructionList.length)
+                return this.instructionList[address].line;
+            else return -1;
         }
     }
 }
@@ -85,5 +116,14 @@ export default {
 }
 .prism-editor__textarea:focus {
     outline: none;
+}
+.prism-editor-wrapper .prism-editor__line-number.highlight-line {
+    border-top-left-radius: 10px;
+    border-bottom-left-radius: 10px;
+    border-top-right-radius: 2px;
+    border-bottom-right-radius: 2px;
+    padding-right: 0.3rem;
+    background: var(--secondaryColor);
+    color: white;
 }
 </style>
