@@ -14,7 +14,7 @@
             <td class="address" :style="highlightId == (n - 1) ? rowStyle : ''">
                 {{ FormatAddress(n - 1) }}
             </td>
-            <td class="valid" :style="highlightId == (n - 1) ? rowStyle : ''">
+            <td :class="'valid ' + HighlightInvalid(data[n - 1].valid)" :style="highlightId == (n - 1) ? rowStyle : ''">
                 {{ data[n - 1].valid ? "T" : "F" }}
             </td>
             <td class="tag" :style="highlightId == (n - 1) ? rowStyle : ''">
@@ -65,6 +65,14 @@ export default {
             var string = `0x${tag.toString(16).padStart(this.tagLength / 4, '0').toUpperCase()}`;
             string += ` (${tag.toString(2).padStart(this.tagLength, '0')})`;
             return string;
+        },
+        HighlightInvalid(valid) {
+            if (valid) {
+                return '';
+            }
+            else {
+                return 'highlight';
+            }
         },
 
         HighlightRow(id, fadeTime) {
@@ -154,6 +162,10 @@ export default {
 .cache td.valid {
     width: 2.5rem;
     text-align: center;
+}
+.cache td.valid.highlight {
+    color: var(--secondaryColorLight);
+    font-weight: bold;
 }
 .cache td.tag {
     width: fit-content;
