@@ -4,10 +4,10 @@
 
 <template>
     <div class="horizontal-container tab-button-row">
-        <common-button :displayValue="'RAM-Only Memory'" :function="() => ChangeCurrentTab('RamOnlyMemory')" :class="'tab-button ' + activeTab['RamOnlyMemory']"/>
-        <common-button :displayValue="'Direct Cache'" :function="() => ChangeCurrentTab('DirectCacheMemory')" :class="'tab-button ' + activeTab['DirectCacheMemory']"/>
-        <common-button :displayValue="'Two-Way Cache'" :function="() => ChangeCurrentTab('TwoWayCacheMemory')" :class="'tab-button ' + activeTab['TwoWayCacheMemory']"/>
-        <common-button :displayValue="'Full Cache'" :function="() => ChangeCurrentTab('FullCacheMemory')" :class="'tab-button ' + activeTab['FullCacheMemory']"/>
+        <common-button :displayValue="'RAM-Only Memory'" :disabled="hasStarted" :function="() => ChangeCurrentTab('RamOnlyMemory')" :class="'tab-button ' + activeTab['RamOnlyMemory']"/>
+        <common-button :displayValue="'Direct Cache'" :disabled="hasStarted" :function="() => ChangeCurrentTab('DirectCacheMemory')" :class="'tab-button ' + activeTab['DirectCacheMemory']"/>
+        <common-button :displayValue="'Two-Way Cache'" :disabled="hasStarted" :function="() => ChangeCurrentTab('TwoWayCacheMemory')" :class="'tab-button ' + activeTab['TwoWayCacheMemory']"/>
+        <common-button :displayValue="'Full Cache'" :disabled="hasStarted" :function="() => ChangeCurrentTab('FullCacheMemory')" :class="'tab-button ' + activeTab['FullCacheMemory']"/>
         <cycle-counter :cycles="this.cycleCounter.value"/>
     </div>
     <div class="horizontal-container tab-container">
@@ -33,7 +33,8 @@ export default {
         instruction: { type: String },
         instructionPointer: { type: Number },
         accumulator: { type: Number},
-        addressPointer: { type: Number }
+        addressPointer: { type: Number },
+        hasStarted: { type: Boolean }
     },
 
     data() {
@@ -53,6 +54,8 @@ export default {
             this.activeTab[this.currentTab] = "";
             this.currentTab = tab;
             this.activeTab[this.currentTab] = "active";
+
+            this.cycleCounter.value = 0;
         },
         RegisterMemory(memory) {
             this.$emit("RegisterMemory", memory);
@@ -93,17 +96,27 @@ export default {
     text-transform: uppercase;
     background: var(--mainColorLightDark);
 }
+
 .tab-button:hover {
     transform: scaleY(120%);
     transform-origin: bottom left;
 }
-.tab-button.active {
+.tab-button.active,
+.tab-button.active:disabled:hover {
     transform: scaleY(120%);
     transform-origin: bottom left;
     background: var(--mainColor);
 }
+.tab-button:disabled:hover {
+    transform: none;
+}
+
 .tab-button:hover span, 
-.tab-button.active span {
+.tab-button.active span,
+.tab-button.active:disabled:hover span {
     transform: scaleY(83.33%);
+}
+.tab-button:disabled:hover span {
+    transform: none;
 }
 </style>

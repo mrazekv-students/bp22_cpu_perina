@@ -15,12 +15,12 @@
                 </div>
 
                 <div class="program-container">
-                    <code-editor @RegisterCompiler="RegisterCompiler"/>
+                    <code-editor :hasStarted="hasStarted" @RegisterCompiler="RegisterCompiler"/>
                 </div>
             </div>
 
             <div class="vertical-container model-container">
-                <the-tab-container @RegisterMemory="RegisterMemory"
+                <the-tab-container @RegisterMemory="RegisterMemory" :hasStarted="hasStarted"
                     :instruction="instruction.instruction" :instructionPointer="instructionPointer"
                     :accumulator="accumulator.value" :addressPointer="addressPointer.value"/>
             </div>
@@ -45,6 +45,13 @@ import Sleep from '@/scripts/Sleep.js';
 export default {
     name: "TheLayout",
     components: { IconButton, CodeEditor, TheTabContainer, TheTitle },
+
+    computed: {
+        hasStarted() {
+            if (this.currentState == s_notStarted || this.currentState == s_ended) return false;
+            else return true;
+        }
+    },
 
     data() {
         return {
@@ -214,7 +221,7 @@ export default {
     height: 100%;
 }
 .app-container {
-    height: 100%;
+    height: 90%;
     width: 100%;
     max-width: 1400px;
     padding-top: 1rem;
@@ -234,7 +241,6 @@ export default {
 .program-container {
     width: 85%;
     height: 100%;
-
     overflow-y: auto;
     border: solid 15px var(--mainColor);
     border-left-width: 3px;

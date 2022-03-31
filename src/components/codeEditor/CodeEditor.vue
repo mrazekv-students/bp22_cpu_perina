@@ -3,7 +3,7 @@
 !-->
 
 <template>
-    <prism-editor class="code-editor" v-model="code" :highlight="HighlightCode" :line-numbers="true" :autoStyleLineNumbers="true" />
+    <prism-editor class="code-editor" v-model="code" :highlight="HighlightCode" :line-numbers="true" :readonly="hasStarted" />
 </template>
 
 <script>
@@ -20,6 +20,10 @@ export default {
     name: "CodeEditor",
     components: { PrismEditor },
     emits: ["RegisterCompiler"],
+
+    props: {
+        hasStarted: { type: Boolean, required: true }
+    },
 
     data() {
         return {
