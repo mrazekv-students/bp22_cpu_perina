@@ -1,0 +1,11 @@
+/* Highlighting colors */
+
+.token.operator {
+    color: #e0ab18;
+}
+.token.comment {
+    color: #6bb469;
+}
+.token.string {
+    color: #a2b5c7;
+}

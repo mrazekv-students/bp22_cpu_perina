@@ -1,5 +1,5 @@
 <template>
-    <the-processor style="width: 100%; height: 100%;"/>
+    <the-processor/>
 </template>
 
 <script>
@@ -16,6 +16,7 @@ export default {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     width: 100%;
+    min-width: 1300px;
     height: 100vh;
 }
 * {
@@ -23,15 +24,10 @@ export default {
     box-sizing: border-box;
 }
 body {
-    margin: 0;
-    overflow: hidden;
     display: flex;
-
-    border-style: dotted;
-    border-width: 2px;
-
-    background: #3A3A40;
-    color: #D6D6D6;
+    overflow-y: hidden;
+    background: var(--backgroundColor);
+    color: var(--fontColor);
 }
 
 .horizontal-container {

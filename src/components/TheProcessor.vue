@@ -5,17 +5,25 @@
 !-->
 
 <template>
-    <div class="horizontal-container">
-        <div class="vertical-container control-container">
-            <div class="horizontal-container button-container">
-                <common-button v-for="button in commonButtons" :key="button" :displayValue="button.display" :function="button.function" :disabled="button.disabled" class="control-button"/>
+    <div class="vertical-container main-container">
+        <the-title :title="'Cache Simulator'" :author="'Daniel Peřina'" :organisation="'Brno University of Technology'" :suborganisation="'Faculty of Information Technology'" :date="'2022'"/>
+
+        <div class="horizontal-container app-container">
+            <div class="vertical-container control-container">
+                <div class="horizontal-container button-container">
+                    <icon-button v-for="button in controlButtons" :key="button" :displayIcon="button.display" :function="button.function" :disabled="button.disabled" class="control-button"/>
+                </div>
+
+                <div class="program-container">
+                    <code-editor :hasStarted="hasStarted" @RegisterCompiler="RegisterCompiler"/>
+                </div>
             </div>
-            <div class="program-container">
-                <code-editor @RegisterCompiler="RegisterCompiler"/>
+
+            <div class="vertical-container model-container">
+                <the-tab-container @RegisterMemory="RegisterMemory" :hasStarted="hasStarted"
+                    :instruction="instruction.instruction" :instructionPointer="instructionPointer"
+                    :accumulator="accumulator.value" :addressPointer="addressPointer.value"/>
             </div>
-        </div>
-        <div class="vertical-container model-container">
-            <tabs-container @RegisterMemory="RegisterMemory" :instruction="instruction.instruction"/>
         </div>
     </div>
 </template>
@@ -26,32 +34,42 @@ const s_started = "started";
 const s_halted = "halted";
 const s_ended = "ended"
 
-import CommonButton from './common/CommonButton.vue';
+import IconButton from './common/IconButton.vue';
 import CodeEditor from './codeEditor/CodeEditor.vue';
-import TabsContainer from './TabsContainer.vue';
+import TheTabContainer from './TheTabContainer.vue';
+import TheTitle from './TheTitle.vue';
 
 import Cpu from '@/scripts/Cpu.js';
-import ExecutionResult from '@/scripts/ExecutionResult.js'
+import ExecutionResult from '@/scripts/enums/ExecutionResult.js';
+import Sleep from '@/scripts/Sleep.js';
 export default {
     name: "TheLayout",
-    components: { CommonButton, CodeEditor, TabsContainer },
+    components: { IconButton, CodeEditor, TheTabContainer, TheTitle },
+
+    computed: {
+        hasStarted() {
+            if (this.currentState == s_notStarted || this.currentState == s_ended) return false;
+            else return true;
+        }
+    },
 
     data() {
         return {
-            commonButtons: [
-                { display: "|>", function: this.StartProgram, disabled: false },
-                { display: "|||", function: this.StopProgram, disabled: true },
-                { display: "||", function: this.PauseProgram, disabled: true},
-                { display: ">", function: this.ExecuteInstruction, disabled: true }
+            controlButtons: [
+                { display: "fa-solid fa-play", function: this.StartProgram, disabled: false },
+                { display: "fa-solid fa-stop", function: this.StopProgram, disabled: true },
+                { display: "fa-solid fa-pause", function: this.PauseProgram, disabled: true},
+                { display: "fa-solid fa-forward-step", function: this.ExecuteInstruction, disabled: true }
             ],
-            compiler: null,
-            memory: null,
+            compiler: { compile: null, getInstruction: null, getLabel: null, getNextLine: null, highlightLine: null },
+            memory: { write: null, read: null, flush: null, initialize: null },
             cpu: null,
             currentState: s_notStarted,
 
             instructionPointer: 0,
             accumulator: { value: 0 },
-            instruction: { instruction: "" },
+            addressPointer: { value: 0 },
+            instruction: { instruction: "INST", line: 0 },
         }
     },
 
@@ -74,28 +92,38 @@ export default {
                 }
 
                 // Create CPU
-                this.cpu = new Cpu(this.memory, this.accumulator);
+                this.Initialize();
+                this.cpu = new Cpu(this.memory, this.accumulator, this.addressPointer, this.cycleCounter);
             }
             this.ChangeSimulationState(s_started);
+            this.compiler.highlightLine(-1);
 
-            // Program loop
+            // Program loops
             while (this.currentState == s_started) {
-                this.ExecuteInstruction();
-                await this.Sleep(500);
+                await this.ExecuteInstruction();
+                await Sleep(this.instructionWaitTime);
             }
         },
         StopProgram() {
             console.log("Stop program");
+            this.compiler.highlightLine(-1);
             this.ChangeSimulationState(s_notStarted);
+            this.Initialize();
         },
         PauseProgram() {
             console.log("Pause program");
+            this.compiler.highlightLine(this.compiler.getNextLine(this.instructionPointer));
             this.ChangeSimulationState(s_halted);
         },
-        ExecuteInstruction() {
+        async ExecuteInstruction() {
             try {
+                if (this.currentState == s_halted) {
+                    this.controlButtons[3].disabled = true;
+                }
+
+                // Execute instruction
                 this.instruction = this.compiler.getInstruction(this.instructionPointer);
-                var result = this.cpu.execute(this.instruction);
+                var result = await this.cpu.execute(this.instruction);
 
                 console.log(this.instruction);
 
@@ -116,11 +144,20 @@ export default {
                 }
                 else if (result.result == ExecutionResult.EndExecution) {
                     console.log("Program end");
+                    this.compiler.highlightLine(-1);
                     this.ChangeSimulationState(s_ended);
+                }
+
+                // Highlight current line if going manually
+                if (this.currentState == s_halted) {
+                    this.compiler.highlightLine(this.compiler.getNextLine(this.instructionPointer));
+                    this.controlButtons[3].disabled = false;
                 }
             }
             catch (e) {
+                // TODO: Error message
                 console.error("Execution failed");
+                console.error(e);
                 this.ChangeSimulationState(s_ended);
             }
         },
@@ -137,96 +174,95 @@ export default {
         ChangeSimulationState(state) {
             switch (state) {
                 case s_notStarted:
-                    this.commonButtons[0].disabled = false;
-                    this.commonButtons[1].disabled = true;
-                    this.commonButtons[2].disabled = true;
-                    this.commonButtons[3].disabled = true;
-                    this.ResetState();
+                    this.controlButtons[0].disabled = false;
+                    this.controlButtons[1].disabled = true;
+                    this.controlButtons[2].disabled = true;
+                    this.controlButtons[3].disabled = true;
                     break;
 
                 case s_started:
-                    this.commonButtons[0].disabled = true;
-                    this.commonButtons[1].disabled = false;
-                    this.commonButtons[2].disabled = false;
-                    this.commonButtons[3].disabled = true;
+                    this.controlButtons[0].disabled = true;
+                    this.controlButtons[1].disabled = false;
+                    this.controlButtons[2].disabled = false;
+                    this.controlButtons[3].disabled = true;
                     break;
 
                 case s_halted:
-                    this.commonButtons[0].disabled = false;
-                    this.commonButtons[1].disabled = false;
-                    this.commonButtons[2].disabled = true;
-                    this.commonButtons[3].disabled = false;
+                    this.controlButtons[0].disabled = false;
+                    this.controlButtons[1].disabled = false;
+                    this.controlButtons[2].disabled = true;
+                    this.controlButtons[3].disabled = false;
                     break;
 
                 case s_ended:
-                    this.commonButtons[0].disabled = false;
-                    this.commonButtons[1].disabled = true;
-                    this.commonButtons[2].disabled = true;
-                    this.commonButtons[3].disabled = true;
+                    this.controlButtons[0].disabled = false;
+                    this.controlButtons[1].disabled = true;
+                    this.controlButtons[2].disabled = true;
+                    this.controlButtons[3].disabled = true;
                     break;
             }
 
             this.currentState = state;
         },
-        Sleep(ms) {
-            return new Promise((resolve) => {
-                setTimeout(resolve, ms);
-            });
-        },
-        ResetState() {
+        Initialize() {
             this.instructionPointer = 0;
             this.accumulator = { value: 0 };
-            this.instruction = { instruction: "" };
-            this.memory.reset();
+            this.addressPointer = { value: 0 };
+            this.instruction = { instruction: "INST" };
+            this.cycleCounter.value = 0;
+            this.memory.initialize();
         }
     }
 }
 </script>
 
 <style>
-.control-container {
-    width: 30%;
+.main-container {
     height: 100%;
 }
-.button-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-
+.app-container {
+    height: 90%;
     width: 100%;
-    height: 10%;
-
-    background: red;
+    max-width: 1400px;
+    padding-top: 1rem;
+    padding-bottom: 1.5rem;
+    margin-left: auto;
+    margin-right: auto;
+}
+.control-container {
+    align-items: center;
+    width: 30%;
+}
+.button-container {
+    justify-content: center;
+    width: 100%;
+    margin-bottom: 1rem;
 }
 .program-container {
-    width: 100%;
-    height: 90%;
-
-    background: darkslategray;
+    width: 85%;
+    height: 100%;
+    overflow-y: auto;
+    border: solid 15px var(--mainColor);
+    border-left-width: 3px;
+    border-right-width: 3px;
+    border-radius: 15px;
+    background: var(--consoleColor);
 }
 .model-container {
     display: flex;
-    justify-content: center;
     align-items: center;
-    
     width: 70%;
-    height: 100%;
-
-    background: blue;
+    margin-top: 1.5rem;
 }
 
 .control-button {
-    width: 4.5rem;
-    height: 4.5rem;
-    margin: 0.3rem;
-
+    width: 5rem;
+    height: 5rem;
     font-size: 3rem;
-    font-weight: bold;
+    border-radius: 10px;
+    background: var(--mainColor);
 }
-.test-button {
-    width: 6rem;
-    height: 3rem;
-    margin: 0.2rem;
-    background: black;
+.control-button + .control-button {
+    margin-left: 1rem;
 }
 </style>

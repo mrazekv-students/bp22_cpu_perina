@@ -1,14 +1,16 @@
 // Methods for compiling assembly code in code editor
 
-import Instruction from "./Instruction";
+import Instruction from "./enums/Instruction";
 
-let instructionNumber = 0;
+let instructionNumber = 1;
+let instructionLine = 1;
 
 // Starts compilation of `code`, resulting internal code is stored in `instructionList`
 export default function startCompilation(code, instructionList) {
     // Split into lines
     var codeLines = code.split('\n');
-    instructionNumber = 0;
+    instructionNumber = 1;
+    instructionLine = 1;
 
     // Compilation loop
     while (codeLines.length > 0) {
@@ -17,6 +19,7 @@ export default function startCompilation(code, instructionList) {
         while (codeWords.length > 0) {
             processInstruction(codeWords, instructionList);
         }
+        instructionLine++;
     }
 
     // Program end instruction
@@ -125,7 +128,7 @@ function processInstruction(codeList, instructionList) {
 // Returns result object
 function processParameterlessInstruction(instruction, instructionList) {
     instructionNumber++;
-    instructionList.push({ instruction: instruction });
+    instructionList.push({ instruction: instruction, line: instructionLine });
 }
 
 // Processes instruction with address parameter
@@ -135,7 +138,7 @@ function processAddressInstrution(instruction, parameter, instructionList) {
     // Check if address
     if (isAddress(parameter)) {
         parameter = parseInt(parameter.substring(1));
-        instructionList.push({ instruction: instruction, address: parameter });
+        instructionList.push({ instruction: instruction, address: parameter, line: instructionLine });
     }
     else
         throw Error("Incorrect parameter format at instruction " + instructionNumber + " (" + instruction + ")");
@@ -148,7 +151,7 @@ function processValueInstruction(instruction, parameter, instructionList) {
     // Check if value
     if (isNumber(parameter)) {
         parameter = parseInt(parameter);
-        instructionList.push({ instruction: instruction, value: parameter });
+        instructionList.push({ instruction: instruction, value: parameter, line: instructionLine });
     }
     else
         throw Error("Incorrect parameter format at instruction " + instructionNumber + " (" + instruction + ")");
@@ -160,7 +163,7 @@ function processLabelInstruction(instruction, parameter, instructionList) {
     instructionNumber++;
     // Check if not instruction keyword
     if (!isKeyword(parameter)) {
-        instructionList.push({ instruction: instruction, label: parameter })
+        instructionList.push({ instruction: instruction, label: parameter, line: instructionLine })
     }
     else
         throw Error("Label must not be keyword at instruction " + instructionNumber + " (" + instruction + ")");

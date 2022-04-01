@@ -18,7 +18,7 @@ describe("Compilers tests", () => {
 
         startCompilation(code, instructionList);
 
-        expect(instructionList).toEqual([{ instruction: "HALT" }, { instruction: "END" }]);
+        expect(instructionList).toEqual([{ instruction: "HALT", line: 1 }, { instruction: "END" }]);
     })
 
     test("Compile multiple parameterless instructions", () => {
@@ -27,7 +27,7 @@ describe("Compilers tests", () => {
 
         startCompilation(code, instructionList);
 
-        expect(instructionList).toEqual([{ instruction: "ACCINC" }, { instruction: "NEGATE" }, { instruction: "ACCDEC" }, { instruction: "NOP" }, { instruction: "HALT" }, { instruction: "END" }]);
+        expect(instructionList).toEqual([{ instruction: "ACCINC", line: 1 }, { instruction: "NEGATE", line: 1 }, { instruction: "ACCDEC", line: 1 }, { instruction: "NOP", line: 1 }, { instruction: "HALT", line: 1 }, { instruction: "END" }]);
     })
 
     test("Compile single address instruction", () => {
@@ -36,7 +36,7 @@ describe("Compilers tests", () => {
 
         startCompilation(code, instructionList);
 
-        expect(instructionList).toEqual([{ instruction: "DSTORE", address: 1 }, { instruction: "END" }]);
+        expect(instructionList).toEqual([{ instruction: "DSTORE", address: 1, line: 1 }, { instruction: "END" }]);
     })
 
     test("Compile multiple address instructions", () => {
@@ -45,7 +45,7 @@ describe("Compilers tests", () => {
 
         startCompilation(code, instructionList);
 
-        expect(instructionList).toEqual([{ instruction: "DSTORE", address: 1 }, { instruction: "DLOAD", address: 10 }, { instruction: "MADD", address: 4 }, { instruction: "END" }]);
+        expect(instructionList).toEqual([{ instruction: "DSTORE", address: 1, line: 1 }, { instruction: "DLOAD", address: 10, line: 1 }, { instruction: "MADD", address: 4, line: 1 }, { instruction: "END" }]);
     })
 
     test("Compile single label instruction", () => {
@@ -54,7 +54,7 @@ describe("Compilers tests", () => {
 
         startCompilation(code, instructionList);
 
-        expect(instructionList).toEqual([{ instruction: "LABEL", label: "test" }, { instruction: "END" }]);
+        expect(instructionList).toEqual([{ instruction: "LABEL", label: "test", line: 1 }, { instruction: "END" }]);
     })
 
     test("Compile multiple label instructions", () => {
@@ -63,7 +63,7 @@ describe("Compilers tests", () => {
 
         startCompilation(code, instructionList);
 
-        expect(instructionList).toEqual([{ instruction: "LABEL", label: "test" }, { instruction: "BRANCH", label: "test" }, { instruction: "BRZERO", label: "someLabel" }, { instruction: "END" }]);
+        expect(instructionList).toEqual([{ instruction: "LABEL", label: "test", line: 1 }, { instruction: "BRANCH", label: "test", line: 1 }, { instruction: "BRZERO", label: "someLabel", line: 1 }, { instruction: "END" }]);
     })
 
     test("Compile single value instruction", () => {
@@ -72,7 +72,7 @@ describe("Compilers tests", () => {
 
         startCompilation(code, instructionList);
 
-        expect(instructionList).toEqual([{ instruction: "MLOAD", value: 150 }, { instruction: "END" }]);
+        expect(instructionList).toEqual([{ instruction: "MLOAD", value: 150, line: 1 }, { instruction: "END" }]);
     })
 
     test("Compile multiple value instructions", () => {
@@ -81,7 +81,7 @@ describe("Compilers tests", () => {
 
         startCompilation(code, instructionList);
 
-        expect(instructionList).toEqual([{ instruction: "MLOAD", value: 150 }, { instruction: "MLOAD", value: -110 }, { instruction: "END" }]);
+        expect(instructionList).toEqual([{ instruction: "MLOAD", value: 150, line: 1 }, { instruction: "MLOAD", value: -110, line: 1 }, { instruction: "END" }]);
     })
 
     test("Compile multiple various instructions", () => {
@@ -90,7 +90,7 @@ describe("Compilers tests", () => {
 
         startCompilation(code, instructionList);
 
-        expect(instructionList).toEqual([{ instruction: "MLOAD", value: 5 }, { instruction: "LABEL", label: "loop" }, { instruction: "DSTORE", address: 10 }, { instruction: "ACCDEC"}, { instruction: "ISTORE", address: 10 }, { instruction: "BRPOS", label: "loop" }, { instruction: "END" }]);
+        expect(instructionList).toEqual([{ instruction: "MLOAD", value: 5, line: 1 }, { instruction: "LABEL", label: "loop", line: 1 }, { instruction: "DSTORE", address: 10, line: 1 }, { instruction: "ACCDEC", line: 1 }, { instruction: "ISTORE", address: 10, line: 1 }, { instruction: "BRPOS", label: "loop", line: 1 }, { instruction: "END" }]);
     })
 
     test("Compile multiple various instructions with line breaks", () => {
@@ -99,7 +99,7 @@ describe("Compilers tests", () => {
 
         startCompilation(code, instructionList);
 
-        expect(instructionList).toEqual([{ instruction: "MLOAD", value: 5 }, { instruction: "LABEL", label: "loop" }, { instruction: "DSTORE", address: 10 }, { instruction: "ACCDEC"}, { instruction: "ISTORE", address: 10 }, { instruction: "BRPOS", label: "loop" }, { instruction: "END" }]);
+        expect(instructionList).toEqual([{ instruction: "MLOAD", value: 5, line: 1 }, { instruction: "LABEL", label: "loop", line: 2 }, { instruction: "DSTORE", address: 10, line: 3 }, { instruction: "ACCDEC", line: 4 }, { instruction: "ISTORE", address: 10, line: 5 }, { instruction: "BRPOS", label: "loop", line: 6 }, { instruction: "END" }]);
     })
 
     test("Compile code with comments", () => {
@@ -108,7 +108,7 @@ describe("Compilers tests", () => {
 
         startCompilation(code, instructionList);
 
-        expect(instructionList).toEqual([{ instruction: "NOP" }, { instruction: "NOP" }, { instruction: "END" }]);
+        expect(instructionList).toEqual([{ instruction: "NOP", line: 2 }, { instruction: "NOP", line: 3 }, { instruction: "END" }]);
     })
 
     test("Fail at unknown instruction", () => {

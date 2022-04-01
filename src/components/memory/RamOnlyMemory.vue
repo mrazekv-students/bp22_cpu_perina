@@ -4,46 +4,70 @@
 !-->
 
 <template>
-    <processor-model :currentInstruction="instruction"/>
-    <ram-model :data="ramData" />
+    <processor-model :instruction="instruction" :instuctionPointer="instructionPointer"
+        :accumulator="accumulator" :addressPointer="addressPointer"/>
+    <connector :id="0" :width="4" @RegisterConnector="RegisterConnector"/>
+    <ram-model :data="ramData" @RegisterRam="RegisterRam"/>
 </template>
 
 <script>
 import ProcessorModel from '../model/ProcessorModel.vue';
 import RamModel from '../model/RamModel.vue';
+import Connector from '../model/Connector.vue';
 export default {
     name: "RamOnlyMemory",
-    components: { ProcessorModel, RamModel },
+    components: { ProcessorModel, RamModel, Connector },
     emits: ["RegisterMemory"],
 
     props: {
-        instruction: { type: String }
+        instruction: { type: String },
+        instructionPointer: { type: Number },
+        accumulator: { type: Number},
+        addressPointer: { type: Number }
     },
 
     data() {
         return {
             ramData: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            connector: { fromCpuToMemory: null, fromMemoryToCpu: null },
+            ramModel: { highlight: null }
         }
     },
 
     created() {
-        this.Reset();
-        this.$emit("RegisterMemory", { write: this.Write, read: this.Read, flush: () => {}, reset: this.Reset });
+        this.$emit("RegisterMemory", { write: this.Write, read: this.Read, flush: () => {}, initialize: this.Initialize });
     },
 
     methods: {
-        Write(address, data) {
+        async Write(address, data) {
             if (address < this.ramData.length && address >= 0)
+            {
+                await this.connector.fromCpuToMemory(this.connectorFillTime, this.connectorFadeTime);
+                this.ramModel.highlight(address, this.highlightFadeTime);
+                this.cycleCounter.value += this.cycleCosts.ramAccess;
                 this.ramData[address] = data;
+            }
             else throw RangeError("Invalid memory address")
         },
-        Read(address) {
+        async Read(address) {
             if (address < this.ramData.length && address >= 0)
+            {
+                this.cycleCounter.value += this.cycleCosts.ramAccess;
+                this.ramModel.highlight(address, this.highlightFadeTime);
+                await this.connector.fromMemoryToCpu(this.connectorFillTime, this.connectorFadeTime);
                 return this.ramData[address];
+            }
             else throw RangeError("Invalid memory address")
         },
-        Reset() {
+        Initialize() {
             this.ramData = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+        },
+
+        RegisterConnector(id, connector) {
+            this.connector = connector;
+        },
+        RegisterRam(ram) {
+            this.ramModel = ram;
         }
     }
 }
