@@ -32,28 +32,27 @@ export default {
 
 <style>
 .modal-mask {
-  position: fixed;
-  z-index: 9998;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
-  display: table;
-  transition: opacity 0.3s ease;
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    z-index: 9998;
+    top: 0;
+    left: 0;
+    background-color: #000000AA;
+    transition: opacity 0.3s ease;
 }
 .modal-wrapper {
-  display: table-cell;
-  vertical-align: middle;
+    display: flex;
+    height: 100%;
+    justify-content: center;
+    align-items: center;
 }
 .modal-container {
-  width: 300px;
-  margin: 0px auto;
-  padding: 20px 30px;
-  background-color: #fff;
-  border-radius: 2px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.33);
-  transition: all 0.3s ease;
+    width: 300px;
+    padding: 30px;
+    border-radius: 10px;
+    background-color: var(--backgroundColor);
+    transition: all 0.3s ease;
 }
 
 
