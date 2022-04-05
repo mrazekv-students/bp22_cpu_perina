@@ -10,7 +10,7 @@
 
 <script>
 export default {
-    name: "CommonButton",
+    name: "IconButton",
 
     props: {
         displayIcon: {

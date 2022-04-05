@@ -14,7 +14,7 @@
             <td class="address" :style="highlightId == (n - 1) ? rowStyle : ''">
                 {{ FormatAddress(n - 1) }}
             </td>
-            <td :class="'valid ' + HighlightInvalid(data[n - 1].valid)" :style="highlightId == (n - 1) ? rowStyle : ''">
+            <td :class="'valid ' + HighlightInvalid(data[n - 1].valid)" :style="highlightId == (n - 1) ? rowStyle : ''" @dblclick="ValidDblClick(n - 1)">
                 {{ data[n - 1].valid ? "T" : "F" }}
             </td>
             <td class="tag" :style="highlightId == (n - 1) ? rowStyle : ''">
@@ -30,7 +30,7 @@
 <script>
 export default {
     name: "CacheModel",
-    emits: ["RegisterCache"],
+    emits: ["RegisterCache", "SwitchValidBit"],
 
     props: {
         id: { type: Number, default: 0 },
@@ -73,6 +73,9 @@ export default {
             else {
                 return 'highlight';
             }
+        },
+        ValidDblClick(row) {
+            this.$emit("SwitchValidBit", row, this.id);
         },
 
         HighlightRow(id, fadeTime) {
@@ -162,10 +165,14 @@ export default {
 .cache td.valid {
     width: 2.5rem;
     text-align: center;
+    user-select: none;
 }
 .cache td.valid.highlight {
     color: var(--secondaryColorLight);
     font-weight: bold;
+}
+.cache td.valid:hover {
+    cursor: pointer;
 }
 .cache td.tag {
     width: fit-content;
