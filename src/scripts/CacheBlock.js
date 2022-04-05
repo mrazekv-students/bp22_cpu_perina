@@ -17,4 +17,8 @@ export default class CacheBlock {
             this.isEmpty = false;
         }
     }
+
+    switchValid() {
+        this.valid = !this.valid;
+    }
 }

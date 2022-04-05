@@ -6,7 +6,7 @@
     <processor-model :instruction="instruction" :instuctionPointer="instructionPointer"
         :accumulator="accumulator" :addressPointer="addressPointer"/>
     <connector :id="0" :width="4" @RegisterConnector="RegisterConnector"/>
-    <cache-model :data="cacheData" :tagLength="tagLength" @RegisterCache="RegisterCache"/>
+    <cache-model :data="cacheData" :tagLength="tagLength" @SwitchValidBit="SwitchValidBit" @RegisterCache="RegisterCache"/>
     <connector :id="1" :width="4" @RegisterConnector="RegisterConnector"/>
     <ram-model :data="ramData" @RegisterRam="RegisterRam"/>
 </template>
@@ -142,6 +142,10 @@ export default {
             this.ramData = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
             this.cacheData = [new CacheBlock(), new CacheBlock(), new CacheBlock(), new CacheBlock()];
             this.memoryUtils = new MemoryUtils(this.ramData, this.cacheData, this.ramModel, this.cacheModel, this.connectorCpuCache, this.connectorCacheMem, this);
+        },
+
+        SwitchValidBit(row) {
+            this.cacheData[row].switchValid();
         },
 
         RegisterConnector(id, connector) {

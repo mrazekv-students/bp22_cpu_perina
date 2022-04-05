@@ -10,8 +10,8 @@
         <connector :id="2" :width="4" @RegisterConnector="RegisterConnector"/>
     </div>
     <div class="vertical-container">
-        <cache-model :id="0" :data="cacheData[0]" :tagLength="tagLength" @RegisterCache="RegisterCache"/>
-        <cache-model :id="1" :data="cacheData[1]" :tagLength="tagLength" @RegisterCache="RegisterCache"/>
+        <cache-model :id="0" :data="cacheData[0]" :tagLength="tagLength" @SwitchValidBit="SwitchValidBit" @RegisterCache="RegisterCache"/>
+        <cache-model :id="1" :data="cacheData[1]" :tagLength="tagLength" @SwitchValidBit="SwitchValidBit" @RegisterCache="RegisterCache"/>
     </div>
     <div class="vertical-container">
         <connector :id="1" :width="4" @RegisterConnector="RegisterConnector"/>
@@ -160,6 +160,10 @@ export default {
             this.ramData = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
             this.cacheData = [[new CacheBlock(), new CacheBlock()], [new CacheBlock(), new CacheBlock()]];
             this.memoryUtils = new MemoryUtils(this.ramData, this.cacheData, this.ramModel, this.cacheModel, this.connectorCpuCache, this.connectorCacheMem, this);
+        },
+
+        SwitchValidBit(row, id) {
+            this.cacheData[id][row].switchValid();
         },
 
         RegisterConnector(id, connector) {
