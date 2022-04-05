@@ -12,13 +12,21 @@
                 <span> {{ suborganisation }} </span>
                 <span> {{ authorDate }} </span>
             </div>
+            <icon-button :displayIcon="'fa-solid fa-gear'" :function="ToggleSettings" class="settings-button"/>
         </div>
     </div>
+
+    <Teleport to="body">
+        <the-settings :show="showSettings" @close="ToggleSettings"/>
+    </Teleport>
 </template>
 
 <script>
+import IconButton from './common/IconButton.vue';
+import TheSettings from './TheSettings.vue';
 export default {
     name: "TheTitle",
+    components: { IconButton, TheSettings } ,
     
     props: {
         title: { type: String, required: true },
@@ -31,6 +39,18 @@ export default {
     computed: {
         authorDate() {
             return this.author + ', ' + this.date;
+        }
+    },
+
+    data() {
+        return {
+            showSettings: false
+        }
+    },
+
+    methods: {
+        ToggleSettings() {
+            this.showSettings = !this.showSettings;
         }
     }
 }
@@ -63,5 +83,14 @@ export default {
     align-items: flex-end;
     margin-left: auto;
     color: var(--scrollColorLight);
+}
+.title-container>.settings-button {
+    width: 3.5rem;
+    height: 3.5rem;
+    margin-left: 0.5rem;
+    margin-right: 0.5rem;
+    border-radius: 10px;
+    font-size: 2rem;
+    background: var(--mainColorDark);
 }
 </style>
