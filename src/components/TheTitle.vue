@@ -5,6 +5,7 @@
 <template>
     <div class="horizontal-container title-bar">
         <div class="horizontal-container title-container">
+            <img src="../../assets/logo.png" alt=".">
             <h1 class="title"> {{ title }} </h1>
             <div class="vertical-container additional-info">
                 <span> {{ organisation }} </span>
@@ -42,10 +43,16 @@ export default {
     background: var(--mainColor);
 }
 .title-container {
-    justify-content: space-between;
+    justify-content: left;
     width: 100%;
     max-width: 1400px;
     padding: 0.5rem;
+}
+.title-container>img {
+    height: 3.5rem;
+    border-radius: 100%;
+    margin-left: 0.5rem;
+    margin-right: 1rem;
 }
 .title-container>.title {
     font-size: 3rem;
@@ -54,6 +61,7 @@ export default {
 }
 .title-container>.additional-info {
     align-items: flex-end;
+    margin-left: auto;
     color: var(--scrollColorLight);
 }
 </style>
