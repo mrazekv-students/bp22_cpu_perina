@@ -10,7 +10,8 @@
         </tr>
         <tr v-for="n in data.length" :key="n">
             <td class="address" :style="highlightId == (n - 1) ? rowStyle : ''">
-                {{ FormatAddress(n - 1) }}
+                <span>{{ FormatAddressHex(n - 1) }}</span>
+                <span>{{ FormatAddressBin(n - 1) }}</span>
             </td>
             <td class="value" :style="highlightId == (n - 1) ? rowStyle : ''">
                 {{ data[n - 1] }}
@@ -44,12 +45,27 @@ export default {
     },
 
     methods: {
-        FormatAddress(address) {
-            var bitCount = Math.floor(Math.log2(this.data.length + 1));
+        FormatAddressHex(address) {
+            var bitCount = Math.log2(this.data.length) / 4;
+            if (bitCount % 1 == 0) {
+                bitCount = Math.floor(bitCount);
+            }
+            else {
+                bitCount = Math.floor(bitCount) + 1;
+            }
 
-            var string = `0x${address.toString(16).padStart(bitCount / 4, '0').toUpperCase()}`;
-            string += ` (${address.toString(2).padStart(bitCount, '0')})`;
-            return string;
+            return `0x${address.toString(16).padStart(bitCount, '0').toUpperCase()}`;
+        },
+        FormatAddressBin(address) {
+            var bitCount = Math.log2(this.data.length);
+            if (bitCount % 1 == 0) {
+                bitCount = Math.floor(bitCount);
+            }
+            else {
+                bitCount = Math.floor(bitCount) + 1;
+            }
+
+            return ` (${address.toString(2).padStart(bitCount, '0')})`;
         },
 
         HighlightRow(id, fadeTime) {
