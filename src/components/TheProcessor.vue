@@ -103,7 +103,7 @@ export default {
             // Program loops
             while (this.currentState == s_started) {
                 await this.ExecuteInstruction();
-                await Sleep(this.instructionWaitTime);
+                await Sleep(this.instructionWaitTime.value);
             }
         },
         StopProgram() {
@@ -207,6 +207,7 @@ export default {
             this.currentState = state;
         },
         Initialize() {
+            console.log(this.instructionWaitTime);
             this.instructionPointer = 0;
             this.accumulator = { value: 0 };
             this.addressPointer = { value: 0 };

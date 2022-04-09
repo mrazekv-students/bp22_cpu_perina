@@ -42,8 +42,8 @@ export default {
         async Write(address, data) {
             if (address < this.ramData.length && address >= 0)
             {
-                await this.connector.fromCpuToMemory(this.connectorFillTime, this.connectorFadeTime);
-                this.ramModel.highlight(address, this.highlightFadeTime);
+                await this.connector.fromCpuToMemory(this.connectorFillTime.value, this.connectorFadeTime.value);
+                this.ramModel.highlight(address, this.highlightFadeTime.value);
                 this.cycleCounter.value += this.cycleCosts.ramAccess;
                 this.ramData[address] = data;
             }
@@ -53,8 +53,8 @@ export default {
             if (address < this.ramData.length && address >= 0)
             {
                 this.cycleCounter.value += this.cycleCosts.ramAccess;
-                this.ramModel.highlight(address, this.highlightFadeTime);
-                await this.connector.fromMemoryToCpu(this.connectorFillTime, this.connectorFadeTime);
+                this.ramModel.highlight(address, this.highlightFadeTime.value);
+                await this.connector.fromMemoryToCpu(this.connectorFillTime.value, this.connectorFadeTime.value);
                 return this.ramData[address];
             }
             else throw RangeError("Invalid memory address")

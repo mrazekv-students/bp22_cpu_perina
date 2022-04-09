@@ -10,10 +10,10 @@
                     <div class="vertical-container">
                         <div class="settings-section">
                             <h2>Animation Settings</h2>
-                            <number-input :label="'Instruction Interval:'" v-model.number="this.instructionWaitTime"/>
-                            <number-input :label="'Connector Fill Time:'" v-model.number="this.connectorFillTime"/>
-                            <number-input :label="'Connector Fade Time:'" v-model.number="this.connectorFadeTime"/>
-                            <number-input :label="'Highlight Fade Time:'" v-model.number="this.highlightFadeTime"/>
+                            <number-input :label="'Instruction Interval:'" v-model.number="this.instructionWaitTime.value"/>
+                            <number-input :label="'Connector Fill Time:'" v-model.number="this.connectorFillTime.value"/>
+                            <number-input :label="'Connector Fade Time:'" v-model.number="this.connectorFadeTime.value"/>
+                            <number-input :label="'Highlight Fade Time:'" v-model.number="this.highlightFadeTime.value"/>
                         </div>
                         <div class="settings-section">
                             <h2>Cycle Cost Settings</h2>
