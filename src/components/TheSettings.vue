@@ -16,7 +16,14 @@
                             <number-input :label="'Highlight Fade Time:'" v-model.number="this.highlightFadeTime.value"/>
                         </div>
                         <div class="settings-section">
-                            <h2>Cycle Cost Settings</h2>
+                            <h2>Memory Cost Settings</h2>
+                            <number-input :label="'Cache Check Cost:'" v-model.number="this.cycleCosts.cacheCheck"/>
+                            <number-input :label="'Cache Access Cost:'" v-model.number="this.cycleCosts.cacheAccess"/>
+                            <number-input :label="'Ram Access Cost:'" v-model.number="this.cycleCosts.ramAccess"/>
+                        </div>
+                        <div class="settings-section">
+                            <h2>Memory Size Settings</h2>
+                            
                         </div>
                     </div>
                     <icon-button :displayIcon="'fa-solid fa-xmark'" :function="CloseSetting" class="close-button"/>
@@ -63,7 +70,7 @@ export default {
     align-items: center;
 }
 .settings-container {
-    width: 400px;
+    width: 420px;
     padding: 30px;
     border-radius: 10px;
     background-color: var(--backgroundColor);

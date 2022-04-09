@@ -207,7 +207,6 @@ export default {
             this.currentState = state;
         },
         Initialize() {
-            console.log(this.instructionWaitTime);
             this.instructionPointer = 0;
             this.accumulator = { value: 0 };
             this.addressPointer = { value: 0 };
