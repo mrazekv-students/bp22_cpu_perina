@@ -28,7 +28,7 @@ export default {
 
     data() {
         return {
-            ramData: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            ramData: [],
             connector: { fromCpuToMemory: null, fromMemoryToCpu: null },
             ramModel: { highlight: null }
         }
@@ -36,6 +36,7 @@ export default {
 
     created() {
         this.$emit("RegisterMemory", { write: this.Write, read: this.Read, flush: () => {}, initialize: this.Initialize });
+        this.Initialize();
     },
 
     methods: {
@@ -60,7 +61,10 @@ export default {
             else throw RangeError("Invalid memory address")
         },
         Initialize() {
-            this.ramData = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+            this.ramData = Array(this.memorySize.ram);
+            for (var i = 0; i < this.memorySize.ram; i++) {
+                this.ramData[i] = 0;
+            }
         },
 
         RegisterConnector(id, connector) {

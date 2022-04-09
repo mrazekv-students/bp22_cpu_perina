@@ -29,11 +29,11 @@ export default {
 }
 .number-input span {
     display: inline-flex;
-    margin-left: 0.6rem;
+    margin-left: 0.8rem;
     align-items: center;
 }
 .number-input input {
-    width: 5rem;
+    width: 6rem;
     padding: 0.2rem 0.5rem;
     border: solid 4px var(--mainColor);
     border-top-width: 1px;

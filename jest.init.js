@@ -5,5 +5,6 @@ config.global.config.globalProperties = {
     connectorFadeTime: { value: 0 },
     highlightFadeTime: { value: 0 },
     cycleCounter: { value: 0 },
-    cycleCosts: { cacheCheck: 2, cacheAccess: 10, ramAccess: 200 }
+    cycleCosts: { cacheCheck: 2, cacheAccess: 10, ramAccess: 200 },
+    memorySize: { cache: 4, ram: 16 }
 };

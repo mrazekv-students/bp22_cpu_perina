@@ -19,11 +19,12 @@
                             <h2>Memory Cost Settings</h2>
                             <number-input :label="'Cache Check Cost:'" v-model.number="this.cycleCosts.cacheCheck"/>
                             <number-input :label="'Cache Access Cost:'" v-model.number="this.cycleCosts.cacheAccess"/>
-                            <number-input :label="'Ram Access Cost:'" v-model.number="this.cycleCosts.ramAccess"/>
+                            <number-input :label="'RAM Access Cost:'" v-model.number="this.cycleCosts.ramAccess"/>
                         </div>
                         <div class="settings-section">
                             <h2>Memory Size Settings</h2>
-                            
+                            <number-input :label="'RAM Size:'" v-model.number="this.memorySize.ram"/>
+                            <number-input :label="'Cache Size:'" v-model.number="this.memorySize.cache"/>
                         </div>
                     </div>
                     <icon-button :displayIcon="'fa-solid fa-xmark'" :function="CloseSetting" class="close-button"/>
@@ -71,7 +72,7 @@ export default {
 }
 .settings-container {
     width: 420px;
-    padding: 30px;
+    padding: 2rem;
     border-radius: 10px;
     background-color: var(--backgroundColor);
     transition: all 0.3s ease;

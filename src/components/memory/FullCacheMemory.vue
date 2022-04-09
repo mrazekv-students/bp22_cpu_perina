@@ -39,8 +39,8 @@ export default {
 
     data() {
         return {
-            ramData: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-            cacheData: [new CacheBlock(), new CacheBlock(), new CacheBlock(), new CacheBlock()],
+            ramData: [],
+            cacheData: [],
             connectorCpuCache: { fromCpuToMemory: null, fromMemoryToCpu: null },
             connectorCacheMem: { fromCpuToMemory: null, fromMemoryToCpu: null },
             ramModel: { highlight: null },
@@ -51,6 +51,7 @@ export default {
 
     created() {
         this.$emit("RegisterMemory", { write: this.Write, read: this.Read, flush: this.Flush, initialize: this.Initialize });
+        this.Initialize();
     },
 
     methods: {
@@ -139,8 +140,14 @@ export default {
             }
         },
         Initialize() {
-            this.ramData = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
-            this.cacheData = [new CacheBlock(), new CacheBlock(), new CacheBlock(), new CacheBlock()];
+            this.ramData = Array(this.memorySize.ram);
+            for (var i = 0; i < this.memorySize.ram; i++) {
+                this.ramData[i] = 0;
+            }
+            this.cacheData = Array(this.memorySize.cache);
+            for (var j = 0; j < this.memorySize.cache; j++) {
+                this.cacheData[j] = new CacheBlock();
+            }
             this.memoryUtils = new MemoryUtils(this.ramData, this.cacheData, this.ramModel, this.cacheModel, this.connectorCpuCache, this.connectorCacheMem, this);
         },
 

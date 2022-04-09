@@ -12,5 +12,7 @@ app.config.globalProperties.highlightFadeTime = { value: 1000 };
 // Cycle counter
 app.config.globalProperties.cycleCounter = { value: 0 };
 app.config.globalProperties.cycleCosts = { cacheCheck: 2, cacheAccess: 10, ramAccess: 200 };
+// Memory size
+app.config.globalProperties.memorySize = { cache: 4, ram: 16 };
 
 app.mount('#app');
