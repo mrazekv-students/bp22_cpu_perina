@@ -15,6 +15,7 @@ https://learnvue.co/2019/12/building-reusable-components-in-vuejs-tabs/#introduc
 https://blog.devgenius.io/how-to-build-a-tab-component-with-vue-js-3-3c06ed335b3d
 https://github.com/evwt/vue-tut
 https://vuejs.org/examples/#modal
+https://stackoverflow.com/questions/47311936/v-model-and-child-components
 
 ## Testing with jest
 https://vuejs.org/guide/scaling-up/testing.html#unit-testing

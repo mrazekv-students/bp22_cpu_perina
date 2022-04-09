@@ -26,7 +26,8 @@ import IconButton from './common/IconButton.vue';
 import TheSettings from './TheSettings.vue';
 export default {
     name: "TheTitle",
-    components: { IconButton, TheSettings } ,
+    components: { IconButton, TheSettings },
+    emits: ["UpdateSettings"],
     
     props: {
         title: { type: String, required: true },
@@ -50,6 +51,9 @@ export default {
 
     methods: {
         ToggleSettings() {
+            if (this.showSettings) {
+                this.$emit("UpdateSettings");
+            }
             this.showSettings = !this.showSettings;
         }
     }

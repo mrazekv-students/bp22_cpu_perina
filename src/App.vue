@@ -12,7 +12,6 @@ export default {
 
 <style>
 #app {
-    font-family: Avenir, Helvetica, Arial, sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     width: 100%;
@@ -26,6 +25,7 @@ export default {
 body {
     display: flex;
     overflow-y: hidden;
+    font-family: Avenir, Helvetica, Arial, sans-serif;
     background: var(--backgroundColor);
     color: var(--fontColor);
 }

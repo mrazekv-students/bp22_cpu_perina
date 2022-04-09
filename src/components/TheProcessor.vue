@@ -6,7 +6,9 @@
 
 <template>
     <div class="vertical-container main-container">
-        <the-title :title="'Cache Simulator'" :author="'Daniel Peřina'" :organisation="'Brno University of Technology'" :suborganisation="'Faculty of Information Technology'" :date="'2022'"/>
+        <the-title :title="'Cache Simulator'" :author="'Daniel Peřina'" :date="'2022'"
+            :organisation="'Brno University of Technology'" :suborganisation="'Faculty of Information Technology'" 
+            @UpdateSettings="Initialize"/>
 
         <div class="horizontal-container app-container">
             <div class="vertical-container control-container">
