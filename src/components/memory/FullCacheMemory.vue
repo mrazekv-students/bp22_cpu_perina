@@ -5,9 +5,9 @@
 <template>
     <processor-model :instruction="instruction" :instuctionPointer="instructionPointer"
         :accumulator="accumulator" :addressPointer="addressPointer"/>
-    <connector :id="0" :width="4" @RegisterConnector="RegisterConnector"/>
+    <connector :id="0" :width="3" @RegisterConnector="RegisterConnector"/>
     <cache-model :data="cacheData" :tagLength="tagLength" @SwitchValidBit="SwitchValidBit" @RegisterCache="RegisterCache"/>
-    <connector :id="1" :width="4" @RegisterConnector="RegisterConnector"/>
+    <connector :id="1" :width="3" @RegisterConnector="RegisterConnector"/>
     <ram-model :data="ramData" @RegisterRam="RegisterRam"/>
 </template>
 
@@ -39,8 +39,8 @@ export default {
 
     data() {
         return {
-            ramData: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-            cacheData: [new CacheBlock(), new CacheBlock(), new CacheBlock(), new CacheBlock()],
+            ramData: [],
+            cacheData: [],
             connectorCpuCache: { fromCpuToMemory: null, fromMemoryToCpu: null },
             connectorCacheMem: { fromCpuToMemory: null, fromMemoryToCpu: null },
             ramModel: { highlight: null },
@@ -51,12 +51,13 @@ export default {
 
     created() {
         this.$emit("RegisterMemory", { write: this.Write, read: this.Read, flush: this.Flush, initialize: this.Initialize });
+        this.Initialize();
     },
 
     methods: {
         async Write(address, data) {
             if (address > this.ramData.length || address < 0)
-                throw RangeError("Invalid memory address");
+                throw RangeError(`Invalid memory address (${address}).`);
 
             // Data koherence: valid-bit
             // Memory block is in cache
@@ -95,7 +96,7 @@ export default {
         },
         async Read(address) {
             if (address > this.ramData.length || address < 0)
-                throw RangeError("Invalid memory address");
+                throw RangeError(`Invalid memory address (${address}).`);
 
             // Check in cache
             for (var i = 0; i < this.cacheData.length; i++) {
@@ -139,8 +140,14 @@ export default {
             }
         },
         Initialize() {
-            this.ramData = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
-            this.cacheData = [new CacheBlock(), new CacheBlock(), new CacheBlock(), new CacheBlock()];
+            this.ramData = Array(this.memorySize.ram);
+            for (var i = 0; i < this.memorySize.ram; i++) {
+                this.ramData[i] = 0;
+            }
+            this.cacheData = Array(this.memorySize.cache);
+            for (var j = 0; j < this.memorySize.cache; j++) {
+                this.cacheData[j] = new CacheBlock();
+            }
             this.memoryUtils = new MemoryUtils(this.ramData, this.cacheData, this.ramModel, this.cacheModel, this.connectorCpuCache, this.connectorCacheMem, this);
         },
 

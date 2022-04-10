@@ -1,8 +1,7 @@
 # Sources
-
-## Code editor
-[Vue prism editor](https://github.com/koca/vue-prism-editor/tree/feature/next)
-[Prism highlighter](https://prismjs.com/)
+https://github.com/koca/vue-prism-editor/tree/feature/next
+https://prismjs.com/
+https://github.com/kyvg/vue3-notification
 
 ## Vue.js tutorials
 https://stackoverflow.com/questions/55316490/vue-best-practice-for-calling-a-method-in-a-child-component
@@ -14,6 +13,8 @@ https://www.codegrepper.com/code-examples/javascript/vue+js+sleep
 https://learnvue.co/2019/12/building-reusable-components-in-vuejs-tabs/#introduction-to-reusable-components
 https://blog.devgenius.io/how-to-build-a-tab-component-with-vue-js-3-3c06ed335b3d
 https://github.com/evwt/vue-tut
+https://vuejs.org/examples/#modal
+https://stackoverflow.com/questions/47311936/v-model-and-child-components
 
 ## Testing with jest
 https://vuejs.org/guide/scaling-up/testing.html#unit-testing

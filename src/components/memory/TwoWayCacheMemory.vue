@@ -6,16 +6,16 @@
     <processor-model :instruction="instruction" :instuctionPointer="instructionPointer"
         :accumulator="accumulator" :addressPointer="addressPointer"/>
     <div class="vertical-container">
-        <connector :id="0" :width="4" @RegisterConnector="RegisterConnector"/>
-        <connector :id="2" :width="4" @RegisterConnector="RegisterConnector"/>
+        <connector :id="0" :width="3" @RegisterConnector="RegisterConnector"/>
+        <connector :id="2" :width="3" @RegisterConnector="RegisterConnector"/>
     </div>
     <div class="vertical-container">
         <cache-model :id="0" :data="cacheData[0]" :tagLength="tagLength" @SwitchValidBit="SwitchValidBit" @RegisterCache="RegisterCache"/>
         <cache-model :id="1" :data="cacheData[1]" :tagLength="tagLength" @SwitchValidBit="SwitchValidBit" @RegisterCache="RegisterCache"/>
     </div>
     <div class="vertical-container">
-        <connector :id="1" :width="4" @RegisterConnector="RegisterConnector"/>
-        <connector :id="3" :width="4" @RegisterConnector="RegisterConnector"/>
+        <connector :id="1" :width="3" @RegisterConnector="RegisterConnector"/>
+        <connector :id="3" :width="3" @RegisterConnector="RegisterConnector"/>
     </div>
     <ram-model :data="ramData" @RegisterRam="RegisterRam"/>
 </template>
@@ -48,8 +48,8 @@ export default {
 
     data() {
         return {
-            ramData: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-            cacheData: [[new CacheBlock(), new CacheBlock()], [new CacheBlock(), new CacheBlock()]],
+            ramData: [],
+            cacheData: [[], []],
             connectorCpuCache: [],
             connectorCacheMem: [],
             cacheModel: [],
@@ -60,12 +60,13 @@ export default {
 
     created() {
         this.$emit("RegisterMemory", { write: this.Write, read: this.Read, flush: this.Flush, initialize: this.Initialize });
+        this.Initialize();
     },
 
     methods: {
         async Write(address, data) {
             if (address > this.ramData.length || address < 0)
-                throw RangeError("Invalid memory address");
+                throw RangeError(`Invalid memory address (${address}).`);
 
             var cacheAddress = address & 0b01;
             var cacheTag = (address & 0b1110) >> 1;
@@ -107,7 +108,7 @@ export default {
         },
         async Read(address) {
             if (address > this.ramData.length || address < 0)
-                throw RangeError("Invalid memory address");
+                throw RangeError(`Invalid memory address (${address}).`);
 
             var cacheAddress = address & 0b1;
             var cacheTag = (address & 0b1110) >> 1;
@@ -157,8 +158,17 @@ export default {
             }
         },
         Initialize() {
-            this.ramData = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
-            this.cacheData = [[new CacheBlock(), new CacheBlock()], [new CacheBlock(), new CacheBlock()]];
+            this.ramData = Array(this.memorySize.ram);
+            for (var i = 0; i < this.memorySize.ram; i++) {
+                this.ramData[i] = 0;
+            }
+            this.cacheData[0] = Array(Math.floor(this.memorySize.cache / 2));
+            this.cacheData[1] = Array(Math.floor(this.memorySize.cache / 2));
+            for (var j = 0; j < 2; j++) {
+                for (var k = 0; k < this.memorySize.cache / 2; k++) {
+                    this.cacheData[j][k] = new CacheBlock();
+                }
+            }
             this.memoryUtils = new MemoryUtils(this.ramData, this.cacheData, this.ramModel, this.cacheModel, this.connectorCpuCache, this.connectorCacheMem, this);
         },
 

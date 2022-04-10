@@ -70,6 +70,8 @@ export default {
     align-items: center;
     width: 100%;
     height: 100%;
+    overflow: auto;
+    
     padding: 1rem;
     margin-right: 2rem;
     border: solid 15px var(--mainColor);
@@ -78,7 +80,7 @@ export default {
     border-radius: 15px;
 }
 .tab-button-row {
-    justify-content:flex-start;
+    justify-content: flex-start;
     width: 100%;
     margin-right: 2rem;
 }

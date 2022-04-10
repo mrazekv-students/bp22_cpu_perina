@@ -6,7 +6,9 @@
 
 <template>
     <div class="vertical-container main-container">
-        <the-title :title="'Cache Simulator'" :author="'Daniel Peřina'" :organisation="'Brno University of Technology'" :suborganisation="'Faculty of Information Technology'" :date="'2022'"/>
+        <the-title :title="'Cache Simulator'" :author="'Daniel Peřina'" :date="'2022'"
+            :organisation="'Brno University of Technology'" :suborganisation="'Faculty of Information Technology'" 
+            @UpdateSettings="Initialize"/>
 
         <div class="horizontal-container app-container">
             <div class="vertical-container control-container">
@@ -87,7 +89,12 @@ export default {
                     this.compiler.compile();
                 }
                 catch (e) {
-                    console.error("Compilation failed");
+                    this.$notify({
+                        title: "Compilation Error",
+                        text: e.message,
+                        type: "error"
+                    });
+                    console.error(e);
                     return;
                 }
 
@@ -101,7 +108,7 @@ export default {
             // Program loops
             while (this.currentState == s_started) {
                 await this.ExecuteInstruction();
-                await Sleep(this.instructionWaitTime);
+                await Sleep(this.instructionWaitTime.value);
             }
         },
         StopProgram() {
@@ -155,8 +162,11 @@ export default {
                 }
             }
             catch (e) {
-                // TODO: Error message
-                console.error("Execution failed");
+                this.$notify({
+                    title: "Execution Error",
+                    text: e.message,
+                    type: "error"
+                });
                 console.error(e);
                 this.ChangeSimulationState(s_ended);
             }

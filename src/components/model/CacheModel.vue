@@ -12,13 +12,15 @@
         </tr>
         <tr v-for="n in data.length" :key="n">
             <td class="address" :style="highlightId == (n - 1) ? rowStyle : ''">
-                {{ FormatAddress(n - 1) }}
+                <span>{{ FormatAddressHex(n - 1) }}</span>
+                <span>{{ FormatAddressBin(n - 1) }}</span>
             </td>
             <td :class="'valid ' + HighlightInvalid(data[n - 1].valid)" :style="highlightId == (n - 1) ? rowStyle : ''" @dblclick="ValidDblClick(n - 1)">
                 {{ data[n - 1].valid ? "T" : "F" }}
             </td>
             <td class="tag" :style="highlightId == (n - 1) ? rowStyle : ''">
-                {{ FormatTag(data[n - 1].tag) }}
+                <span>{{ FormatAddressHex(data[n - 1].tag, tagLength) }}</span>
+                <span>{{ FormatAddressBin(data[n - 1].tag, tagLength) }}</span>
             </td>
             <td class="value" :style="highlightId == (n - 1) ? rowStyle : ''">
                 {{ data[n - 1].data }}
@@ -54,18 +56,43 @@ export default {
     },
 
     methods: {
-        FormatAddress(address) {
-            var bitCount = Math.floor(Math.log2(this.data.length + 1));
+        FormatAddressHex(address, tagLength) {
+            var bitCount;
+            if (typeof tagLength == "undefined") {
+                bitCount = Math.log2(this.data.length) / 4;
+            }
+            else {
+                bitCount = tagLength / 4;
+            }
+            
+            if (bitCount % 1 == 0) {
+                bitCount = Math.floor(bitCount);
+            }
+            else {
+                bitCount = Math.floor(bitCount) + 1;
+            }
 
-            var string = `0x${address.toString(16).padStart(bitCount / 4, '0').toUpperCase()}`;
-            string += ` (${address.toString(2).padStart(bitCount, '0')})`;
-            return string;
+            return `0x${address.toString(16).padStart(bitCount, '0').toUpperCase()}`;
         },
-        FormatTag(tag) {
-            var string = `0x${tag.toString(16).padStart(this.tagLength / 4, '0').toUpperCase()}`;
-            string += ` (${tag.toString(2).padStart(this.tagLength, '0')})`;
-            return string;
+        FormatAddressBin(address, tagLength) {
+            var bitCount;
+            if (typeof tagLength == "undefined") {
+                bitCount = Math.log2(this.data.length);
+            }
+            else {
+                bitCount = tagLength;
+            }
+
+            if (bitCount % 1 == 0) {
+                bitCount = Math.floor(bitCount);
+            }
+            else {
+                bitCount = Math.floor(bitCount) + 1;
+            }
+
+            return ` (${address.toString(2).padStart(bitCount, '0')})`;
         },
+
         HighlightInvalid(valid) {
             if (valid) {
                 return '';

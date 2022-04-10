@@ -25,7 +25,7 @@ export default {
                 width: this.width + 'rem'
             },
             barStyle: {
-                width: '0rem',
+                width: '0%',
                 opacity: 1,
                 'margin-left': 'initial'
             },
@@ -55,7 +55,7 @@ export default {
             // Fill bar
             var i = 10;
             this.fillBar.interval = setInterval(() => {
-                this.barStyle.width = ((i / fillTime) * this.width) + 'rem';
+                this.barStyle.width = ((i / fillTime) * 100) + '%';
                 i += 10;
             }, 10);
             var promise = new Promise((resolve) => {
@@ -81,7 +81,7 @@ export default {
             }, fadeTime);
         },
         ResetBar(alignment) {
-            this.barStyle.width = '0rem';
+            this.barStyle.width = '0%';
             this.barStyle.opacity = 1;
             this.barStyle['margin-left'] = alignment;
         },
