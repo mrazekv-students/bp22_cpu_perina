@@ -1,11 +1,12 @@
-import { createApp } from 'vue'
-import App from './App.vue'
+import { createApp } from 'vue';
+import Notifications from '@kyvg/vue3-notification';
+import App from './App.vue';
 
 const app = createApp(App);
 
 // Globals
 // Animations
-app.config.globalProperties.instructionWaitTime = { value: 500 };
+app.config.globalProperties.instructionWaitTime = { value: 1000 };
 app.config.globalProperties.connectorFillTime = { value: 500 };
 app.config.globalProperties.connectorFadeTime = { value: 1000 };
 app.config.globalProperties.highlightFadeTime = { value: 1000 };
@@ -15,4 +16,4 @@ app.config.globalProperties.cycleCosts = { cacheCheck: 2, cacheAccess: 10, ramAc
 // Memory size
 app.config.globalProperties.memorySize = { cache: 4, ram: 16 };
 
-app.mount('#app');
+app.use(Notifications).mount('#app');

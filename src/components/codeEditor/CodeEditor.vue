@@ -73,14 +73,7 @@ export default {
             this.instructionList = [];
             this.labelDict = {};
 
-            try {
-                startCompilation(this.code, this.instructionList);
-            }
-            catch (e) {
-                // TODO: Show error for user
-                console.error(e);
-                throw e;
-            }
+            startCompilation(this.code, this.instructionList);
             
             // Populate labelDict
             for (var i in this.instructionList) {
@@ -95,12 +88,12 @@ export default {
         GetInstruction(address) {
             if (address < this.instructionList.length)
                 return this.instructionList[address];
-            else throw RangeError("Invalid instruction address");
+            else throw RangeError(`Invalid instruction address (${address}).`);
         },
         GetLabel(label) {
             if (label in this.labelDict)
                 return this.labelDict[label];
-            else throw RangeError("No such label");
+            else throw RangeError(`Unknown label (${label}).`);
         },
         GetNextLine(address) {
             if (address < this.instructionList.length)

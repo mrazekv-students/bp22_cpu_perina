@@ -1,5 +1,6 @@
 <template>
     <the-processor/>
+    <notifications :position="'bottom right'" :duration="10000" classes="vue-notification custom-notification"/>
 </template>
 
 <script>
@@ -28,6 +29,17 @@ body {
     font-family: Avenir, Helvetica, Arial, sans-serif;
     background: var(--backgroundColor);
     color: var(--fontColor);
+}
+
+.custom-notification {
+    font-size: 1rem;
+    padding: 15px;
+    border-radius: 5px;
+}
+.custom-notification .notification-title {
+    margin-bottom: 0.5rem;
+    font-size: 1.2rem;
+    text-transform: uppercase;
 }
 
 .horizontal-container {

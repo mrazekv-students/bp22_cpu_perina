@@ -48,7 +48,7 @@ export default {
                 this.cycleCounter.value += this.cycleCosts.ramAccess;
                 this.ramData[address] = data;
             }
-            else throw RangeError("Invalid memory address")
+            else throw RangeError(`Invalid memory address (${address}).`);
         },
         async Read(address) {
             if (address < this.ramData.length && address >= 0)
@@ -58,7 +58,7 @@ export default {
                 await this.connector.fromMemoryToCpu(this.connectorFillTime.value, this.connectorFadeTime.value);
                 return this.ramData[address];
             }
-            else throw RangeError("Invalid memory address")
+            else throw RangeError(`Invalid memory address (${address}).`);
         },
         Initialize() {
             this.ramData = Array(this.memorySize.ram);

@@ -57,7 +57,7 @@ export default {
     methods: {
         async Write(address, data) {
             if (address > this.ramData.length || address < 0)
-                throw RangeError("Invalid memory address");
+                throw RangeError(`Invalid memory address (${address}).`);
 
             var cacheAddress = address & 0b11;
             var cacheTag = (address & 0b1100) >> 2;
@@ -85,7 +85,7 @@ export default {
         },
         async Read(address) {
             if (address > this.ramData.length || address < 0)
-                throw RangeError("Invalid memory address");
+                throw RangeError(`Invalid memory address (${address}).`);
 
             var cacheAddress = address & 0b11;
             var cacheTag = (address & 0b1100) >> 2;

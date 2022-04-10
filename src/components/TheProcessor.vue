@@ -89,7 +89,12 @@ export default {
                     this.compiler.compile();
                 }
                 catch (e) {
-                    console.error("Compilation failed");
+                    this.$notify({
+                        title: "Compilation Error",
+                        text: e.message,
+                        type: "error"
+                    });
+                    console.error(e);
                     return;
                 }
 
@@ -157,8 +162,11 @@ export default {
                 }
             }
             catch (e) {
-                // TODO: Error message
-                console.error("Execution failed");
+                this.$notify({
+                    title: "Execution Error",
+                    text: e.message,
+                    type: "error"
+                });
                 console.error(e);
                 this.ChangeSimulationState(s_ended);
             }

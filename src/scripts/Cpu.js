@@ -99,7 +99,7 @@ export default class Cpu {
                 break;
     
             default:
-                throw Error("Unknown instruction");
+                throw Error(`Unknown instruction ${instruction.instruction}.`);
         }
     
         return result;

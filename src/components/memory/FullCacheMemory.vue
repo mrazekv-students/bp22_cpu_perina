@@ -57,7 +57,7 @@ export default {
     methods: {
         async Write(address, data) {
             if (address > this.ramData.length || address < 0)
-                throw RangeError("Invalid memory address");
+                throw RangeError(`Invalid memory address (${address}).`);
 
             // Data koherence: valid-bit
             // Memory block is in cache
@@ -96,7 +96,7 @@ export default {
         },
         async Read(address) {
             if (address > this.ramData.length || address < 0)
-                throw RangeError("Invalid memory address");
+                throw RangeError(`Invalid memory address (${address}).`);
 
             // Check in cache
             for (var i = 0; i < this.cacheData.length; i++) {

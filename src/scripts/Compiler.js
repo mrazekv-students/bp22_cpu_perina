@@ -2,14 +2,12 @@
 
 import Instruction from "./enums/Instruction";
 
-let instructionNumber = 1;
 let instructionLine = 1;
 
 // Starts compilation of `code`, resulting internal code is stored in `instructionList`
 export default function startCompilation(code, instructionList) {
     // Split into lines
     var codeLines = code.split('\n');
-    instructionNumber = 1;
     instructionLine = 1;
 
     // Compilation loop
@@ -120,53 +118,49 @@ function processInstruction(codeList, instructionList) {
             break;
 
         default:
-            throw Error("Unknown instruction at " + instructionNumber);
+            throw Error(`Unknown instruction at line ${instructionLine} (${instruction}).`);
     }
 }
 
 // Processes instruction with no parameters
 // Returns result object
 function processParameterlessInstruction(instruction, instructionList) {
-    instructionNumber++;
     instructionList.push({ instruction: instruction, line: instructionLine });
 }
 
 // Processes instruction with address parameter
 // Returns result object
 function processAddressInstrution(instruction, parameter, instructionList) {
-    instructionNumber++;
     // Check if address
     if (isAddress(parameter)) {
         parameter = parseInt(parameter.substring(1));
         instructionList.push({ instruction: instruction, address: parameter, line: instructionLine });
     }
     else
-        throw Error("Incorrect parameter format at instruction " + instructionNumber + " (" + instruction + ")");
+        throw Error(`Invalid parameter at line ${instructionLine} (${instruction} ${parameter}).`);
 }
 
 // Processes instruction with value parameter
 // Returns result object
 function processValueInstruction(instruction, parameter, instructionList) {
-    instructionNumber++;
     // Check if value
     if (isNumber(parameter)) {
         parameter = parseInt(parameter);
         instructionList.push({ instruction: instruction, value: parameter, line: instructionLine });
     }
     else
-        throw Error("Incorrect parameter format at instruction " + instructionNumber + " (" + instruction + ")");
+        throw Error(`Invalid parameter at line ${instructionLine} (${instruction} ${parameter}).`);
 }
 
 // Processes instruction with label parameter
 // Returns result object
 function processLabelInstruction(instruction, parameter, instructionList) {
-    instructionNumber++;
     // Check if not instruction keyword
     if (!isKeyword(parameter)) {
         instructionList.push({ instruction: instruction, label: parameter, line: instructionLine })
     }
     else
-        throw Error("Label must not be keyword at instruction " + instructionNumber + " (" + instruction + ")");
+        throw Error(`Invalid label at line ${instructionLine} (label ${parameter}). Label must not be keyword.`);
 }
 
 // Checks if string is syntax valid address
