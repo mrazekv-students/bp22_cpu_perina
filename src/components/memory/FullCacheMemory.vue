@@ -5,9 +5,9 @@
 <template>
     <processor-model :instruction="instruction" :instuctionPointer="instructionPointer"
         :accumulator="accumulator" :addressPointer="addressPointer"/>
-    <connector :id="0" :width="4" @RegisterConnector="RegisterConnector"/>
+    <connector :id="0" :width="3" @RegisterConnector="RegisterConnector"/>
     <cache-model :data="cacheData" :tagLength="tagLength" @SwitchValidBit="SwitchValidBit" @RegisterCache="RegisterCache"/>
-    <connector :id="1" :width="4" @RegisterConnector="RegisterConnector"/>
+    <connector :id="1" :width="3" @RegisterConnector="RegisterConnector"/>
     <ram-model :data="ramData" @RegisterRam="RegisterRam"/>
 </template>
 

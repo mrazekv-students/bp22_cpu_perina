@@ -6,7 +6,7 @@
 <template>
     <processor-model :instruction="instruction" :instuctionPointer="instructionPointer"
         :accumulator="accumulator" :addressPointer="addressPointer"/>
-    <connector :id="0" :width="4" @RegisterConnector="RegisterConnector"/>
+    <connector :id="0" :width="6" @RegisterConnector="RegisterConnector"/>
     <ram-model :data="ramData" @RegisterRam="RegisterRam"/>
 </template>
 

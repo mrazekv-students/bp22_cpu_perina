@@ -6,16 +6,16 @@
     <processor-model :instruction="instruction" :instuctionPointer="instructionPointer"
         :accumulator="accumulator" :addressPointer="addressPointer"/>
     <div class="vertical-container">
-        <connector :id="0" :width="4" @RegisterConnector="RegisterConnector"/>
-        <connector :id="2" :width="4" @RegisterConnector="RegisterConnector"/>
+        <connector :id="0" :width="3" @RegisterConnector="RegisterConnector"/>
+        <connector :id="2" :width="3" @RegisterConnector="RegisterConnector"/>
     </div>
     <div class="vertical-container">
         <cache-model :id="0" :data="cacheData[0]" :tagLength="tagLength" @SwitchValidBit="SwitchValidBit" @RegisterCache="RegisterCache"/>
         <cache-model :id="1" :data="cacheData[1]" :tagLength="tagLength" @SwitchValidBit="SwitchValidBit" @RegisterCache="RegisterCache"/>
     </div>
     <div class="vertical-container">
-        <connector :id="1" :width="4" @RegisterConnector="RegisterConnector"/>
-        <connector :id="3" :width="4" @RegisterConnector="RegisterConnector"/>
+        <connector :id="1" :width="3" @RegisterConnector="RegisterConnector"/>
+        <connector :id="3" :width="3" @RegisterConnector="RegisterConnector"/>
     </div>
     <ram-model :data="ramData" @RegisterRam="RegisterRam"/>
 </template>
