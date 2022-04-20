@@ -28,6 +28,7 @@ export default {
     },
     computed: {
         addressPointerString() {
+            // Source: https://stackoverflow.com/questions/42368797/how-can-i-convert-an-integer-to-hex-with-a-fix-length-in-javascript
             return `0x${this.addressPointer.toString(16).toUpperCase()}`
         }
     }

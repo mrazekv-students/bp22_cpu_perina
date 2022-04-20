@@ -49,6 +49,7 @@ export default {
             return Prism.highlight(code, Prism.languages.bp22);
         },
         HighlightLine(lineNumber) {
+            // Source: https://github.com/evwt/vue-tut
             // Remove highlighting
             if (this.highlightedLine >= 0 )
             {
@@ -65,8 +66,7 @@ export default {
                 var newLine = this.$el.querySelector(`.prism-editor__line-number:nth-child(${lineNumber + 1})`);
                 if (!newLine) return;
                 newLine.classList.add('highlight-line');
-            }
-            
+            }       
         },
         
         CompileProgram() {
