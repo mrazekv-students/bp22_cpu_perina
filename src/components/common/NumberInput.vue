@@ -1,5 +1,6 @@
 <!--
     A number input with label
+    Source: https://stackoverflow.com/questions/47311936/v-model-and-child-components
 !-->
 
 <template>
