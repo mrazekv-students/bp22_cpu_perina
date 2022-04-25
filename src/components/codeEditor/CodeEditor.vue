@@ -111,10 +111,10 @@ export default {
     line-height: 1.5;
     padding: 5px;
 }
-.prism-editor__textarea:focus {
+.code-editor .prism-editor__textarea:focus {
     outline: none;
 }
-.prism-editor-wrapper .prism-editor__line-number.highlight-line {
+.code-editor .prism-editor__line-number.highlight-line {
     border-top-left-radius: 10px;
     border-bottom-left-radius: 10px;
     border-top-right-radius: 2px;
@@ -123,4 +123,18 @@ export default {
     background: var(--secondaryColor);
     color: white;
 }
+
+/* Word wrap line number misaling fix*/
+/* Source: https://github.com/koca/vue-prism-editor/issues/87 */
+.code-editor  .prism-editor__textarea {
+    width: 800px !important;
+}
+.code-editor  .prism-editor__editor {
+    white-space: pre !important;
+}
+.code-editor  .prism-editor__container {
+    height: 100%;
+    overflow-x: scroll !important;
+}
+
 </style>
