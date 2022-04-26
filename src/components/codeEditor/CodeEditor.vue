@@ -27,7 +27,7 @@ export default {
 
     data() {
         return {
-            code: "; This is simple test program\n; Fills memory 5-0 with its address value\n\tMLOAD 5\nloop:\n\tDSTORE @10\n\tISTORE @10\n\tACCDEC\n\tBRPOS loop\n",
+            code: "; This is simple test program\n; Fills memory 7-0 with its address value\n\tMLOAD 7\nloop:\n\tDSTORE @10\n\tISTORE @10\n\tACCDEC\n\tBRPOS loop\n",
             instructionList: [],
             labelDict: {},
             highlightedLine: -1

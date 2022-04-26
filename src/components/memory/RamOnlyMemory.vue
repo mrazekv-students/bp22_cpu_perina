@@ -60,7 +60,7 @@ export default {
             else throw RangeError(`Invalid memory address (0x${address.toString(16).toUpperCase()}).`);
         },
         async Read(address) {
-            if (address < this.ramData.length && address >= 0)
+            if (address < this.ramDataLength && address >= 0)
             {
                 var block = address >> 2;
                 var offset = address & 0b11;
