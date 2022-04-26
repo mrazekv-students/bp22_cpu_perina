@@ -49,8 +49,8 @@ export default {
         async Write(address, data) {
             if (address < this.ramDataLength && address >= 0)
             {
-                var block = Math.floor(address / 4);
-                var offset = Math.floor(address % 4);
+                var block = address >> 2;
+                var offset = address & 0b11;
 
                 await this.connector.fromCpuToMemory(this.connectorFillTime.value, this.connectorFadeTime.value);
                 this.ramModel.highlight(address, this.highlightFadeTime.value);
@@ -62,8 +62,8 @@ export default {
         async Read(address) {
             if (address < this.ramData.length && address >= 0)
             {
-                var block = Math.floor(address / 4);
-                var offset = Math.floor(address % 4);
+                var block = address >> 2;
+                var offset = address & 0b11;
 
                 this.cycleCounter.value += this.cycleCosts.ramAccess;
                 this.ramModel.highlight(address, this.highlightFadeTime.value);

@@ -11,7 +11,7 @@
         <tr v-for="n in data.length" :key="n">
             <td class="address" :style="highlightId == (n - 1) ? rowStyle : ''">
                 <span class="hex">{{ FormatAddressHex((n - 1) * 4) }}</span>
-                <span class="bin">{{ FormatAddressBin((n - 1) * 4) }}</span>
+                <span class="bin"> ({{ FormatAddressBin((n - 1) * 4) }})</span>
             </td>
             <td class="value" :style="highlightId == (n - 1) ? rowStyle : ''">
                 {{ data[n - 1] }}
@@ -73,7 +73,7 @@ export default {
                 bitCount = Math.floor(bitCount) + 1;
             }
 
-            return ` (${address.toString(2).padStart(bitCount, '0')})`;
+            return `${address.toString(2).padStart(bitCount, '0')}`;
         },
 
         HighlightRow(id, fadeTime) {
@@ -149,21 +149,16 @@ export default {
 }
 
 .ram td.address {
-    width: fit-content;
-    min-width: 5rem;
-    padding-right: 0.5rem;
-    padding-left: 0.5rem;
+    padding: 0.1rem 0.4rem;
     text-align: right;
     font-family: Consolas, Courier, monospace;
     color: var(--fontColorFaded);
 }
-.ram td.address>.bin {
-    font-size: 0.8rem;
-}
 .ram td.value {
-    width: 6rem;
-    padding-right: 0.5rem;
-    padding-left: 0.5rem;
+    padding: 0.1rem 0.4rem;
     text-align: center;
+}
+.ram .bin {
+    font-size: 0.75rem;
 }
 </style>
