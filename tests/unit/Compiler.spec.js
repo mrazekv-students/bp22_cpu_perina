@@ -40,12 +40,12 @@ describe("Compilers tests", () => {
     })
 
     test("Compile multiple address instructions", () => {
-        var code = "DSTORE @1 DLOAD @10 MADD @0004";
+        var code = "DSTORE @1 DLOAD @A MADD @0B1";
         var instructionList = [];
 
         startCompilation(code, instructionList);
 
-        expect(instructionList).toEqual([{ instruction: "DSTORE", address: 1, line: 1 }, { instruction: "DLOAD", address: 10, line: 1 }, { instruction: "MADD", address: 4, line: 1 }, { instruction: "END" }]);
+        expect(instructionList).toEqual([{ instruction: "DSTORE", address: 1, line: 1 }, { instruction: "DLOAD", address: 10, line: 1 }, { instruction: "MADD", address: 177, line: 1 }, { instruction: "END" }]);
     })
 
     test("Compile single label instruction", () => {
@@ -90,7 +90,7 @@ describe("Compilers tests", () => {
 
         startCompilation(code, instructionList);
 
-        expect(instructionList).toEqual([{ instruction: "MLOAD", value: 5, line: 1 }, { instruction: "LABEL", label: "loop", line: 1 }, { instruction: "DSTORE", address: 10, line: 1 }, { instruction: "ACCDEC", line: 1 }, { instruction: "ISTORE", address: 10, line: 1 }, { instruction: "BRPOS", label: "loop", line: 1 }, { instruction: "END" }]);
+        expect(instructionList).toEqual([{ instruction: "MLOAD", value: 5, line: 1 }, { instruction: "LABEL", label: "loop", line: 1 }, { instruction: "DSTORE", address: 16, line: 1 }, { instruction: "ACCDEC", line: 1 }, { instruction: "ISTORE", address: 16, line: 1 }, { instruction: "BRPOS", label: "loop", line: 1 }, { instruction: "END" }]);
     })
 
     test("Compile multiple various instructions with line breaks", () => {
@@ -99,7 +99,7 @@ describe("Compilers tests", () => {
 
         startCompilation(code, instructionList);
 
-        expect(instructionList).toEqual([{ instruction: "MLOAD", value: 5, line: 1 }, { instruction: "LABEL", label: "loop", line: 2 }, { instruction: "DSTORE", address: 10, line: 3 }, { instruction: "ACCDEC", line: 4 }, { instruction: "ISTORE", address: 10, line: 5 }, { instruction: "BRPOS", label: "loop", line: 6 }, { instruction: "END" }]);
+        expect(instructionList).toEqual([{ instruction: "MLOAD", value: 5, line: 1 }, { instruction: "LABEL", label: "loop", line: 2 }, { instruction: "DSTORE", address: 16, line: 3 }, { instruction: "ACCDEC", line: 4 }, { instruction: "ISTORE", address: 16, line: 5 }, { instruction: "BRPOS", label: "loop", line: 6 }, { instruction: "END" }]);
     })
 
     test("Compile code with comments", () => {
@@ -126,7 +126,7 @@ describe("Compilers tests", () => {
     })
 
     test("Fail at invalid address parameter, not a number", () => {
-        var code = "NOP DSTORE @1a NOP";
+        var code = "NOP DSTORE @1gh NOP";
         var instructionList = [];
 
         expect(() => startCompilation(code, instructionList)).toThrow();

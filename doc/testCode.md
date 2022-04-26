@@ -1,6 +1,7 @@
 # Testovací kód
 ## Všechny instrukce
 
+```(asm)
 HALT
 NEGATE
 ACCDEC
@@ -20,14 +21,16 @@ BRNEG test
 MADD @0006
 IJUMP @0007
 :test
+```
 
 ## Jednoduchý program
-
-;This is simple test program
-  MLOAD 5
-loop:               ; Simple loop
-  DSTORE @10
-  ACCDEC
-  ISTORE @10
-  BRPOS loop      ; Return back
-  ; End of program
+```(asm)
+; This is simple test program
+; Fills memory 7-0 with its address value
+	MLOAD 7
+loop:
+	DSTORE @10
+	ISTORE @10
+	ACCDEC
+	BRPOS loop
+```

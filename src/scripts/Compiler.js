@@ -192,5 +192,5 @@ function isDecNumber(str) {
 // Check if string is hexadecimal number
 // Source: https://stackoverflow.com/questions/9221362/regular-expression-for-a-hexadecimal-number
 function isHexNumber(str) {
-    return /[0-9a-f]+/i.test(str);
+    return /[0-9a-f]+$/i.test(str);
 }
