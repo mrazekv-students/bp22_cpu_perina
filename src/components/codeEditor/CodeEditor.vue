@@ -126,15 +126,13 @@ export default {
 
 /* Word wrap line number misaling fix*/
 /* Source: https://github.com/koca/vue-prism-editor/issues/87 */
-.code-editor  .prism-editor__textarea {
+.code-editor .prism-editor__textarea {
     width: 800px !important;
 }
-.code-editor  .prism-editor__editor {
+.code-editor .prism-editor__editor {
     white-space: pre !important;
 }
-.code-editor  .prism-editor__container {
-    height: 100%;
+.code-editor .prism-editor__container {
     overflow-x: scroll !important;
 }
-
 </style>

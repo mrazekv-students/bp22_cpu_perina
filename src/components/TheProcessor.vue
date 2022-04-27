@@ -252,7 +252,8 @@ export default {
 .program-container {
     width: 85%;
     height: 100%;
-    overflow-y: auto;
+    overflow-y: hidden;
+
     border: solid 15px var(--mainColor);
     border-left-width: 3px;
     border-right-width: 3px;
