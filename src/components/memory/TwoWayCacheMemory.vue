@@ -127,7 +127,6 @@ export default {
             var cacheAddress = address & ((1 << this.cacheAddressBits) - 1);
             var cacheBlock = cacheAddress >> 2;
             var cacheTag = address >> this.cacheAddressBits;
-            console.log(cacheAddress, cacheBlock, cacheTag);
 
             // Check in cache
             for (var i = 0; i < this.cacheData.length; i++) {
