@@ -24,6 +24,9 @@ https://www.geeksforgeeks.org/computer-organization-locality-and-cache-friendly-
   ; Základní adresa sloupce
   MLOAD -1
   DSTORE @23
+  
+  ; Algoritmus
+  FLUSH HALT
 col:
   ; Načte se základní adresa sloupce
   DLOAD @23
@@ -77,6 +80,9 @@ end:
   ; Čítač sloupců
   MLOAD 4
   DSTORE @22
+  
+  ; Algoritmus
+  FLUSH HALT
 row:
   ; Skok na end pokud čítač řádků == 0
   DLOAD @21
@@ -193,7 +199,7 @@ https://stackoverflow.com/questions/16699247/what-is-a-cache-friendly-code
   MLOAD 1 DSTORE @2C MLOAD -1 DSTORE @2D
 
   ; Průchod seznamem
-  HALT
+  FLUSH HALT
   ; Aktuální prvek
   MLOAD 4
   DSTORE @0
