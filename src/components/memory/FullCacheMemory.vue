@@ -112,7 +112,7 @@ export default {
             }
         },
         async Read(address) {
-            if (address > this.ramData.length || address < 0)
+            if (address > this.ramDataLength || address < 0)
                 throw RangeError(`Invalid memory address (0x${address.toString(16).toUpperCase()}).`);
 
             var cacheTag = address & ~(0b11);

@@ -112,7 +112,7 @@ export default {
             }
             // Current memory block not valid - must save
             else {
-                var ramAddress = this.memoryUtils.getRamAddressFromCache(cacheAddress, this.cacheData[id][cacheAddress].tag, 1);
+                var ramAddress = this.memoryUtils.getRamAddressFromCache(this.cacheData[id][cacheBlock].tag, cacheAddress, this.cacheAddressBits);
                 
                 await this.memoryUtils.writeToRam(cacheAddress, ramAddress, id);
                 await Sleep(this.connectorFadeTime.value / 2);
@@ -127,6 +127,7 @@ export default {
             var cacheAddress = address & ((1 << this.cacheAddressBits) - 1);
             var cacheBlock = cacheAddress >> 2;
             var cacheTag = address >> this.cacheAddressBits;
+            console.log(cacheAddress, cacheBlock, cacheTag);
 
             // Check in cache
             for (var i = 0; i < this.cacheData.length; i++) {
@@ -156,7 +157,7 @@ export default {
             }
             // Current memory block not valid - must save
             else {
-                var ramAddress = this.memoryUtils.getRamAddressFromCache(cacheAddress, this.cacheData[id][cacheAddress].tag, 1);
+                var ramAddress = this.memoryUtils.getRamAddressFromCache(this.cacheData[id][cacheBlock].tag, cacheAddress, this.cacheAddressBits);
                 
                 await this.memoryUtils.writeToRam(cacheAddress, ramAddress, id);
                 await Sleep(this.connectorFadeTime.value / 2);
@@ -167,7 +168,7 @@ export default {
         Flush() {
             for (var i = 0; i < this.cacheData.length; i++) {
                 for (var j = 0; j < this.cacheData[i].length; j++) {
-                    var address = this.memoryUtils.getRamAddressFromCache(this.cacheData[i][j].tag, j, 1);
+                    var address = this.memoryUtils.getRamAddressFromCache(this.cacheData[i][j].tag, j, this.cacheAddressBits - 2);
                     if (!this.cacheData[i][j].isEmpty)
                     {
                         this.ramData[address] = [...this.cacheData[i][j].data];

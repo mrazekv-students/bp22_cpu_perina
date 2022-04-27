@@ -130,7 +130,7 @@ export default {
         },
         Flush() {
             for (var i = 0; i < this.cacheData.length; i++) {
-                var address = this.memoryUtils.getRamAddressFromCache(this.cacheData[i].tag, i, this.cacheAddressBits);
+                var address = this.memoryUtils.getRamAddressFromCache(this.cacheData[i].tag, i, this.cacheAddressBits - 2);
                 this.ramData[address] = [...this.cacheData[i].data];
                 this.cacheData[i].valid = true;
             }
