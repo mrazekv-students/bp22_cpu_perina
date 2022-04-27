@@ -171,7 +171,7 @@ export default {
                     if (!this.cacheData[i][j].isEmpty)
                     {
                         this.ramData[address] = [...this.cacheData[i][j].data];
-                        this.cacheData[i][j].valid = true;
+                        this.cacheData[i][j] = new CacheBlock();
                     }
                 }
             }

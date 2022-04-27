@@ -113,6 +113,10 @@ function processInstruction(codeList, instructionList) {
             processAddressInstrution(Instruction.IJUMP.name, codeList.shift(), instructionList);
             break;
 
+        case Instruction.FLUSH.name:
+            processParameterlessInstruction(Instruction.FLUSH.name, instructionList);
+            break;
+
         // Skip empty strings
         case "":
             break;

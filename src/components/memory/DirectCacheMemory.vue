@@ -132,7 +132,7 @@ export default {
             for (var i = 0; i < this.cacheData.length; i++) {
                 var address = this.memoryUtils.getRamAddressFromCache(this.cacheData[i].tag, i, this.cacheAddressBits - 2);
                 this.ramData[address] = [...this.cacheData[i].data];
-                this.cacheData[i].valid = true;
+                this.cacheData[i] = new CacheBlock();
             }
         },
         Initialize() {

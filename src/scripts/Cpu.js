@@ -93,6 +93,10 @@ export default class Cpu {
                 result = this._executeLabel();
                 break;
 
+            case Instruction.FLUSH.name:
+                result = this._executeFlush();
+                break;
+
             // Special program end instruction
             case "END":
                 result = this._endExecution();
@@ -251,6 +255,13 @@ export default class Cpu {
 
     // Execute LABEL instruction
     _executeLabel() {
+        return { result: ExecutionResult.NextInstruction };
+    }
+
+    // Execute FLUSH instruction
+    _executeFlush() {
+        this.cycleCounter.value = 0;
+        this.memory.flush();
         return { result: ExecutionResult.NextInstruction };
     }
 

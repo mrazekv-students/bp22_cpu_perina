@@ -21,6 +21,7 @@ export default class Instruction {
     static MADD = new Instruction("MADD");
     static IJUMP = new Instruction("IJUMP");
     static LABEL = new Instruction("LABEL");
+    static FLUSH = new Instruction("FLUSH");
 
     constructor (name) {
         this.name = name
