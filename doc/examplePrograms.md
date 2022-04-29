@@ -1,6 +1,5 @@
 # Příklady programů a algoritmů způsobující problémy s pamětí
 ## Zdroje
-- https://stackoverflow.com/questions/16699247/what-is-a-cache-friendly-code
 
 ## Průchod matice 4x4
 https://www.geeksforgeeks.org/computer-organization-locality-and-cache-friendly-code/
@@ -115,6 +114,7 @@ end:
 
 ## (Násobení matic)
 http://web.cecs.pdx.edu/~jrb/cs201/lectures/cache.friendly.code.pdf (p.27)
+
 https://www.cse.iitk.ac.in/users/swarnendu/courses/autumn2019-cs698l/Write%20Cache-Friendly%20Code.pdf (p.86)
 
 ## Dva cykly nebo jeden cyklus?
