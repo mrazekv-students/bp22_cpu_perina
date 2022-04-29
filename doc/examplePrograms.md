@@ -113,7 +113,7 @@ end:
   HALT
 ```
 
-## (Násobení) matic
+## (Násobení matic)
 http://web.cecs.pdx.edu/~jrb/cs201/lectures/cache.friendly.code.pdf (p.27)
 https://www.cse.iitk.ac.in/users/swarnendu/courses/autumn2019-cs698l/Write%20Cache-Friendly%20Code.pdf (p.86)
 
@@ -126,20 +126,23 @@ https://www.cse.iitk.ac.in/users/swarnendu/courses/autumn2019-cs698l/Write%20Cac
 ; poté se inkrementuje
 
   ; Čítač pro pohyb v poli
-  MLOAD 62
+  MLOAD 31
   DSTORE @3F
+  FLUSH HALT
 loop:
   ; Nastavit hodnotu na 1 a uložit
   MLOAD 1
   ISTORE @3F
   ; Hodnotu inkrementovat a uložit
   ILOAD @3F
-  INC
+  ACCINC
   ISTORE @3F
   ; Pokud čítač == 0 tak konec
   DLOAD @3F
   BRZERO end
   ; Jinak pokračovat
+  ACCDEC
+  DSTORE @3F
   BRANCH loop
 end:
   HALT
@@ -151,8 +154,9 @@ end:
 ; poté se inkrementuje
 
   ; Čítač pro pohyb v poli
-  MLOAD 62
+  MLOAD 31
   DSTORE @3F
+  FLUSH HALT
 loop_one:
   ; Nastavit hodnota na 1
   MLOAD 1
@@ -161,24 +165,36 @@ loop_one:
   DLOAD @3F
   BRZERO end_one
   ; Jinak pokračovat
+  ACCDEC
+  DSTORE @3F
   BRANCH loop_one
 end_one:
   ; Čítač pro pohyb v poli (znovu)
-  MLOAD 62
+  MLOAD 31
   DSTORE @3F
 loop_inc:
   ; Hodnotu inkrementovat
   ILOAD @3F
-  INC
+  ACCINC
   ISTORE @3F
   ; Pokud čítač == 0 tak konec
-  DLOAD @3f
+  DLOAD @3F
   BRZERO end_inc
   ; Jinak pokračovat
+  ACCDEC
+  DSTORE @3F
   BRANCH loop_inc
 end_inc:
   HALT
 ```
+
+|Název|Jeden cyklus (long)|Dva cykly (long)|Jeden cyklus (short)|Dva cykly (short)|
+|-|-|-|-|-|
+|RAM-only:|51 416|64 376|25 608|32 088|
+|Direct cache:|19 676|24 604|9 532|10 796|
+|Two-way cache:|6 996|13 594|3 008|4 810|
+|Full cache:|6 660|12 158|3 116|4 948|
+
 
 ## Spojitý seznam
 https://stackoverflow.com/questions/16699247/what-is-a-cache-friendly-code
