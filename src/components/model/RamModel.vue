@@ -10,8 +10,8 @@
         </tr>
         <tr v-for="n in data.length" :key="n">
             <td class="address" :style="highlightId == (n - 1) ? rowStyle : ''">
-                <span>{{ FormatAddressHex(n - 1) }}</span>
-                <span>{{ FormatAddressBin(n - 1) }}</span>
+                <span class="hex">{{ FormatAddressHex((n - 1) * 4) }}</span>
+                <span class="bin"> ({{ FormatAddressBin((n - 1) * 4) }})</span>
             </td>
             <td class="value" :style="highlightId == (n - 1) ? rowStyle : ''">
                 {{ data[n - 1] }}
@@ -40,6 +40,12 @@ export default {
         }
     },
 
+    computed: {
+        dataLength() {
+            return this.data.length * 4;
+        }
+    },
+
     created() {
         this.$emit("RegisterRam", { highlight: this.HighlightRow });
     },
@@ -47,7 +53,7 @@ export default {
     methods: {
         FormatAddressHex(address) {
             // Source: https://stackoverflow.com/questions/42368797/how-can-i-convert-an-integer-to-hex-with-a-fix-length-in-javascript
-            var bitCount = Math.log2(this.data.length) / 4;
+            var bitCount = Math.log2(this.dataLength) / 4;
             if (bitCount % 1 == 0) {
                 bitCount = Math.floor(bitCount);
             }
@@ -59,7 +65,7 @@ export default {
         },
         FormatAddressBin(address) {
             // Source: https://stackoverflow.com/questions/42368797/how-can-i-convert-an-integer-to-hex-with-a-fix-length-in-javascript
-            var bitCount = Math.log2(this.data.length);
+            var bitCount = Math.log2(this.dataLength);
             if (bitCount % 1 == 0) {
                 bitCount = Math.floor(bitCount);
             }
@@ -67,13 +73,13 @@ export default {
                 bitCount = Math.floor(bitCount) + 1;
             }
 
-            return ` (${address.toString(2).padStart(bitCount, '0')})`;
+            return `${address.toString(2).padStart(bitCount, '0')}`;
         },
 
         HighlightRow(id, fadeTime) {
             this.ResetIntervals();
             this.ResetHighlight();
-            this.highlightId = id;
+            this.highlightId = Math.floor(id / 4);
 
             var i = fadeTime;
             var fadeHex;
@@ -143,16 +149,16 @@ export default {
 }
 
 .ram td.address {
-    width: fit-content;
-    min-width: 5rem;
-    padding-right: 0.5rem;
-    padding-left: 0.5rem;
+    padding: 0.1rem 0.4rem;
     text-align: right;
     font-family: Consolas, Courier, monospace;
     color: var(--fontColorFaded);
 }
 .ram td.value {
-    width: 5rem;
-    padding-left: 0.5rem;
+    padding: 0.1rem 0.4rem;
+    text-align: center;
+}
+.ram .bin {
+    font-size: 0.75rem;
 }
 </style>
