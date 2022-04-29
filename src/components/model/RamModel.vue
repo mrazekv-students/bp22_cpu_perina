@@ -46,6 +46,7 @@ export default {
 
     methods: {
         FormatAddressHex(address) {
+            // Source: https://stackoverflow.com/questions/42368797/how-can-i-convert-an-integer-to-hex-with-a-fix-length-in-javascript
             var bitCount = Math.log2(this.data.length) / 4;
             if (bitCount % 1 == 0) {
                 bitCount = Math.floor(bitCount);
@@ -57,6 +58,7 @@ export default {
             return `0x${address.toString(16).padStart(bitCount, '0').toUpperCase()}`;
         },
         FormatAddressBin(address) {
+            // Source: https://stackoverflow.com/questions/42368797/how-can-i-convert-an-integer-to-hex-with-a-fix-length-in-javascript
             var bitCount = Math.log2(this.data.length);
             if (bitCount % 1 == 0) {
                 bitCount = Math.floor(bitCount);

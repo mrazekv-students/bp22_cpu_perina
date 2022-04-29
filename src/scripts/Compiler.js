@@ -176,6 +176,7 @@ function isAddress(str) {
 // Check if string is instruction keyword
 function isKeyword(str) {
     var result = false;
+    // Source: https://www.sohamkamani.com/javascript/enums/
     Object.keys(Instruction).forEach(instruction => {
         if (instruction === str.toUpperCase()) result = true;
     });

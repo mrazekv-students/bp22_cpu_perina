@@ -1,5 +1,6 @@
 <!--
     Edit settings window
+    Source: https://vuejs.org/examples/#modal
 !-->
 
 <template>
