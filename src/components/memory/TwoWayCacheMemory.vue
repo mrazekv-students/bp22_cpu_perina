@@ -42,6 +42,7 @@ export default {
     },
 
     computed: {
+        // TODO: Check and rename to be clearer
         tagLength() {
             return Math.floor(Math.log2(this.ramDataLength + 1)) - Math.floor(Math.log2(this.cacheDataLength + 1));
         },
