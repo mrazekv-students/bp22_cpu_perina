@@ -34,6 +34,12 @@ export default {
         }
     },
 
+    computed: {
+        ramDataLength() {
+            return this.ramData.length * 4;
+        }
+    },
+
     created() {
         this.$emit("RegisterMemory", { write: this.Write, read: this.Read, flush: () => {}, initialize: this.Initialize });
         this.Initialize();
@@ -41,29 +47,35 @@ export default {
 
     methods: {
         async Write(address, data) {
-            if (address < this.ramData.length && address >= 0)
+            if (address < this.ramDataLength && address >= 0)
             {
+                var block = address >> 2;
+                var offset = address & 0b11;
+
                 await this.connector.fromCpuToMemory(this.connectorFillTime.value, this.connectorFadeTime.value);
                 this.ramModel.highlight(address, this.highlightFadeTime.value);
                 this.cycleCounter.value += this.cycleCosts.ramAccess;
-                this.ramData[address] = data;
+                this.ramData[block][offset] = data;
             }
-            else throw RangeError(`Invalid memory address (${address}).`);
+            else throw RangeError(`Invalid memory address (0x${address.toString(16).toUpperCase()}).`);
         },
         async Read(address) {
-            if (address < this.ramData.length && address >= 0)
+            if (address < this.ramDataLength && address >= 0)
             {
+                var block = address >> 2;
+                var offset = address & 0b11;
+
                 this.cycleCounter.value += this.cycleCosts.ramAccess;
                 this.ramModel.highlight(address, this.highlightFadeTime.value);
                 await this.connector.fromMemoryToCpu(this.connectorFillTime.value, this.connectorFadeTime.value);
-                return this.ramData[address];
+                return this.ramData[block][offset];
             }
-            else throw RangeError(`Invalid memory address (${address}).`);
+            else throw RangeError(`Invalid memory address (0x${address.toString(16).toUpperCase()}).`);
         },
         Initialize() {
             this.ramData = Array(this.memorySize.ram);
             for (var i = 0; i < this.memorySize.ram; i++) {
-                this.ramData[i] = 0;
+                this.ramData[i] = [0, 0, 0, 0];
             }
         },
 

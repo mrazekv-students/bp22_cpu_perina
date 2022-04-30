@@ -6,7 +6,7 @@ const app = createApp(App);
 
 // Globals
 // Animations
-app.config.globalProperties.instructionWaitTime = { value: 1000 };
+app.config.globalProperties.instructionWaitTime = { value: 500 };
 app.config.globalProperties.connectorFillTime = { value: 500 };
 app.config.globalProperties.connectorFadeTime = { value: 1000 };
 app.config.globalProperties.highlightFadeTime = { value: 1000 };

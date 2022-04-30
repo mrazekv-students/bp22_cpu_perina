@@ -113,6 +113,10 @@ function processInstruction(codeList, instructionList) {
             processAddressInstrution(Instruction.IJUMP.name, codeList.shift(), instructionList);
             break;
 
+        case Instruction.FLUSH.name:
+            processParameterlessInstruction(Instruction.FLUSH.name, instructionList);
+            break;
+
         // Skip empty strings
         case "":
             break;
@@ -133,7 +137,7 @@ function processParameterlessInstruction(instruction, instructionList) {
 function processAddressInstrution(instruction, parameter, instructionList) {
     // Check if address
     if (isAddress(parameter)) {
-        parameter = parseInt(parameter.substring(1));
+        parameter = parseInt(parameter.substring(1), 16);
         instructionList.push({ instruction: instruction, address: parameter, line: instructionLine });
     }
     else
@@ -144,7 +148,7 @@ function processAddressInstrution(instruction, parameter, instructionList) {
 // Returns result object
 function processValueInstruction(instruction, parameter, instructionList) {
     // Check if value
-    if (isNumber(parameter)) {
+    if (isDecNumber(parameter)) {
         parameter = parseInt(parameter);
         instructionList.push({ instruction: instruction, value: parameter, line: instructionLine });
     }
@@ -168,7 +172,7 @@ function isAddress(str) {
     var result = str.startsWith("@");
     if (result) {
         str = str.substring(1);
-        result = isNumber(str);
+        result = isHexNumber(str);
     }
     return result
 }
@@ -176,14 +180,21 @@ function isAddress(str) {
 // Check if string is instruction keyword
 function isKeyword(str) {
     var result = false;
+    // Source: https://www.sohamkamani.com/javascript/enums/
     Object.keys(Instruction).forEach(instruction => {
         if (instruction === str.toUpperCase()) result = true;
     });
     return result;
 }
 
-// Check is string is number
+// Check if string is decimal number
 // Source: https://stackoverflow.com/questions/1779013/check-if-string-contains-only-digits
-function isNumber(str) {
+function isDecNumber(str) {
     return /^-?\d+$/.test(str);
+}
+
+// Check if string is hexadecimal number
+// Source: https://stackoverflow.com/questions/9221362/regular-expression-for-a-hexadecimal-number
+function isHexNumber(str) {
+    return /[0-9a-f]+$/i.test(str);
 }

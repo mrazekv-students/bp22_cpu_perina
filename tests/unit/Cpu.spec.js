@@ -488,7 +488,7 @@ describe("CPU instruction error tests", () => {
         // Prepare
         var acc = { value: 0 };
         var ap = { value: 0 };
-        var instructionList = [{ instruction: "DLOAD", address: 32 }, { instruction: "END" }];
+        var instructionList = [{ instruction: "DLOAD", address: 256 }, { instruction: "END" }];
 
         const wrapper = mount(RamOnlyMemory);
         var memory = wrapper.emitted().RegisterMemory[0][0];
@@ -516,7 +516,7 @@ describe("CPU instruction error tests", () => {
         // Prepare
         var acc = { value: 10 };
         var ap = { value: 0 };
-        var instructionList = [{ instruction: "DSTORE", address: 32 }, { instruction: "END" }];
+        var instructionList = [{ instruction: "DSTORE", address: 256 }, { instruction: "END" }];
 
         const wrapper = mount(RamOnlyMemory);
         var memory = wrapper.emitted().RegisterMemory[0][0];

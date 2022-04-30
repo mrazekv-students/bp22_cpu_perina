@@ -27,7 +27,7 @@ export default {
 
     data() {
         return {
-            code: "",
+            code: "; This is simple test program\n; Fills memory 7-0 with its address value\n\tMLOAD 7\nloop:\n\tDSTORE @10\n\tISTORE @10\n\tACCDEC\n\tBRPOS loop\n",
             instructionList: [],
             labelDict: {},
             highlightedLine: -1
@@ -49,6 +49,7 @@ export default {
             return Prism.highlight(code, Prism.languages.bp22);
         },
         HighlightLine(lineNumber) {
+            // Source: https://github.com/evwt/vue-tut
             // Remove highlighting
             if (this.highlightedLine >= 0 )
             {
@@ -65,8 +66,7 @@ export default {
                 var newLine = this.$el.querySelector(`.prism-editor__line-number:nth-child(${lineNumber + 1})`);
                 if (!newLine) return;
                 newLine.classList.add('highlight-line');
-            }
-            
+            }       
         },
         
         CompileProgram() {
@@ -111,10 +111,10 @@ export default {
     line-height: 1.5;
     padding: 5px;
 }
-.prism-editor__textarea:focus {
+.code-editor .prism-editor__textarea:focus {
     outline: none;
 }
-.prism-editor-wrapper .prism-editor__line-number.highlight-line {
+.code-editor .prism-editor__line-number.highlight-line {
     border-top-left-radius: 10px;
     border-bottom-left-radius: 10px;
     border-top-right-radius: 2px;
@@ -122,5 +122,17 @@ export default {
     padding-right: 0.3rem;
     background: var(--secondaryColor);
     color: white;
+}
+
+/* Word wrap line number misaling fix*/
+/* Source: https://github.com/koca/vue-prism-editor/issues/87 */
+.code-editor .prism-editor__textarea {
+    width: 800px !important;
+}
+.code-editor .prism-editor__editor {
+    white-space: pre !important;
+}
+.code-editor .prism-editor__container {
+    overflow-x: scroll !important;
 }
 </style>

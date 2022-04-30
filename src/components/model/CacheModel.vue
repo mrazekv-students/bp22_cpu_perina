@@ -12,14 +12,13 @@
         </tr>
         <tr v-for="n in data.length" :key="n">
             <td class="address" :style="highlightId == (n - 1) ? rowStyle : ''">
-                <span>{{ FormatAddressHex(n - 1) }}</span>
-                <span>{{ FormatAddressBin(n - 1) }}</span>
+                <span class="hex">{{ FormatAddressHex((n - 1) * 4) }}</span>
+                <span class="bin"> ({{ FormatAddressBin((n - 1) * 4) }})</span>
             </td>
             <td :class="'valid ' + HighlightInvalid(data[n - 1].valid)" :style="highlightId == (n - 1) ? rowStyle : ''" @dblclick="ValidDblClick(n - 1)">
                 {{ data[n - 1].valid ? "T" : "F" }}
             </td>
             <td class="tag" :style="highlightId == (n - 1) ? rowStyle : ''">
-                <span>{{ FormatAddressHex(data[n - 1].tag, tagLength) }}</span>
                 <span>{{ FormatAddressBin(data[n - 1].tag, tagLength) }}</span>
             </td>
             <td class="value" :style="highlightId == (n - 1) ? rowStyle : ''">
@@ -51,15 +50,22 @@ export default {
         }
     },
 
+    computed: {
+        dataLength() {
+            return this.data.length * 4;
+        }
+    },
+
     created() {
         this.$emit("RegisterCache", { highlight: this.HighlightRow }, this.id);
     },
 
     methods: {
         FormatAddressHex(address, tagLength) {
+            // Source: https://stackoverflow.com/questions/42368797/how-can-i-convert-an-integer-to-hex-with-a-fix-length-in-javascript
             var bitCount;
             if (typeof tagLength == "undefined") {
-                bitCount = Math.log2(this.data.length) / 4;
+                bitCount = Math.log2(this.dataLength) / 4;
             }
             else {
                 bitCount = tagLength / 4;
@@ -75,9 +81,10 @@ export default {
             return `0x${address.toString(16).padStart(bitCount, '0').toUpperCase()}`;
         },
         FormatAddressBin(address, tagLength) {
+            // Source: https://stackoverflow.com/questions/42368797/how-can-i-convert-an-integer-to-hex-with-a-fix-length-in-javascript
             var bitCount;
             if (typeof tagLength == "undefined") {
-                bitCount = Math.log2(this.data.length);
+                bitCount = Math.log2(this.dataLength);
             }
             else {
                 bitCount = tagLength;
@@ -90,7 +97,7 @@ export default {
                 bitCount = Math.floor(bitCount) + 1;
             }
 
-            return ` (${address.toString(2).padStart(bitCount, '0')})`;
+            return `${address.toString(2).padStart(bitCount, '0')}`;
         },
 
         HighlightInvalid(valid) {
@@ -108,7 +115,7 @@ export default {
         HighlightRow(id, fadeTime) {
             this.ResetIntervals();
             this.ResetHighlight();
-            this.highlightId = id;
+            this.highlightId = Math.floor(id / 4);
 
             var i = fadeTime;
             var fadeHex;
@@ -181,16 +188,13 @@ export default {
 }
 
 .cache td.address {
-    width: fit-content;
-    min-width: 5rem;
-    padding-right: 0.5rem;
-    padding-left: 0.5rem;
+    padding: 0.1rem 0.3rem;
     text-align: right;
     font-family: Consolas, Courier, monospace;
     color: var(--fontColorFaded);
 }
 .cache td.valid {
-    width: 2.5rem;
+    width: 2rem;
     text-align: center;
     user-select: none;
 }
@@ -202,15 +206,15 @@ export default {
     cursor: pointer;
 }
 .cache td.tag {
-    width: fit-content;
-    min-width: 5rem;
-    padding-right: 0.5rem;
-    padding-left: 0.5rem;
+    padding: 0.1rem 0.4rem;
     font-family: Consolas, Courier, monospace;
     text-align: center;
 }
 .cache td.value {
-    width: 5rem;
-    padding-left: 0.5rem;
+    padding: 0.1rem 0.4rem;
+    text-align: center;
+}
+.cache .bin {
+    font-size: 0.8rem;
 }
 </style>

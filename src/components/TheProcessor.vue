@@ -102,8 +102,9 @@ export default {
                 this.Initialize();
                 this.cpu = new Cpu(this.memory, this.accumulator, this.addressPointer, this.cycleCounter);
             }
+
             this.ChangeSimulationState(s_started);
-            this.compiler.highlightLine(-1);
+            this.compiler.highlightLine(this.compiler.getNextLine(this.instructionPointer));
 
             // Program loops
             while (this.currentState == s_started) {
@@ -113,13 +114,11 @@ export default {
         },
         StopProgram() {
             console.log("Stop program");
-            this.compiler.highlightLine(-1);
             this.ChangeSimulationState(s_notStarted);
             this.Initialize();
         },
         PauseProgram() {
             console.log("Pause program");
-            this.compiler.highlightLine(this.compiler.getNextLine(this.instructionPointer));
             this.ChangeSimulationState(s_halted);
         },
         async ExecuteInstruction() {
@@ -153,11 +152,12 @@ export default {
                     console.log("Program end");
                     this.compiler.highlightLine(-1);
                     this.ChangeSimulationState(s_ended);
+                    return;
                 }
 
-                // Highlight current line if going manually
+                this.compiler.highlightLine(this.compiler.getNextLine(this.instructionPointer));
+
                 if (this.currentState == s_halted) {
-                    this.compiler.highlightLine(this.compiler.getNextLine(this.instructionPointer));
                     this.controlButtons[3].disabled = false;
                 }
             }
@@ -220,6 +220,7 @@ export default {
             this.addressPointer = { value: 0 };
             this.instruction = { instruction: "INST" };
             this.cycleCounter.value = 0;
+            this.compiler.highlightLine(-1);
             this.memory.initialize();
         }
     }
@@ -251,7 +252,8 @@ export default {
 .program-container {
     width: 85%;
     height: 100%;
-    overflow-y: auto;
+    overflow-y: hidden;
+
     border: solid 15px var(--mainColor);
     border-left-width: 3px;
     border-right-width: 3px;
