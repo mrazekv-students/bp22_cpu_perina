@@ -188,12 +188,19 @@ end_inc:
   HALT
 ```
 
-|Název|Jeden cyklus (long)|Dva cykly (long)|Jeden cyklus (short)|Dva cykly (short)|
+|Název|Jeden cyklus (32)|Dva cykly (32)|Jeden cyklus (16)|Dva cykly (16)|
 |-|-|-|-|-|
 |RAM-only:|51 416|64 376|25 608|32 088|
 |Direct cache:|19 676|24 604|9 532|10 796|
 |Two-way cache:|6 996|13 594|3 008|4 810|
 |Full cache:|6 660|12 158|3 116|4 948|
+
+|Název|Jeden cyklus (63)|Dva cykly (63)|Jeden cyklus (8)|Dva cykly (8)|
+|-|-|-|-|-|
+|RAM-only:|101 419|126 934|12 704|15 944|
+|Direct cache:|32 855|41 882|1 460|1 692|
+|Two-way cache:|14 321|25 974|1 488|1 720|
+|Full cache:|14 761|24 936|1 544|1 776|
 
 
 ## Spojitý seznam
