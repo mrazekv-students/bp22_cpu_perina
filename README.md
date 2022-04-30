@@ -3,6 +3,8 @@ Vysoké učení technické v Brně, Fakulta informačních technologií
 - Autor práce: Daniel Peřina
 - Vedoucí práce: Vojtěch Mrázek, Ing. Ph.D.
 
+Aplikace je dostupná na [Cache Simulator](https://mrazekv-students.github.io/bp22_cpu_perina/)
+
 ## Spuštění aplikace
 ### Instalace balíčků a závislostí
 ```
