@@ -1,5 +1,6 @@
 <!--
     Visual-only 'progress-bar' style connector
+    TODO: Dynamic length
 !-->
 
 <template>

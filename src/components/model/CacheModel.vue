@@ -1,5 +1,6 @@
 <!--
     Visual-only component for cache
+    TODO: Add highlight check
 !-->
 
 <template>

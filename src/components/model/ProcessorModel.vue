@@ -1,5 +1,6 @@
 <!--
     Visual only component for processor
+    TODO: Label highlight
 !-->
 
 <template>

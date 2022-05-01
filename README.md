@@ -1,31 +1,30 @@
-# bp22_cpu_perina
-Bakalářská práce: Vizualizace činnosti vyrovnávacích pamětí procesoru
+# Bakalářská práce: Vizualizace činnosti vyrovnávacích pamětí procesoru
+Vysoké učení technické v Brně, Fakulta informačních technologií
+- Autor práce: Daniel Peřina
+- Vedoucí práce: Vojtěch Mrázek, Ing. Ph.D.
 
-# Vue.js
-## Project setup
+Aplikace je dostupná na [Cache Simulator](https://mrazekv-students.github.io/bp22_cpu_perina/)
+
+## Spuštění aplikace
+### Instalace balíčků a závislostí
 ```
 npm install
 ```
 
-### Compiles and hot-reloads for development
+### Spuštění aplikace na lokální adrese pro vývoj
 ```
 npm run serve
 ```
 
-### Compiles and minifies for production
+### Překlad aplikace pro produkci
 ```
 npm run build
 ```
 
-### Run your unit tests
+### Spuštění jednotkových testů
 ```
 npm run test:unit
 ```
 
-### Lints and fixes files
-```
-npm run lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+### Přizpůsobení konfigurace
+[Reference konfigurace](https://cli.vuejs.org/config/)
