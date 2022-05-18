@@ -3,7 +3,6 @@
 !-->
 
 <template>
-    <v-select :options="['Option1 ', 'Option 2']" />
     <prism-editor class="code-editor" v-model="code" :highlight="HighlightCode" :line-numbers="true" :readonly="hasStarted" />
 </template>
 
@@ -13,25 +12,28 @@ import { PrismEditor } from 'vue-prism-editor';
 import 'vue-prism-editor/dist/prismeditor.min.css';
 // Highlighting library: https://prismjs.com/
 import Prism from 'prismjs/components/prism-core';
-// Program select box: https://vue-select.org/
-import vSelect from "vue-select";
-import "vue-select/dist/vue-select.css";
 
 import startCompilation from '@/scripts/Compiler.js';
 import { bp22Highlight } from './bp22/bp22Highlighting.js';
 import './bp22/bp22Style.css';
 export default {
     name: "CodeEditor",
-    components: { PrismEditor, vSelect },
+    components: { PrismEditor },
     emits: ["RegisterCompiler"],
 
     props: {
-        hasStarted: { type: Boolean, required: true }
+        hasStarted: { type: Boolean, required: true },
+        selectedProgram: { type: String, default: "" }
+    },
+    watch: {
+        selectedProgram: function(value) {
+            this.code = value;
+        }
     },
 
     data() {
         return {
-            code: "; This is simple test program\n; Fills memory 7-0 with its address value\n\tMLOAD 7\nloop:\n\tDSTORE @10\n\tISTORE @10\n\tACCDEC\n\tBRPOS loop\n",
+            code: "",
             instructionList: [],
             labelDict: {},
             highlightedLine: -1
@@ -39,6 +41,7 @@ export default {
     },
 
     created() {
+        this.code = this.selectedProgram;
         this.$emit("RegisterCompiler", { 
             compile: this.CompileProgram, 
             getInstruction: this.GetInstruction, 
@@ -57,7 +60,7 @@ export default {
             // Remove highlighting
             if (this.highlightedLine >= 0 )
             {
-                var oldLine = this.$el.querySelector(`.prism-editor__line-number:nth-child(${this.highlightedLine + 1})`);
+                var oldLine = document.querySelector(`.prism-editor__line-number:nth-child(${this.highlightedLine + 1})`);
                 if (!oldLine) return;
                 oldLine.classList.remove('highlight-line');
             }
@@ -67,7 +70,7 @@ export default {
             // Highlight
             if (lineNumber >= 0)
             {
-                var newLine = this.$el.querySelector(`.prism-editor__line-number:nth-child(${lineNumber + 1})`);
+                var newLine = document.querySelector(`.prism-editor__line-number:nth-child(${lineNumber + 1})`);
                 if (!newLine) return;
                 newLine.classList.add('highlight-line');
             }       
@@ -103,7 +106,7 @@ export default {
             if (address < this.instructionList.length)
                 return this.instructionList[address].line;
             else return -1;
-        }
+        },
     }
 }
 </script>

@@ -16,8 +16,10 @@
                     <icon-button v-for="button in controlButtons" :key="button" :displayIcon="button.display" :function="button.function" :disabled="button.disabled" class="control-button"/>
                 </div>
 
-                <div class="program-container">
-                    <code-editor :hasStarted="hasStarted" @RegisterCompiler="RegisterCompiler"/>
+                <div class="vertical-container program-container">
+                    <v-select class="program-select" v-model="selected" :options="programs" :label="'label'" :reduce="label => label.label" :disabled="hasStarted"
+                        placeholder="Vyberte ukázkový program" @option:selected="SelectProgram" />
+                    <code-editor :selectedProgram="selectedProgram" :hasStarted="hasStarted" @RegisterCompiler="RegisterCompiler"/>
                 </div>
             </div>
 
@@ -36,6 +38,11 @@ const s_started = "started";
 const s_halted = "halted";
 const s_ended = "ended"
 
+// Program select box: https://vue-select.org/
+import vSelect from "vue-select";
+import "vue-select/dist/vue-select.css";
+import { examplePrograms } from './codeEditor/ExamplePrograms.js';
+
 import IconButton from './common/IconButton.vue';
 import CodeEditor from './codeEditor/CodeEditor.vue';
 import TheTabContainer from './TheTabContainer.vue';
@@ -46,7 +53,7 @@ import ExecutionResult from '@/scripts/enums/ExecutionResult.js';
 import Sleep from '@/scripts/Sleep.js';
 export default {
     name: "TheLayout",
-    components: { IconButton, CodeEditor, TheTabContainer, TheTitle },
+    components: { IconButton, CodeEditor, TheTabContainer, TheTitle, vSelect },
 
     computed: {
         hasStarted() {
@@ -72,10 +79,19 @@ export default {
             accumulator: { value: 0 },
             addressPointer: { value: 0 },
             instruction: { instruction: "INST", line: 0 },
+
+            programs: examplePrograms,
+            selected: examplePrograms[0].label,
+            selectedProgram: examplePrograms[0].code
         }
     },
 
     methods: {
+        SelectProgram(program) {
+            console.log(program);
+            this.selectedProgram = program.code
+        },
+
         // Simulation control methods
         async StartProgram() {
             console.log("Start program");
@@ -236,7 +252,7 @@ export default {
     width: 100%;
     max-width: 1400px;
     padding-top: 1rem;
-    padding-bottom: 1.5rem;
+    padding-bottom: 1rem;
     margin-left: auto;
     margin-right: auto;
 }
@@ -250,7 +266,7 @@ export default {
     margin-bottom: 1rem;
 }
 .program-container {
-    width: 85%;
+    width: 90%;
     height: 100%;
     overflow-y: hidden;
 
@@ -276,5 +292,34 @@ export default {
 }
 .control-button + .control-button {
     margin-left: 1rem;
+}
+
+.program-select {
+    --vs-controls-color: var(--mainColor);
+    --vs-border-color: var(--mainColor);
+    --vs-dropdown-bg: var(--backgroundColor);
+    --vs-dropdown-color: var(--fontColorFaded);
+    --vs-dropdown-option-color: var(--fontColorFaded);
+    --vs-selected-bg: var(--mainColor);
+    --vs-selected-color: var(--fontColor);
+    --vs-search-input-color: var(--fontColorFaded);
+    --vs-dropdown-option--active-bg: var(--mainColor);
+    --vs-dropdown-option--active-color: var(--fontColor);
+    --vs-disabled-bg: var(--backgroundColor);
+}
+.program-select .vs__search::placeholder,
+.program-select .vs__dropdown-toggle,
+.program-select .vs__dropdown-menu {
+    border: none;
+    border-radius: 0;
+    font-weight: bold;
+    background: var(--backgroundColor);
+}
+.program-select .vs__dropdown-toggle {
+    border-bottom: solid 3px var(--mainColor);
+}
+.program-select .vs__dropdown-menu {
+    border-top: solid 1px var(--mainColor);
+    border-bottom: solid 3px var(--mainColor);
 }
 </style>
