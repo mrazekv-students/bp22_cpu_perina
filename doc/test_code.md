@@ -1,7 +1,7 @@
 # Testovací kód
 ## Všechny instrukce
 
-```(asm)
+```asm
 HALT
 NEGATE
 ACCDEC
@@ -24,9 +24,9 @@ IJUMP @0007
 ```
 
 ## Jednoduchý program
-```(asm)
-; This is simple test program
-; Fills memory 7-0 with its address value
+```asm
+; Základní ukázkový program
+; Naplní paměti 7-0 hodnotami jejich adres
 	MLOAD 7
 loop:
 	DSTORE @10

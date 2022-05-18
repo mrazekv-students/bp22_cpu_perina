@@ -4,7 +4,7 @@
 ## Průchod matice 4x4
 https://www.geeksforgeeks.org/computer-organization-locality-and-cache-friendly-code/
 
-```(asm)
+```asm
 ; Průchod maticí 4x4
 ; Matice je v paměti uložena po řádcích
 ; Matice je procházena po sloupcích
@@ -63,7 +63,7 @@ end:
   HALT
 ```
 
-```(asm)
+```asm
 ; Průchod maticí 4x4
 ; Matice je v paměti uložena po řádcích
 ; Matice je procházena po řádcích
@@ -120,7 +120,7 @@ https://www.cse.iitk.ac.in/users/swarnendu/courses/autumn2019-cs698l/Write%20Cac
 ## Dva cykly nebo jeden cyklus?
 https://www.cse.iitk.ac.in/users/swarnendu/courses/autumn2019-cs698l/Write%20Cache-Friendly%20Code.pdf (p.79)
 
-```(asm)
+```asm
 ; Zpracování pole pomocí jednoho cyklu
 ; Hodnota prvku se nejdřív nastaví na 1
 ; poté se inkrementuje
@@ -148,7 +148,7 @@ end:
   HALT
 ```
 
-```(asm)
+```asm
 ; Zpracování pole pomocí dvou cyklů
 ; Hodnota prvku se nejdřív nastaví na 1
 ; poté se inkrementuje
@@ -206,7 +206,7 @@ end_inc:
 ## Spojitý seznam
 https://stackoverflow.com/questions/16699247/what-is-a-cache-friendly-code
 
-```(asm)
+```asm
 ; Průchod spojitým seznamem
 ; Prvek seznamu se skládá ze dvojice:
 ; hodnota a odkaz na další prvek
