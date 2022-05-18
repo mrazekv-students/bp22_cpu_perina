@@ -38,7 +38,7 @@ export default {
     },
 
     methods: {
-        Highlight(fadeTime) {
+        Highlight(fadeTime = this.highlightFadeTime) {
             this.ResetIntervals();
             this.ResetHighlight();
 
@@ -46,13 +46,15 @@ export default {
             var fadeHex;
             this.fadeOut.interval = setInterval(() => {
                 fadeHex = (Math.floor((i / fadeTime) * 255)).toString(16).padStart(2, '0');
-                this.rowStyle.background = this.highlightColor + fadeHex;
+                this.highlightStyle.background = this.highlightColor + fadeHex;
                 i -= 10;
             }, 10);
+            console.log("START", fadeTime);
             this.fadeOut.timeout = setTimeout(() => {
                 clearInterval(this.fadeOut.interval);
                 this.fadeOut.interval = null;
                 this.fadeOut.timeout = null;
+                console.log("TIMEOUT");
             }, fadeTime);
         },
         ResetHighlight() {

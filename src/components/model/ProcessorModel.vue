@@ -37,17 +37,17 @@ export default {
 
     data() {
         return {
-            registers: { HighlightACC: null, HighlightAP: null }
+            registers: { highlightACC: null, highlightAP: null }
         }
     },
 
     methods: {
         RegisterACC(acc) {
-            this.registers.HighlightACC = acc.highlight;
+            this.registers.highlightACC = acc.highlight;
             this.$emit("RegisterRegs", this.registers);
         },
         RegisterAP(ap) {
-            this.registers.HighlightAP = ap.highlight;
+            this.registers.highlightAP = ap.highlight;
             this.$emit("RegisterRegs", this.registers);
         }
     }

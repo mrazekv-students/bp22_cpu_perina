@@ -22,7 +22,7 @@
             </div>
 
             <div class="vertical-container model-container">
-                <the-tab-container @RegisterMemory="RegisterMemory" :hasStarted="hasStarted"
+                <the-tab-container @RegisterMemory="RegisterMemory" @RegisterRegs="RegisterRegs" :hasStarted="hasStarted"
                     :instruction="instruction.instruction" :instructionPointer="instructionPointer"
                     :accumulator="accumulator.value" :addressPointer="addressPointer.value"/>
             </div>
@@ -65,6 +65,7 @@ export default {
             ],
             compiler: { compile: null, getInstruction: null, getLabel: null, getNextLine: null, highlightLine: null },
             memory: { write: null, read: null, flush: null, initialize: null },
+            regs: { highlightACC: null, highlightAP: null },
             cpu: null,
             currentState: s_notStarted,
 
@@ -100,7 +101,7 @@ export default {
 
                 // Create CPU
                 this.Initialize();
-                this.cpu = new Cpu(this.memory, this.accumulator, this.addressPointer, this.cycleCounter);
+                this.cpu = new Cpu(this.memory, this.accumulator, this.addressPointer, this.regs, this.cycleCounter);
             }
 
             this.ChangeSimulationState(s_started);
@@ -178,6 +179,9 @@ export default {
         },
         RegisterMemory(memory) {
             this.memory = memory;
+        },
+        RegisterRegs(regs) {
+            this.regs = regs;
         },
 
         // Other methods
