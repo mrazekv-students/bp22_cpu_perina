@@ -9,9 +9,9 @@
         <register-label :value="instruction" class="current-instruction"/>
         <div class="horizontal-container registers">
             <register-label label="IP" :value="instuctionPointer"/>
-            <register-label label="ACC" :value="accumulator"/>
+            <register-label label="ACC" :value="accumulator" @RegisterLabel="RegisterACC"/>
         </div>
-        <register-label label="AP" :value="addressPointerString" class="address-pointer" />
+        <register-label label="AP" :value="addressPointerString" class="address-pointer" @RegisterLabel="RegisterAP"/>
     </div>
 </template>
 
@@ -20,6 +20,7 @@ import RegisterLabel from '../common/RegisterLabel.vue'
 export default {
     name: "ProcessorModel",
     components: { RegisterLabel },
+    emits: ["RegisterRegs"],
 
     props: {
         instruction: { type: String },
@@ -31,6 +32,23 @@ export default {
         addressPointerString() {
             // Source: https://stackoverflow.com/questions/42368797/how-can-i-convert-an-integer-to-hex-with-a-fix-length-in-javascript
             return `0x${this.addressPointer.toString(16).toUpperCase()}`
+        }
+    },
+
+    data() {
+        return {
+            registers: { HighlightACC: null, HighlightAP: null }
+        }
+    },
+
+    methods: {
+        RegisterACC(acc) {
+            this.registers.HighlightACC = acc.highlight;
+            this.$emit("RegisterRegs", this.registers);
+        },
+        RegisterAP(ap) {
+            this.registers.HighlightAP = ap.highlight;
+            this.$emit("RegisterRegs", this.registers);
         }
     }
 }
