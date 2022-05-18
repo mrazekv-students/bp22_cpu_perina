@@ -3,6 +3,7 @@
 !-->
 
 <template>
+    <v-select :options="['Option1 ', 'Option 2']" />
     <prism-editor class="code-editor" v-model="code" :highlight="HighlightCode" :line-numbers="true" :readonly="hasStarted" />
 </template>
 
@@ -12,13 +13,16 @@ import { PrismEditor } from 'vue-prism-editor';
 import 'vue-prism-editor/dist/prismeditor.min.css';
 // Highlighting library: https://prismjs.com/
 import Prism from 'prismjs/components/prism-core';
+// Program select box: https://vue-select.org/
+import vSelect from "vue-select";
+import "vue-select/dist/vue-select.css";
 
 import startCompilation from '@/scripts/Compiler.js';
 import { bp22Highlight } from './bp22/bp22Highlighting.js';
 import './bp22/bp22Style.css';
 export default {
     name: "CodeEditor",
-    components: { PrismEditor },
+    components: { PrismEditor, vSelect },
     emits: ["RegisterCompiler"],
 
     props: {
