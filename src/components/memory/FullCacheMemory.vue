@@ -4,7 +4,7 @@
 
 <template>
     <processor-model :instruction="instruction" :instuctionPointer="instructionPointer"
-        :accumulator="accumulator" :addressPointer="addressPointer"/>
+        :accumulator="accumulator" :addressPointer="addressPointer" @RegisterRegs="(e) => $emit('RegisterRegs', e)"/>
     <connector :id="0" :width="3.5" @RegisterConnector="RegisterConnector"/>
     <cache-model :data="cacheData" :tagLength="tagLength" @SwitchValidBit="SwitchValidBit" @RegisterCache="RegisterCache"/>
     <connector :id="1" :width="3.5" @RegisterConnector="RegisterConnector"/>
@@ -23,7 +23,7 @@ import Sleep from '@/scripts/Sleep.js';
 export default {
     name: "FullCacheMemory",
     components: { ProcessorModel, CacheModel, RamModel, Connector },
-    emits: ["RegisterMemory"],
+    emits: ["RegisterMemory", "RegisterRegs"],
 
     props: {
         instruction: { type: String },

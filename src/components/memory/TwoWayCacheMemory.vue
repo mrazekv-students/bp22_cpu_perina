@@ -4,7 +4,7 @@
 
 <template>
     <processor-model :instruction="instruction" :instuctionPointer="instructionPointer"
-        :accumulator="accumulator" :addressPointer="addressPointer"/>
+        :accumulator="accumulator" :addressPointer="addressPointer" @RegisterRegs="(e) => $emit('RegisterRegs', e)"/>
     <div class="vertical-container">
         <connector :id="0" :width="3.5" @RegisterConnector="RegisterConnector"/>
         <connector :id="2" :width="3.5" @RegisterConnector="RegisterConnector"/>
@@ -32,7 +32,7 @@ import Sleep from '@/scripts/Sleep.js';
 export default {
     name: "TwoWayCacheMemory",
     components: { ProcessorModel, CacheModel, RamModel, Connector },
-    emits: ["RegisterMemory"],
+    emits: ["RegisterMemory", "RegisterRegs"],
 
     props: {
         instruction: { type: String },

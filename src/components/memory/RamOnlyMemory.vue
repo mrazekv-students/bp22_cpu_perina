@@ -5,7 +5,7 @@
 
 <template>
     <processor-model :instruction="instruction" :instuctionPointer="instructionPointer"
-        :accumulator="accumulator" :addressPointer="addressPointer"/>
+        :accumulator="accumulator" :addressPointer="addressPointer" @RegisterRegs="(e) => $emit('RegisterRegs', e)"/>
     <connector :id="0" :width="6" @RegisterConnector="RegisterConnector"/>
     <ram-model :data="ramData" @RegisterRam="RegisterRam"/>
 </template>
@@ -17,7 +17,7 @@ import Connector from '../model/Connector.vue';
 export default {
     name: "RamOnlyMemory",
     components: { ProcessorModel, RamModel, Connector },
-    emits: ["RegisterMemory"],
+    emits: ["RegisterMemory", "RegisterRegs"],
 
     props: {
         instruction: { type: String },
