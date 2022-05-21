@@ -225,7 +225,6 @@ export default class Cpu {
     // Execute BRZERO instruction
     _executeBrzero(label) {
         this.cycleCounter.value += 1;
-        this.regs.highlightACC();
         if (this.acc.value == 0) {
             this.cycleCounter.value += 1;
             return { result: ExecutionResult.MoveToLabel, label: label };
@@ -237,7 +236,6 @@ export default class Cpu {
     // Execute BRPOS instruction
     _executeBrpos(label) {
         this.cycleCounter.value += 1;
-        this.regs.highlightACC();
         if (this.acc.value > 0) {
             this.cycleCounter.value += 1;
             return { result: ExecutionResult.MoveToLabel, label: label };
@@ -249,7 +247,6 @@ export default class Cpu {
     // Execute BRNEG instruction
     _executeBrneg(label) {
         this.cycleCounter.value += 1;
-        this.regs.highlightACC();
         if (this.acc.value < 0) {
             this.cycleCounter.value += 1;
             return { result: ExecutionResult.MoveToLabel, label: label };

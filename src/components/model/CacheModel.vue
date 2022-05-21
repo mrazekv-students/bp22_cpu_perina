@@ -113,7 +113,7 @@ export default {
             this.$emit("SwitchValidBit", row, this.id);
         },
 
-        HighlightRow(id, fadeTime) {
+        HighlightRow(id, fadeTime = this.highlightFadeTime.value) {
             this.ResetIntervals();
             this.ResetHighlight();
             this.highlightId = Math.floor(id / 4);
