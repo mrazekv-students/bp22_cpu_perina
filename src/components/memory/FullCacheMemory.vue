@@ -55,7 +55,7 @@ export default {
             connectorCpuCache: { fromCpuToMemory: null, fromMemoryToCpu: null },
             connectorCacheMem: { fromCpuToMemory: null, fromMemoryToCpu: null },
             ramModel: { highlight: null },
-            cacheModel: { highlight: null },
+            cacheModel: { highlight: null, highlightTag: null },
             memoryUtils: null
         }
     },
@@ -76,6 +76,7 @@ export default {
             // Memory block is in cache
             for (var i = 0; i < this.cacheData.length; i++) {
                 this.cycleCounter.value += this.cycleCosts.cacheCheck;
+                await this.cacheModel.highlightTag(i, Math.min(this.highlightFadeTime.value / 2, 500));
                 if (this.cacheData[i].tag == cacheTag && !this.cacheData[i].isEmpty) {
                     await this.memoryUtils.writeToCache(this.GetCacheAddress(i, address), cacheTag, data);
                     return;
@@ -121,6 +122,7 @@ export default {
             // Check in cache
             for (var i = 0; i < this.cacheData.length; i++) {
                 this.cycleCounter.value += this.cycleCosts.cacheCheck;
+                await this.cacheModel.highlightTag(i, Math.min(this.highlightFadeTime.value / 2, 500));
                 if (this.cacheData[i].tag == cacheTag && !this.cacheData[i].isEmpty) {
                     return await this.memoryUtils.readFromCache(this.GetCacheAddress(i, address));
                 }
