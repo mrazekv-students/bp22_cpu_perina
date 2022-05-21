@@ -26,8 +26,8 @@ export default {
                 width: this.width + 'rem'
             },
             barStyle: {
-                width: '0%',
-                opacity: 1,
+                'width': '0%',
+                'opacity': 1,
                 'margin-left': 'initial'
             },
             fillBar: { interval: null, timeout: null },

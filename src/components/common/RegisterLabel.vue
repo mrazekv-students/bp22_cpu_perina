@@ -21,13 +21,12 @@ export default {
     props: {
         label: { type: String, default: null },
         value: { required: true },
-        highlightColor: { type: String, default: "#8b161c" }
     },
 
     data() {
         return {
             highlightStyle: {
-                background: this.highlightColor + "00"
+                background: this.colors.secondaryColor + "00"
             },
             fadeOut: { interval: null, timeout: null }
         }
@@ -46,7 +45,7 @@ export default {
             var fadeHex;
             this.fadeOut.interval = setInterval(() => {
                 fadeHex = (Math.floor((i / fadeTime) * 255)).toString(16).padStart(2, '0');
-                this.highlightStyle.background = this.highlightColor + fadeHex;
+                this.highlightStyle.background = this.colors.secondaryColor + fadeHex;
                 i -= 10;
             }, 10);
             this.fadeOut.timeout = setTimeout(() => {
@@ -56,7 +55,7 @@ export default {
             }, fadeTime);
         },
         ResetHighlight() {
-            this.highlightStyle.background = this.highlightColor + "00";
+            this.highlightStyle.background = this.colors.secondaryColor + "00";
         },
         ResetIntervals() {
             if (this.fadeOut.interval != null) {

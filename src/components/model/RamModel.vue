@@ -8,12 +8,12 @@
             <th class="address"> Address </th>
             <th class="value"> Data </th>
         </tr>
-        <tr v-for="n in data.length" :key="n">
-            <td class="address" :style="highlightId == (n - 1) ? rowStyle : ''">
+        <tr v-for="n in data.length" :key="n" :style="rowHighlightId == (n - 1) ? rowHighlightStyle : ''">
+            <td class="address">
                 <span class="hex">{{ FormatAddressHex((n - 1) * 4) }}</span>
                 <span class="bin"> ({{ FormatAddressBin((n - 1) * 4) }})</span>
             </td>
-            <td class="value" :style="highlightId == (n - 1) ? rowStyle : ''">
+            <td class="value">
                 {{ data[n - 1] }}
             </td>
         </tr>
@@ -27,16 +27,15 @@ export default {
 
     props: {
         data: { type: Array, required: true },
-        highlightColor: { type: String, default: "#8b161c" }
     },
 
     data() {
         return {
-            rowStyle: {
-                background: this.highlightColor + "00"
+            rowHighlightStyle: {
+                'background': this.colors.secondaryColor + "00"
             },
-            highlightId: -1,
-            fadeOut: { interval: null, timeout: null},
+            rowHighlightId: -1,
+            rowHighlight: { interval: null, timeout: null},
         }
     },
 
@@ -77,33 +76,33 @@ export default {
         },
 
         HighlightRow(id, fadeTime = this.highlightFadeTime.value) {
-            this.ResetIntervals();
-            this.ResetHighlight();
-            this.highlightId = Math.floor(id / 4);
+            this.ResetRowIntervals();
+            this.ResetRowHighlight();
+            this.rowHighlightId = Math.floor(id / 4);
 
             var i = fadeTime;
             var fadeHex;
-            this.fadeOut.interval = setInterval(() => {
+            this.rowHighlight.interval = setInterval(() => {
                 fadeHex = (Math.floor((i / fadeTime) * 255)).toString(16).padStart(2, '0');
-                this.rowStyle.background = this.highlightColor + fadeHex;
+                this.rowHighlightStyle.background = this.colors.secondaryColor + fadeHex;
                 i -= 10;
             }, 10);
-            this.fadeOut.timeout = setTimeout(() => {
-                clearInterval(this.fadeOut.interval);
-                this.fadeOut.interval = null;
-                this.fadeOut.timeout = null;
+            this.rowHighlight.timeout = setTimeout(() => {
+                clearInterval(this.rowHighlight.interval);
+                this.rowHighlight.interval = null;
+                this.rowHighlight.timeout = null;
             }, fadeTime);
         },
-        ResetHighlight() {
-            this.rowStyle.background = this.highlightColor + "00";
-        },
-        ResetIntervals() {
-            if (this.fadeOut.interval != null) {
-                clearInterval(this.fadeOut.interval);
-                clearTimeout(this.fadeOut.timeout);
-                this.fadeOut.interval = null;
-                this.fadeOut.timeout = null;
+        ResetRowIntervals() {
+            if (this.rowHighlight.interval != null) {
+                clearInterval(this.rowHighlight.interval);
+                clearTimeout(this.rowHighlight.timeout);
+                this.rowHighlight.interval = null;
+                this.rowHighlight.timeout = null;
             }
+        },
+        ResetRowHighlight() {
+            this.rowHighlightStyle.background = this.colors.secondaryColor + "00";
         }
     }
 }
@@ -124,11 +123,25 @@ export default {
 .ram::-webkit-scrollbar {
     background: var(--mainColor);
 }
+/* Source: https://stackoverflow.com/questions/28592053/multiple-background-color-layers */
 .ram tr {
-    background: var(--mainColorDark);
+    position: relative;
 }
-.ram tr:nth-child(even) {
+.ram tr::before{
+    content: "";
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: var(--mainColorDark);
+    z-index: -1;
+}
+.ram tr:nth-child(even)::before{
+    content: "";
+    position: absolute;
+    width: 100%;
+    height: 100%;
     background: var(--mainColorDarkDark);
+    z-index: -1;
 }
 
 .ram th {
