@@ -4,6 +4,8 @@ import Cpu from '@/scripts/Cpu.js';
 import ExecutionResult from '@/scripts/enums/ExecutionResult';
 import RamOnlyMemory from '@/components/memory/RamOnlyMemory.vue';
 
+var regs = { highlightACC: () => {}, highlightAP: () => {}};
+
 describe("Cpu instruction tests", () => {
     test("Execute no instructions", async () => {
         // Prepare
@@ -13,7 +15,7 @@ describe("Cpu instruction tests", () => {
 
         const wrapper = mount(RamOnlyMemory);
         var memory = wrapper.emitted().RegisterMemory[0][0];
-        var cpu = new Cpu(memory, acc, ap, config.global.config.globalProperties.cycleCounter);
+        var cpu = new Cpu(memory, acc, ap, regs, config.global.config.globalProperties.cycleCounter);
 
         // Execute & assert
         var result = await cpu.execute(instructionList.shift());
@@ -28,7 +30,7 @@ describe("Cpu instruction tests", () => {
 
         const wrapper = mount(RamOnlyMemory);
         var memory = wrapper.emitted().RegisterMemory[0][0];
-        var cpu = new Cpu(memory, acc, ap, config.global.config.globalProperties.cycleCounter);
+        var cpu = new Cpu(memory, acc, ap, regs, config.global.config.globalProperties.cycleCounter);
 
         // Execute & assert
         var result = await cpu.execute(instructionList.shift());
@@ -43,7 +45,7 @@ describe("Cpu instruction tests", () => {
 
         const wrapper = mount(RamOnlyMemory);
         var memory = wrapper.emitted().RegisterMemory[0][0];
-        var cpu = new Cpu(memory, acc, ap, config.global.config.globalProperties.cycleCounter);
+        var cpu = new Cpu(memory, acc, ap, regs, config.global.config.globalProperties.cycleCounter);
 
         // Execute
         var result = await cpu.execute(instructionList.shift());
@@ -61,7 +63,7 @@ describe("Cpu instruction tests", () => {
 
         const wrapper = mount(RamOnlyMemory);
         var memory = wrapper.emitted().RegisterMemory[0][0];
-        var cpu = new Cpu(memory, acc, ap, config.global.config.globalProperties.cycleCounter);
+        var cpu = new Cpu(memory, acc, ap, regs, config.global.config.globalProperties.cycleCounter);
 
         // Execute
         var result = await cpu.execute(instructionList.shift());
@@ -79,7 +81,7 @@ describe("Cpu instruction tests", () => {
 
         const wrapper = mount(RamOnlyMemory);
         var memory = wrapper.emitted().RegisterMemory[0][0];
-        var cpu = new Cpu(memory, acc, ap, config.global.config.globalProperties.cycleCounter);
+        var cpu = new Cpu(memory, acc, ap, regs, config.global.config.globalProperties.cycleCounter);
 
         // Execute
         var result = await cpu.execute(instructionList.shift());
@@ -97,7 +99,7 @@ describe("Cpu instruction tests", () => {
 
         const wrapper = mount(RamOnlyMemory);
         var memory = wrapper.emitted().RegisterMemory[0][0];
-        var cpu = new Cpu(memory, acc, ap, config.global.config.globalProperties.cycleCounter);
+        var cpu = new Cpu(memory, acc, ap, regs, config.global.config.globalProperties.cycleCounter);
 
         // Execute & assert
         var result = await cpu.execute(instructionList.shift());
@@ -112,7 +114,7 @@ describe("Cpu instruction tests", () => {
 
         const wrapper = mount(RamOnlyMemory);
         var memory = wrapper.emitted().RegisterMemory[0][0];
-        var cpu = new Cpu(memory, acc, ap, config.global.config.globalProperties.cycleCounter);
+        var cpu = new Cpu(memory, acc, ap, regs, config.global.config.globalProperties.cycleCounter);
 
         // Execute & assert
         var result = await cpu.execute(instructionList.shift());
@@ -127,7 +129,7 @@ describe("Cpu instruction tests", () => {
 
         const wrapper = mount(RamOnlyMemory);
         var memory = wrapper.emitted().RegisterMemory[0][0];
-        var cpu = new Cpu(memory, acc, ap, config.global.config.globalProperties.cycleCounter);
+        var cpu = new Cpu(memory, acc, ap, regs, config.global.config.globalProperties.cycleCounter);
 
         // Execute
         var result = await cpu.execute(instructionList.shift());
@@ -145,7 +147,7 @@ describe("Cpu instruction tests", () => {
 
         const wrapper = mount(RamOnlyMemory);
         var memory = wrapper.emitted().RegisterMemory[0][0];
-        var cpu = new Cpu(memory, acc, ap, config.global.config.globalProperties.cycleCounter);
+        var cpu = new Cpu(memory, acc, ap, regs, config.global.config.globalProperties.cycleCounter);
 
         // Execute
         var result = await cpu.execute(instructionList.shift());
@@ -163,7 +165,7 @@ describe("Cpu instruction tests", () => {
 
         const wrapper = mount(RamOnlyMemory);
         var memory = wrapper.emitted().RegisterMemory[0][0];
-        var cpu = new Cpu(memory, acc, ap, config.global.config.globalProperties.cycleCounter);
+        var cpu = new Cpu(memory, acc, ap, regs, config.global.config.globalProperties.cycleCounter);
 
         // Execute
         await memory.write(8, 100);
@@ -182,7 +184,7 @@ describe("Cpu instruction tests", () => {
 
         const wrapper = mount(RamOnlyMemory);
         var memory = wrapper.emitted().RegisterMemory[0][0];
-        var cpu = new Cpu(memory, acc, ap, config.global.config.globalProperties.cycleCounter);
+        var cpu = new Cpu(memory, acc, ap, regs, config.global.config.globalProperties.cycleCounter);
 
         // Execute
         await memory.write(4, 8);
@@ -202,7 +204,7 @@ describe("Cpu instruction tests", () => {
 
         const wrapper = mount(RamOnlyMemory);
         var memory = wrapper.emitted().RegisterMemory[0][0];
-        var cpu = new Cpu(memory, acc, ap, config.global.config.globalProperties.cycleCounter);
+        var cpu = new Cpu(memory, acc, ap, regs, config.global.config.globalProperties.cycleCounter);
 
         // Execute
         var result = await cpu.execute(instructionList.shift());
@@ -221,7 +223,7 @@ describe("Cpu instruction tests", () => {
 
         const wrapper = mount(RamOnlyMemory);
         var memory = wrapper.emitted().RegisterMemory[0][0];
-        var cpu = new Cpu(memory, acc, ap, config.global.config.globalProperties.cycleCounter);
+        var cpu = new Cpu(memory, acc, ap, regs, config.global.config.globalProperties.cycleCounter);
 
         // Execute
         await memory.write(4, 8);
@@ -241,7 +243,7 @@ describe("Cpu instruction tests", () => {
 
         const wrapper = mount(RamOnlyMemory);
         var memory = wrapper.emitted().RegisterMemory[0][0];
-        var cpu = new Cpu(memory, acc, ap, config.global.config.globalProperties.cycleCounter);
+        var cpu = new Cpu(memory, acc, ap, regs, config.global.config.globalProperties.cycleCounter);
 
         // Execute & assert
         var result = await cpu.execute(instructionList.shift());
@@ -256,7 +258,7 @@ describe("Cpu instruction tests", () => {
 
         const wrapper = mount(RamOnlyMemory);
         var memory = wrapper.emitted().RegisterMemory[0][0];
-        var cpu = new Cpu(memory, acc, ap, config.global.config.globalProperties.cycleCounter);
+        var cpu = new Cpu(memory, acc, ap, regs, config.global.config.globalProperties.cycleCounter);
 
         // Execute & assert
         var result = await cpu.execute(instructionList.shift());
@@ -271,7 +273,7 @@ describe("Cpu instruction tests", () => {
 
         const wrapper = mount(RamOnlyMemory);
         var memory = wrapper.emitted().RegisterMemory[0][0];
-        var cpu = new Cpu(memory, acc, ap, config.global.config.globalProperties.cycleCounter);
+        var cpu = new Cpu(memory, acc, ap, regs, config.global.config.globalProperties.cycleCounter);
 
         // Execute & assert
         var result = await cpu.execute(instructionList.shift());
@@ -286,7 +288,7 @@ describe("Cpu instruction tests", () => {
 
         const wrapper = mount(RamOnlyMemory);
         var memory = wrapper.emitted().RegisterMemory[0][0];
-        var cpu = new Cpu(memory, acc, ap, config.global.config.globalProperties.cycleCounter);
+        var cpu = new Cpu(memory, acc, ap, regs, config.global.config.globalProperties.cycleCounter);
 
         // Execute & assert
         var result = await cpu.execute(instructionList.shift());
@@ -301,7 +303,7 @@ describe("Cpu instruction tests", () => {
 
         const wrapper = mount(RamOnlyMemory);
         var memory = wrapper.emitted().RegisterMemory[0][0];
-        var cpu = new Cpu(memory, acc, ap, config.global.config.globalProperties.cycleCounter);
+        var cpu = new Cpu(memory, acc, ap, regs, config.global.config.globalProperties.cycleCounter);
 
         // Execute & assert
         var result = await cpu.execute(instructionList.shift());
@@ -316,7 +318,7 @@ describe("Cpu instruction tests", () => {
 
         const wrapper = mount(RamOnlyMemory);
         var memory = wrapper.emitted().RegisterMemory[0][0];
-        var cpu = new Cpu(memory, acc, ap, config.global.config.globalProperties.cycleCounter);
+        var cpu = new Cpu(memory, acc, ap, regs, config.global.config.globalProperties.cycleCounter);
 
         // Execute & assert
         var result = await cpu.execute(instructionList.shift());
@@ -331,7 +333,7 @@ describe("Cpu instruction tests", () => {
 
         const wrapper = mount(RamOnlyMemory);
         var memory = wrapper.emitted().RegisterMemory[0][0];
-        var cpu = new Cpu(memory, acc, ap, config.global.config.globalProperties.cycleCounter);
+        var cpu = new Cpu(memory, acc, ap, regs, config.global.config.globalProperties.cycleCounter);
 
         // Execute & assert
         var result = await cpu.execute(instructionList.shift());
@@ -346,7 +348,7 @@ describe("Cpu instruction tests", () => {
 
         const wrapper = mount(RamOnlyMemory);
         var memory = wrapper.emitted().RegisterMemory[0][0];
-        var cpu = new Cpu(memory, acc, ap, config.global.config.globalProperties.cycleCounter);
+        var cpu = new Cpu(memory, acc, ap, regs, config.global.config.globalProperties.cycleCounter);
 
         // Execute & assert
         var result = await cpu.execute(instructionList.shift());
@@ -361,7 +363,7 @@ describe("Cpu instruction tests", () => {
 
         const wrapper = mount(RamOnlyMemory);
         var memory = wrapper.emitted().RegisterMemory[0][0];
-        var cpu = new Cpu(memory, acc, ap, config.global.config.globalProperties.cycleCounter);
+        var cpu = new Cpu(memory, acc, ap, regs, config.global.config.globalProperties.cycleCounter);
 
         // Execute & assert
         var result = await cpu.execute(instructionList.shift());
@@ -376,7 +378,7 @@ describe("Cpu instruction tests", () => {
 
         const wrapper = mount(RamOnlyMemory);
         var memory = wrapper.emitted().RegisterMemory[0][0];
-        var cpu = new Cpu(memory, acc, ap, config.global.config.globalProperties.cycleCounter);
+        var cpu = new Cpu(memory, acc, ap, regs, config.global.config.globalProperties.cycleCounter);
 
         // Execute & assert
         var result = await cpu.execute(instructionList.shift());
@@ -391,7 +393,7 @@ describe("Cpu instruction tests", () => {
 
         const wrapper = mount(RamOnlyMemory);
         var memory = wrapper.emitted().RegisterMemory[0][0];
-        var cpu = new Cpu(memory, acc, ap, config.global.config.globalProperties.cycleCounter);
+        var cpu = new Cpu(memory, acc, ap, regs, config.global.config.globalProperties.cycleCounter);
 
         // Execute
         await memory.write(8, 10);
@@ -410,7 +412,7 @@ describe("Cpu instruction tests", () => {
 
         const wrapper = mount(RamOnlyMemory);
         var memory = wrapper.emitted().RegisterMemory[0][0];
-        var cpu = new Cpu(memory, acc, ap, config.global.config.globalProperties.cycleCounter);
+        var cpu = new Cpu(memory, acc, ap, regs, config.global.config.globalProperties.cycleCounter);
 
         // Execute
         await memory.write(8, -5);
@@ -429,7 +431,7 @@ describe("Cpu instruction tests", () => {
 
         const wrapper = mount(RamOnlyMemory);
         var memory = wrapper.emitted().RegisterMemory[0][0];
-        var cpu = new Cpu(memory, acc, ap, config.global.config.globalProperties.cycleCounter);
+        var cpu = new Cpu(memory, acc, ap, regs, config.global.config.globalProperties.cycleCounter);
 
         // Execute
         await memory.write(8, 10);
@@ -447,7 +449,7 @@ describe("Cpu instruction tests", () => {
 
         const wrapper = mount(RamOnlyMemory);
         var memory = wrapper.emitted().RegisterMemory[0][0];
-        var cpu = new Cpu(memory, acc, ap, config.global.config.globalProperties.cycleCounter);
+        var cpu = new Cpu(memory, acc, ap, regs, config.global.config.globalProperties.cycleCounter);
 
         // Execute & assert
         var result = await cpu.execute(instructionList.shift());
@@ -464,7 +466,7 @@ describe("CPU instruction error tests", () => {
 
         const wrapper = mount(RamOnlyMemory);
         var memory = wrapper.emitted().RegisterMemory[0][0];
-        var cpu = new Cpu(memory, acc, ap, config.global.config.globalProperties.cycleCounter);
+        var cpu = new Cpu(memory, acc, ap, regs, config.global.config.globalProperties.cycleCounter);
 
         // Execute & assert
         await expect(cpu.execute(instructionList.shift())).rejects.toThrow();
@@ -478,7 +480,7 @@ describe("CPU instruction error tests", () => {
 
         const wrapper = mount(RamOnlyMemory);
         var memory = wrapper.emitted().RegisterMemory[0][0];
-        var cpu = new Cpu(memory, acc, ap, config.global.config.globalProperties.cycleCounter);
+        var cpu = new Cpu(memory, acc, ap, regs, config.global.config.globalProperties.cycleCounter);
 
         // Execute & assert
         await expect(cpu.execute(instructionList.shift())).rejects.toThrow();
@@ -492,7 +494,7 @@ describe("CPU instruction error tests", () => {
 
         const wrapper = mount(RamOnlyMemory);
         var memory = wrapper.emitted().RegisterMemory[0][0];
-        var cpu = new Cpu(memory, acc, ap, config.global.config.globalProperties.cycleCounter);
+        var cpu = new Cpu(memory, acc, ap, regs, config.global.config.globalProperties.cycleCounter);
 
         // Execute & assert
         await expect(cpu.execute(instructionList.shift())).rejects.toThrow();
@@ -506,7 +508,7 @@ describe("CPU instruction error tests", () => {
 
         const wrapper = mount(RamOnlyMemory);
         var memory = wrapper.emitted().RegisterMemory[0][0];
-        var cpu = new Cpu(memory, acc, ap, config.global.config.globalProperties.cycleCounter);
+        var cpu = new Cpu(memory, acc, ap, regs, config.global.config.globalProperties.cycleCounter);
 
         // Execute & assert
         await expect(cpu.execute(instructionList.shift())).rejects.toThrow();
@@ -520,7 +522,7 @@ describe("CPU instruction error tests", () => {
 
         const wrapper = mount(RamOnlyMemory);
         var memory = wrapper.emitted().RegisterMemory[0][0];
-        var cpu = new Cpu(memory, acc, ap, config.global.config.globalProperties.cycleCounter);
+        var cpu = new Cpu(memory, acc, ap, regs, config.global.config.globalProperties.cycleCounter);
 
         // Execute & assert
         await expect(cpu.execute(instructionList.shift())).rejects.toThrow();
