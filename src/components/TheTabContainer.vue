@@ -65,12 +65,12 @@ export default {
 .tab-container {
     justify-content: center;
     align-items: center;
-    width: 100%;
+    width: 98%;
     height: 100%;
     overflow: auto;
     
     padding: 1rem;
-    margin-right: 2rem;
+    margin-right: 1rem;
     border: solid 15px var(--mainColor);
     border-left-width: 3px;
     border-right-width: 3px;
@@ -78,7 +78,7 @@ export default {
 }
 .tab-button-row {
     justify-content: flex-start;
-    width: 100%;
-    margin-right: 2rem;
+    width: 98%;
+    margin-right: 1rem;
 }
 </style>
