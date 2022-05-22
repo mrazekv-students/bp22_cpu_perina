@@ -11,18 +11,18 @@
             <th class="tag"> Tag </th>
             <th class="value"> Data </th>
         </tr>
-        <tr v-for="n in data.length" :key="n">
-            <td class="address" :style="highlightId == (n - 1) ? rowStyle : ''">
+        <tr v-for="n in data.length" :key="n" :style="rowHighlightId == (n - 1) ? rowHighlightStyle : ''">
+            <td class="address">
                 <span class="hex">{{ FormatAddressHex((n - 1) * 4) }}</span>
                 <span class="bin"> ({{ FormatAddressBin((n - 1) * 4) }})</span>
             </td>
-            <td :class="'valid ' + HighlightInvalid(data[n - 1].valid)" :style="highlightId == (n - 1) ? rowStyle : ''" @dblclick="ValidDblClick(n - 1)">
+            <td class="valid" :style="!data[n - 1].valid ? validFalseStyle : ''" @dblclick="ValidDblClick(n - 1)">
                 {{ data[n - 1].valid ? "T" : "F" }}
             </td>
-            <td class="tag" :style="highlightId == (n - 1) ? rowStyle : ''">
+            <td class="tag" :style="tagHighlightId == (n - 1) ? tagHighlightStyle : ''">
                 <span>{{ FormatAddressBin(data[n - 1].tag, tagLength) }}</span>
             </td>
-            <td class="value" :style="highlightId == (n - 1) ? rowStyle : ''">
+            <td class="value">
                 {{ data[n - 1].data }}
             </td>
         </tr>
@@ -38,16 +38,25 @@ export default {
         id: { type: Number, default: 0 },
         data: { type: Array, required: true },
         tagLength: { type: Number, default: 1 },
-        highlightColor: { type: String, default: "#8b161c" }
     },
 
     data() {
         return {
-            rowStyle: {
-                background: this.highlightColor + "00"
+            rowHighlightStyle: {
+                'background': this.colors.secondaryColor + "00"
             },
-            highlightId: -1,
-            fadeOut: { interval: null, timeout: null},
+            tagHighlightStyle: {
+                'background': this.colors.infoColor + "00"
+            },
+            validFalseStyle: {
+                'color': this.colors.secondaryColorLight,
+                'font-weight': "bold"
+            },
+
+            rowHighlightId: -1,
+            rowHighlight: { interval: null, timeout: null},
+            tagHighlightId: -1,
+            tagHighlight: { interval: null, timeout: null},
         }
     },
 
@@ -58,7 +67,7 @@ export default {
     },
 
     created() {
-        this.$emit("RegisterCache", { highlight: this.HighlightRow }, this.id);
+        this.$emit("RegisterCache", { highlight: this.HighlightRow, highlightTag: this.HighlightTag }, this.id);
     },
 
     methods: {
@@ -101,46 +110,74 @@ export default {
             return `${address.toString(2).padStart(bitCount, '0')}`;
         },
 
-        HighlightInvalid(valid) {
-            if (valid) {
-                return '';
-            }
-            else {
-                return 'highlight';
-            }
-        },
         ValidDblClick(row) {
             this.$emit("SwitchValidBit", row, this.id);
         },
 
-        HighlightRow(id, fadeTime) {
-            this.ResetIntervals();
-            this.ResetHighlight();
-            this.highlightId = Math.floor(id / 4);
+        HighlightRow(id, fadeTime = this.highlightFadeTime.value) {
+            this.ResetRowIntervals();
+            this.ResetRowHighlight();
+            this.rowHighlightId = Math.floor(id / 4);
 
             var i = fadeTime;
             var fadeHex;
-            this.fadeOut.interval = setInterval(() => {
+            this.rowHighlight.interval = setInterval(() => {
                 fadeHex = (Math.floor((i / fadeTime) * 255)).toString(16).padStart(2, '0');
-                this.rowStyle.background = this.highlightColor + fadeHex;
+                this.rowHighlightStyle.background = this.colors.secondaryColor + fadeHex;
                 i -= 10;
             }, 10);
-            this.fadeOut.timeout = setTimeout(() => {
-                clearInterval(this.fadeOut.interval);
-                this.fadeOut.interval = null;
-                this.fadeOut.timeout = null;
+            this.rowHighlight.timeout = setTimeout(() => {
+                clearInterval(this.rowHighlight.interval);
+                this.rowHighlight.interval = null;
+                this.rowHighlight.timeout = null;
             }, fadeTime);
         },
-        ResetHighlight() {
-            this.rowStyle.background = this.highlightColor + "00";
-        },
-        ResetIntervals() {
-            if (this.fadeOut.interval != null) {
-                clearInterval(this.fadeOut.interval);
-                clearTimeout(this.fadeOut.timeout);
-                this.fadeOut.interval = null;
-                this.fadeOut.timeout = null;
+        ResetRowIntervals() {
+            if (this.rowHighlight.interval != null) {
+                clearInterval(this.rowHighlight.interval);
+                clearTimeout(this.rowHighlight.timeout);
+                this.rowHighlight.interval = null;
+                this.rowHighlight.timeout = null;
             }
+        },
+        ResetRowHighlight() {
+            this.rowHighlightStyle.background = this.colors.secondaryColor + "00";
+        },
+
+        // TODO: Add color coding
+        async HighlightTag(id, fadeTime = this.highlightFadeTime.value) {
+            this.ResetTagIntervals();
+            this.ResetTagHighlight();
+            this.tagHighlightId = id;
+
+            var i = fadeTime;
+            var fadeHex;
+            this.tagHighlight.interval = setInterval(() => {
+                fadeHex = (Math.floor((i / fadeTime) * 255)).toString(16).padStart(2, '0');
+                this.tagHighlightStyle.background = this.colors.infoColor + fadeHex;
+                i -= 10;
+            }, 10);
+            var promise = new Promise((resolve) => {
+                this.tagHighlight.timeout = setTimeout(() => {
+                    clearInterval(this.tagHighlight.interval);
+                    this.tagHighlight.interval = null;
+                    this.tagHighlight.timeout = null;
+
+                    resolve();
+                }, fadeTime);
+            });
+            await promise;
+        },
+        ResetTagIntervals() {
+            if (this.tagHighlight.interval != null) {
+                clearInterval(this.tagHighlight.interval);
+                clearTimeout(this.tagHighlight.timeout);
+                this.tagHighlight.interval = null;
+                this.tagHighlight.timeout = null;
+            }
+        },
+        ResetTagHighlight() {
+            this.tagHighlightStyle.background = this.colors.infoColor + "00";
         }
     }
 }
@@ -164,11 +201,25 @@ export default {
 .cache + .cache {
     margin-top: 1rem;
 }
+/* Source: https://stackoverflow.com/questions/28592053/multiple-background-color-layers */
 .cache tr {
-    background: var(--mainColorDark);
+    position: relative;
 }
-.cache tr:nth-child(even) {
+.cache tr::before{
+    content: "";
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: var(--mainColorDark);
+    z-index: -1;
+}
+.cache tr:nth-child(even)::before{
+    content: "";
+    position: absolute;
+    width: 100%;
+    height: 100%;
     background: var(--mainColorDarkDark);
+    z-index: -1;
 }
 
 .cache th {
@@ -199,10 +250,6 @@ export default {
     text-align: center;
     user-select: none;
 }
-.cache td.valid.highlight {
-    color: var(--secondaryColorLight);
-    font-weight: bold;
-}
 .cache td.valid:hover {
     cursor: pointer;
 }
@@ -215,7 +262,7 @@ export default {
     padding: 0.1rem 0.4rem;
     text-align: center;
 }
-.cache .bin {
+.cache td .bin {
     font-size: 0.8rem;
 }
 </style>

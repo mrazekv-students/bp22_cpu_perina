@@ -11,7 +11,7 @@
         <cycle-counter :cycles="this.cycleCounter.value"/>
     </div>
     <div class="horizontal-container tab-container">
-        <component :is="currentTab" @RegisterMemory="RegisterMemory"
+        <component :is="currentTab" @RegisterMemory="(e) => $emit('RegisterMemory', e)" @RegisterRegs="(e) => $emit('RegisterRegs', e)"
             :instruction="instruction" :instructionPointer="instructionPointer"
             :accumulator="accumulator" :addressPointer="addressPointer"/>
     </div>
@@ -27,7 +27,7 @@ import FullCacheMemory from './memory/FullCacheMemory.vue'
 export default {
     name: "TheTabContainer",
     components: { TabButton, CycleCounter, RamOnlyMemory, DirectCacheMemory, TwoWayCacheMemory, FullCacheMemory },
-    emits: ["RegisterMemory"],
+    emits: ["RegisterMemory", "RegisterRegs"],
 
     props: {
         instruction: { type: String },
@@ -57,9 +57,6 @@ export default {
 
             this.cycleCounter.value = 0;
         },
-        RegisterMemory(memory) {
-            this.$emit("RegisterMemory", memory);
-        }
     }
 }
 </script>

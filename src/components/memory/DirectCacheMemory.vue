@@ -4,7 +4,7 @@
 
 <template>
     <processor-model :instruction="instruction" :instuctionPointer="instructionPointer"
-        :accumulator="accumulator" :addressPointer="addressPointer"/>
+        :accumulator="accumulator" :addressPointer="addressPointer" @RegisterRegs="(e) => $emit('RegisterRegs', e)"/>
     <connector :id="0" :width="3.5" @RegisterConnector="RegisterConnector"/>
     <cache-model :data="cacheData" :tagLength="tagLength" @SwitchValidBit="SwitchValidBit" @RegisterCache="RegisterCache"/>
     <connector :id="1" :width="3.5" @RegisterConnector="RegisterConnector"/>
@@ -23,12 +23,12 @@ import Sleep from '@/scripts/Sleep.js';
 export default {
     name: "DirectCacheMemory",
     components: { ProcessorModel, RamModel, CacheModel, Connector },
-    emits: ["RegisterMemory"],
+    emits: ["RegisterMemory", "RegisterRegs"],
 
     props: {
         instruction: { type: String },
         instructionPointer: { type: Number },
-        accumulator: { type: Number},
+        accumulator: { type: Number },
         addressPointer: { type: Number }
     },
 
@@ -55,7 +55,7 @@ export default {
             connectorCpuCache: { fromCpuToMemory: null, fromMemoryToCpu: null },
             connectorCacheMem: { fromCpuToMemory: null, fromMemoryToCpu: null },
             ramModel: { highlight: null },
-            cacheModel: { highlight: null },
+            cacheModel: { highlight: null, highlightTag: null },
             memoryUtils: null
         }
     },
@@ -77,6 +77,7 @@ export default {
             // Data koherence: valid-bit
             // Memory block is in cache
             this.cycleCounter.value += this.cycleCosts.cacheCheck;
+            await this.cacheModel.highlightTag(cacheBlock, Math.min(this.highlightFadeTime.value / 2, 500));
             if (this.cacheData[cacheBlock].tag == cacheTag && !this.cacheData[cacheBlock].isEmpty) {
                 await this.memoryUtils.writeToCache(cacheAddress, cacheTag, data);
             }
@@ -108,6 +109,7 @@ export default {
 
             // Check in cache
             this.cycleCounter.value += this.cycleCosts.cacheCheck;
+            await this.cacheModel.highlightTag(cacheBlock, Math.min(this.highlightFadeTime.value / 2, 500));
             if (this.cacheData[cacheBlock].tag == cacheTag && !this.cacheData[cacheBlock].isEmpty) {
                 return await this.memoryUtils.readFromCache(cacheAddress);
             }

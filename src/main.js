@@ -16,4 +16,7 @@ app.config.globalProperties.cycleCosts = { cacheCheck: 2, cacheAccess: 10, ramAc
 // Memory size
 app.config.globalProperties.memorySize = { cache: 4, ram: 16 };
 
+// Colors
+app.config.globalProperties.colors = { secondaryColor: "#8b161c", secondaryColorLight: "#cc1717", fontColor: "#D6D6D6", infoColor: "#3f60bb" }
+
 app.use(Notifications).mount('#app');

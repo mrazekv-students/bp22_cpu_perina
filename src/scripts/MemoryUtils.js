@@ -20,17 +20,17 @@ export default class MemoryUtils {
     async readFromRam(cacheAddress, ramAddress, tag, path) {
         var cacheBlock = cacheAddress >> 2;
         var ramBlock = ramAddress >> 2;
-        this.ramModel.highlight(ramAddress, this.config.highlightFadeTime.value);
+        this.ramModel.highlight(ramAddress);
 
         if (typeof path == "undefined") {
-            await this.connectorCacheMem.fromMemoryToCpu(this.config.connectorFillTime.value, this.config.connectorFadeTime.value);
+            await this.connectorCacheMem.fromMemoryToCpu();
             this.cache[cacheBlock].update(true, tag, this.ram[ramBlock]);
-            this.cacheModel.highlight(cacheAddress, this.config.highlightFadeTime.value)
+            this.cacheModel.highlight(cacheAddress)
         }
         else {
-            await this.connectorCacheMem[path].fromMemoryToCpu(this.config.connectorFillTime.value, this.config.connectorFadeTime.value);
+            await this.connectorCacheMem[path].fromMemoryToCpu();
             this.cache[path][cacheBlock].update(true, tag, this.ram[ramBlock]);
-            this.cacheModel[path].highlight(cacheAddress, this.config.highlightFadeTime.value)
+            this.cacheModel[path].highlight(cacheAddress)
         }
 
         this.config.cycleCounter.value += this.config.cycleCosts.ramAccess;
@@ -42,17 +42,17 @@ export default class MemoryUtils {
         var ramBlock = ramAddress >> 2;
 
         if (typeof path == "undefined") {
-            this.cacheModel.highlight(cacheAddress, this.config.highlightFadeTime.value);
-            await this.connectorCacheMem.fromCpuToMemory(this.config.connectorFillTime.value, this.config.connectorFadeTime.value);
+            this.cacheModel.highlight(cacheAddress);
+            await this.connectorCacheMem.fromCpuToMemory();
             this.ram[ramBlock] = [...this.cache[cacheBlock].data];
         }
         else {
-            this.cacheModel[path].highlight(cacheAddress, this.config.highlightFadeTime.value);
-            await this.connectorCacheMem[path].fromCpuToMemory(this.config.connectorFillTime.value, this.config.connectorFadeTime.value);
+            this.cacheModel[path].highlight(cacheAddress);
+            await this.connectorCacheMem[path].fromCpuToMemory();
             this.ram[ramBlock] = [...this.cache[path][cacheBlock].data];
         }
 
-        this.ramModel.highlight(ramAddress, this.config.highlightFadeTime.value);
+        this.ramModel.highlight(ramAddress);
         this.config.cycleCounter.value += this.config.cycleCosts.ramAccess;
     }
 
@@ -63,13 +63,13 @@ export default class MemoryUtils {
         var offset = address & 0b11;
 
         if (typeof path == "undefined") {
-            this.cacheModel.highlight(address, this.config.highlightFadeTime.value);
-            await this.connectorCpuCache.fromMemoryToCpu(this.config.connectorFillTime.value, this.config.connectorFadeTime.value);
+            this.cacheModel.highlight(address);
+            await this.connectorCpuCache.fromMemoryToCpu();
             returnVal = this.cache[block].data[offset];    
         }
         else {
-            this.cacheModel[path].highlight(address, this.config.highlightFadeTime.value);
-            await this.connectorCpuCache[path].fromMemoryToCpu(this.config.connectorFillTime.value, this.config.connectorFadeTime.value);
+            this.cacheModel[path].highlight(address);
+            await this.connectorCpuCache[path].fromMemoryToCpu();
             returnVal = this.cache[path][block].data[offset];
         }
 
@@ -83,14 +83,14 @@ export default class MemoryUtils {
         var offset = address & 0b11;
 
         if (typeof path == "undefined") {
-            await this.connectorCpuCache.fromCpuToMemory(this.config.connectorFillTime.value, this.config.connectorFadeTime.value);
+            await this.connectorCpuCache.fromCpuToMemory();
             this.cache[block].update(false, tag, data, offset);
-            this.cacheModel.highlight(address, this.config.highlightFadeTime.value);
+            this.cacheModel.highlight(address);
         }
         else {
-            await this.connectorCpuCache[path].fromCpuToMemory(this.config.connectorFillTime.value, this.config.connectorFadeTime.value);
+            await this.connectorCpuCache[path].fromCpuToMemory();
             this.cache[path][block].update(false, tag, data, offset);
-            this.cacheModel[path].highlight(address, this.config.highlightFadeTime.value);   
+            this.cacheModel[path].highlight(address);   
         }
         
         this.config.cycleCounter.value += this.config.cycleCosts.cacheAccess;

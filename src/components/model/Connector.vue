@@ -26,8 +26,8 @@ export default {
                 width: this.width + 'rem'
             },
             barStyle: {
-                width: '0%',
-                opacity: 1,
+                'width': '0%',
+                'opacity': 1,
                 'margin-left': 'initial'
             },
             fillBar: { interval: null, timeout: null },
@@ -40,13 +40,13 @@ export default {
     },
 
     methods: {
-        async FromCpuToMemory(fillTime, fadeTime) {
+        async FromCpuToMemory(fillTime = this.connectorFillTime.value, fadeTime = this.connectorFadeTime.value) {
             // Fill from left to right
             this.ResetIntervals();
             this.ResetBar("initial");
             await this.AnimateBar(fillTime, fadeTime);
         },
-        async FromMemoryToCpu(fillTime, fadeTime) {
+        async FromMemoryToCpu(fillTime = this.connectorFillTime.value, fadeTime = this.connectorFadeTime.value) {
             // Fill from right to left
             this.ResetIntervals();
             this.ResetBar("auto");

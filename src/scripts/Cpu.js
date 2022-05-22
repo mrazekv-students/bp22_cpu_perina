@@ -4,10 +4,11 @@ import Instruction from "./enums/Instruction.js";
 import ExecutionResult from "./enums/ExecutionResult.js";
 
 export default class Cpu {
-    constructor(memory, acc, ap, cycleCounter) {
+    constructor(memory, acc, ap, regs, cycleCounter) {
         this.memory = memory;
         this.acc = acc;
         this.ap = ap;
+        this.regs = regs;
         this.cycleCounter = cycleCounter;
     }
 
@@ -119,6 +120,7 @@ export default class Cpu {
     _executeNegate() {
         this.cycleCounter.value += 1;
         this.acc.value = -this.acc.value;
+        this.regs.highlightACC();
         return { result: ExecutionResult.NextInstruction };
     }
 
@@ -126,6 +128,7 @@ export default class Cpu {
     _executeAccdec() {
         this.cycleCounter.value += 1;
         this.acc.value -= 1;
+        this.regs.highlightACC();
         return { result: ExecutionResult.NextInstruction };
     }
     
@@ -133,6 +136,7 @@ export default class Cpu {
     _executeAccinc() {
         this.cycleCounter.value += 1;
         this.acc.value += 1;
+        this.regs.highlightACC();
         return { result: ExecutionResult.NextInstruction };
     }
 
@@ -152,6 +156,7 @@ export default class Cpu {
     _executeInp() {
         this.cycleCounter.value += 1;
         this.acc.value = Math.floor(Math.random() * 1024);
+        this.regs.highlightACC();
         return { result: ExecutionResult.NextInstruction };
     }
 
@@ -159,6 +164,7 @@ export default class Cpu {
     _executeMload(value) {
         this.cycleCounter.value += 1;
         this.acc.value = value;
+        this.regs.highlightACC();
         return { result: ExecutionResult.NextInstruction };
     }
 
@@ -166,7 +172,10 @@ export default class Cpu {
     async _executeDload(address) {
         this.cycleCounter.value += 1;
         this.ap.value = address;
+        this.regs.highlightAP();
+
         this.acc.value = await this.memory.read(address);
+        this.regs.highlightACC();
         return { result: ExecutionResult.NextInstruction };
     }
 
@@ -174,9 +183,13 @@ export default class Cpu {
     async _executeIload(address) {
         this.cycleCounter.value += 1;
         this.ap.value = address;
+        this.regs.highlightAP();
         this.ap.value = await this.memory.read(address);
+        this.regs.highlightAP();
+
         this.cycleCounter.value += 1
         this.acc.value = await this.memory.read(this.ap.value);
+        this.regs.highlightACC();
         return { result: ExecutionResult.NextInstruction };
     }
 
@@ -184,6 +197,8 @@ export default class Cpu {
     async _executeDstore(address) {
         this.cycleCounter.value += 1;
         this.ap.value = address;
+        this.regs.highlightAP();
+
         await this.memory.write(address, this.acc.value);
         return { result: ExecutionResult.NextInstruction };
     }
@@ -192,7 +207,10 @@ export default class Cpu {
     async _executeIstore(address) {
         this.cycleCounter.value += 1;
         this.ap.value = address;
+        this.regs.highlightAP();
         this.ap.value = await this.memory.read(address);
+        this.regs.highlightAP();
+
         this.cycleCounter.value += 1;
         await this.memory.write(this.ap.value, this.acc.value);
         return { result: ExecutionResult.NextInstruction };
@@ -241,7 +259,10 @@ export default class Cpu {
     async _executeMadd(address) {
         this.cycleCounter.value += 1;
         this.ap.value = address;
+        this.regs.highlightAP();
+
         this.acc.value += await this.memory.read(address);
+        this.regs.highlightACC();
         return { result: ExecutionResult.NextInstruction };
     }
 
@@ -249,6 +270,8 @@ export default class Cpu {
     async _executeIjump(address) {
         this.cycleCounter.value += 1;
         this.ap.value = address;
+        this.regs.highlightAP();
+        
         var ip = await this.memory.read(address);
         return { result: ExecutionResult.MoveToAddress, address: ip };
     }
