@@ -37,7 +37,7 @@ export default {
     },
 
     methods: {
-        Highlight(fadeTime = this.highlightFadeTime.value) {
+        Highlight(fadeTime = this.times.highlightFade) {
             this.ResetIntervals();
             this.ResetHighlight();
 

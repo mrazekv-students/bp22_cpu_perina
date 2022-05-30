@@ -75,7 +75,7 @@ export default {
             return `${address.toString(2).padStart(bitCount, '0')}`;
         },
 
-        HighlightRow(id, fadeTime = this.highlightFadeTime.value) {
+        HighlightRow(id, fadeTime = this.times.highlightFade) {
             this.ResetRowIntervals();
             this.ResetRowHighlight();
             this.rowHighlightId = Math.floor(id / 4);

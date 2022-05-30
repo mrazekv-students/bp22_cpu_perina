@@ -114,7 +114,7 @@ export default {
             this.$emit("SwitchValidBit", row, this.id);
         },
 
-        HighlightRow(id, fadeTime = this.highlightFadeTime.value) {
+        HighlightRow(id, fadeTime = this.times.highlightFade) {
             this.ResetRowIntervals();
             this.ResetRowHighlight();
             this.rowHighlightId = Math.floor(id / 4);
@@ -145,7 +145,7 @@ export default {
         },
 
         // TODO: Add color coding
-        async HighlightTag(id, fadeTime = this.highlightFadeTime.value) {
+        async HighlightTag(id, fadeTime = this.times.highlightFade) {
             this.ResetTagIntervals();
             this.ResetTagHighlight();
             this.tagHighlightId = id;

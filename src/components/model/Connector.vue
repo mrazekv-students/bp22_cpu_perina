@@ -40,13 +40,13 @@ export default {
     },
 
     methods: {
-        async FromCpuToMemory(fillTime = this.connectorFillTime.value, fadeTime = this.connectorFadeTime.value) {
+        async FromCpuToMemory(fillTime = this.times.connectorFill, fadeTime = this.times.connectorFade) {
             // Fill from left to right
             this.ResetIntervals();
             this.ResetBar("initial");
             await this.AnimateBar(fillTime, fadeTime);
         },
-        async FromMemoryToCpu(fillTime = this.connectorFillTime.value, fadeTime = this.connectorFadeTime.value) {
+        async FromMemoryToCpu(fillTime = this.times.connectorFill, fadeTime = this.times.connectorFade) {
             // Fill from right to left
             this.ResetIntervals();
             this.ResetBar("auto");

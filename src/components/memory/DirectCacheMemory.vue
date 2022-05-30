@@ -77,7 +77,7 @@ export default {
             // Data koherence: valid-bit
             // Memory block is in cache
             this.cycleCounter.value += this.cycleCosts.cacheCheck;
-            await this.cacheModel.highlightTag(cacheBlock, Math.min(this.highlightFadeTime.value / 2, 500));
+            await this.cacheModel.highlightTag(cacheBlock, Math.min(this.times.highlightFade / 2, 500));
             if (this.cacheData[cacheBlock].tag == cacheTag && !this.cacheData[cacheBlock].isEmpty) {
                 await this.memoryUtils.writeToCache(cacheAddress, cacheTag, data);
             }
@@ -93,7 +93,7 @@ export default {
                     var ramAddress = this.memoryUtils.getRamAddressFromCache(this.cacheData[cacheBlock].tag, cacheAddress, this.cacheAddressBits);
 
                     await this.memoryUtils.writeToRam(cacheAddress, ramAddress);
-                    await Sleep(this.connectorFadeTime.value / 2);
+                    await Sleep(this.times.connectorFade / 2);
                     await this.memoryUtils.readFromRam(cacheAddress, address, cacheTag);
                     await this.memoryUtils.writeToCache(cacheAddress, cacheTag, data);
                 }
@@ -109,7 +109,7 @@ export default {
 
             // Check in cache
             this.cycleCounter.value += this.cycleCosts.cacheCheck;
-            await this.cacheModel.highlightTag(cacheBlock, Math.min(this.highlightFadeTime.value / 2, 500));
+            await this.cacheModel.highlightTag(cacheBlock, Math.min(this.times.highlightFade / 2, 500));
             if (this.cacheData[cacheBlock].tag == cacheTag && !this.cacheData[cacheBlock].isEmpty) {
                 return await this.memoryUtils.readFromCache(cacheAddress);
             }
@@ -125,7 +125,7 @@ export default {
                     var ramAddress = this.memoryUtils.getRamAddressFromCache(this.cacheData[cacheBlock].tag, cacheAddress, this.cacheAddressBits);
 
                     await this.memoryUtils.writeToRam(cacheAddress, ramAddress);
-                    await Sleep(this.connectorFadeTime.value / 2);
+                    await Sleep(this.times.connectorFade / 2);
                     await this.memoryUtils.readFromRam(cacheAddress, address, cacheTag);
                     return await this.memoryUtils.readFromCache(cacheAddress);
                 }

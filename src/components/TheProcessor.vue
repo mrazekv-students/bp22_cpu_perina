@@ -126,7 +126,7 @@ export default {
             // Program loops
             while (this.currentState == s_started) {
                 await this.ExecuteInstruction();
-                await Sleep(this.instructionWaitTime.value);
+                await Sleep(this.times.instructionWait);
             }
         },
         StopProgram() {

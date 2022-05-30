@@ -76,7 +76,7 @@ export default {
             // Memory block is in cache
             for (var i = 0; i < this.cacheData.length; i++) {
                 this.cycleCounter.value += this.cycleCosts.cacheCheck;
-                await this.cacheModel.highlightTag(i, Math.min(this.highlightFadeTime.value / 2, 500));
+                await this.cacheModel.highlightTag(i, Math.min(this.times.highlightFade / 2, 500));
                 if (this.cacheData[i].tag == cacheTag && !this.cacheData[i].isEmpty) {
                     await this.memoryUtils.writeToCache(this.GetCacheAddress(i, address), cacheTag, data);
                     return;
@@ -108,7 +108,7 @@ export default {
                 var ramAddress = this.cacheData[id].tag;
 
                 await this.memoryUtils.writeToRam(cacheAddress, ramAddress);
-                await Sleep(this.connectorFadeTime.value / 2);
+                await Sleep(this.times.connectorFade / 2);
                 await this.memoryUtils.readFromRam(cacheAddress, address, cacheTag);
                 await this.memoryUtils.writeToCache(cacheAddress, cacheTag, data);
             }
@@ -122,7 +122,7 @@ export default {
             // Check in cache
             for (var i = 0; i < this.cacheData.length; i++) {
                 this.cycleCounter.value += this.cycleCosts.cacheCheck;
-                await this.cacheModel.highlightTag(i, Math.min(this.highlightFadeTime.value / 2, 500));
+                await this.cacheModel.highlightTag(i, Math.min(this.times.highlightFade / 2, 500));
                 if (this.cacheData[i].tag == cacheTag && !this.cacheData[i].isEmpty) {
                     return await this.memoryUtils.readFromCache(this.GetCacheAddress(i, address));
                 }
@@ -153,7 +153,7 @@ export default {
                 var ramAddress = this.cacheData[id].tag;
 
                 await this.memoryUtils.writeToRam(cacheAddress, ramAddress);
-                await Sleep(this.connectorFadeTime.value / 2);
+                await Sleep(this.times.connectorFade / 2);
                 await this.memoryUtils.readFromRam(cacheAddress, address, cacheTag);
                 return await this.memoryUtils.readFromCache(cacheAddress);
             }
