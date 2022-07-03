@@ -38,21 +38,23 @@ export default {
 
     methods: {
         Highlight(fadeTime = this.times.highlightFade) {
-            this.ResetIntervals();
-            this.ResetHighlight();
+            if (this.animations.enable) {
+                this.ResetIntervals();
+                this.ResetHighlight();
 
-            var i = fadeTime;
-            var fadeHex;
-            this.fadeOut.interval = setInterval(() => {
-                fadeHex = (Math.floor((i / fadeTime) * 255)).toString(16).padStart(2, '0');
-                this.highlightStyle.background = this.colors.secondaryColor + fadeHex;
-                i -= 10;
-            }, 10);
-            this.fadeOut.timeout = setTimeout(() => {
-                clearInterval(this.fadeOut.interval);
-                this.fadeOut.interval = null;
-                this.fadeOut.timeout = null;
-            }, fadeTime);
+                var i = fadeTime;
+                var fadeHex;
+                this.fadeOut.interval = setInterval(() => {
+                    fadeHex = (Math.floor((i / fadeTime) * 255)).toString(16).padStart(2, '0');
+                    this.highlightStyle.background = this.colors.secondaryColor + fadeHex;
+                    i -= 10;
+                }, 10);
+                this.fadeOut.timeout = setTimeout(() => {
+                    clearInterval(this.fadeOut.interval);
+                    this.fadeOut.interval = null;
+                    this.fadeOut.timeout = null;
+                }, fadeTime);
+            }
         },
         ResetHighlight() {
             this.highlightStyle.background = this.colors.secondaryColor + "00";

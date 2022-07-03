@@ -6,6 +6,7 @@ const app = createApp(App);
 
 // Globals
 // Animations
+app.config.globalProperties.animations = { enable: true };
 app.config.globalProperties.times = { instructionWait: 500, connectorFill: 500, connectorFade: 1000, highlightFade: 1000 };
 // Cycle counter
 app.config.globalProperties.cycleCounter = { value: 0 };

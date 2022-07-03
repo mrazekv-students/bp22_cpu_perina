@@ -115,22 +115,24 @@ export default {
         },
 
         HighlightRow(id, fadeTime = this.times.highlightFade) {
-            this.ResetRowIntervals();
-            this.ResetRowHighlight();
-            this.rowHighlightId = Math.floor(id / 4);
+            if (this.animations.enable) {
+                this.ResetRowIntervals();
+                this.ResetRowHighlight();
+                this.rowHighlightId = Math.floor(id / 4);
 
-            var i = fadeTime;
-            var fadeHex;
-            this.rowHighlight.interval = setInterval(() => {
-                fadeHex = (Math.floor((i / fadeTime) * 255)).toString(16).padStart(2, '0');
-                this.rowHighlightStyle.background = this.colors.secondaryColor + fadeHex;
-                i -= 10;
-            }, 10);
-            this.rowHighlight.timeout = setTimeout(() => {
-                clearInterval(this.rowHighlight.interval);
-                this.rowHighlight.interval = null;
-                this.rowHighlight.timeout = null;
-            }, fadeTime);
+                var i = fadeTime;
+                var fadeHex;
+                this.rowHighlight.interval = setInterval(() => {
+                    fadeHex = (Math.floor((i / fadeTime) * 255)).toString(16).padStart(2, '0');
+                    this.rowHighlightStyle.background = this.colors.secondaryColor + fadeHex;
+                    i -= 10;
+                }, 10);
+                this.rowHighlight.timeout = setTimeout(() => {
+                    clearInterval(this.rowHighlight.interval);
+                    this.rowHighlight.interval = null;
+                    this.rowHighlight.timeout = null;
+                }, fadeTime);
+            }
         },
         ResetRowIntervals() {
             if (this.rowHighlight.interval != null) {
@@ -146,27 +148,29 @@ export default {
 
         // TODO: Add color coding
         async HighlightTag(id, fadeTime = this.times.highlightFade) {
-            this.ResetTagIntervals();
-            this.ResetTagHighlight();
-            this.tagHighlightId = id;
+            if (this.animations.enable) {
+                this.ResetTagIntervals();
+                this.ResetTagHighlight();
+                this.tagHighlightId = id;
 
-            var i = fadeTime;
-            var fadeHex;
-            this.tagHighlight.interval = setInterval(() => {
-                fadeHex = (Math.floor((i / fadeTime) * 255)).toString(16).padStart(2, '0');
-                this.tagHighlightStyle.background = this.colors.infoColor + fadeHex;
-                i -= 10;
-            }, 10);
-            var promise = new Promise((resolve) => {
-                this.tagHighlight.timeout = setTimeout(() => {
-                    clearInterval(this.tagHighlight.interval);
-                    this.tagHighlight.interval = null;
-                    this.tagHighlight.timeout = null;
+                var i = fadeTime;
+                var fadeHex;
+                this.tagHighlight.interval = setInterval(() => {
+                    fadeHex = (Math.floor((i / fadeTime) * 255)).toString(16).padStart(2, '0');
+                    this.tagHighlightStyle.background = this.colors.infoColor + fadeHex;
+                    i -= 10;
+                }, 10);
+                var promise = new Promise((resolve) => {
+                    this.tagHighlight.timeout = setTimeout(() => {
+                        clearInterval(this.tagHighlight.interval);
+                        this.tagHighlight.interval = null;
+                        this.tagHighlight.timeout = null;
 
-                    resolve();
-                }, fadeTime);
-            });
-            await promise;
+                        resolve();
+                    }, fadeTime);
+                });
+                await promise;
+            }
         },
         ResetTagIntervals() {
             if (this.tagHighlight.interval != null) {

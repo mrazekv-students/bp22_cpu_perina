@@ -76,22 +76,24 @@ export default {
         },
 
         HighlightRow(id, fadeTime = this.times.highlightFade) {
-            this.ResetRowIntervals();
-            this.ResetRowHighlight();
-            this.rowHighlightId = Math.floor(id / 4);
+            if (this.animations.enable) {
+                this.ResetRowIntervals();
+                this.ResetRowHighlight();
+                this.rowHighlightId = Math.floor(id / 4);
 
-            var i = fadeTime;
-            var fadeHex;
-            this.rowHighlight.interval = setInterval(() => {
-                fadeHex = (Math.floor((i / fadeTime) * 255)).toString(16).padStart(2, '0');
-                this.rowHighlightStyle.background = this.colors.secondaryColor + fadeHex;
-                i -= 10;
-            }, 10);
-            this.rowHighlight.timeout = setTimeout(() => {
-                clearInterval(this.rowHighlight.interval);
-                this.rowHighlight.interval = null;
-                this.rowHighlight.timeout = null;
-            }, fadeTime);
+                var i = fadeTime;
+                var fadeHex;
+                this.rowHighlight.interval = setInterval(() => {
+                    fadeHex = (Math.floor((i / fadeTime) * 255)).toString(16).padStart(2, '0');
+                    this.rowHighlightStyle.background = this.colors.secondaryColor + fadeHex;
+                    i -= 10;
+                }, 10);
+                this.rowHighlight.timeout = setTimeout(() => {
+                    clearInterval(this.rowHighlight.interval);
+                    this.rowHighlight.interval = null;
+                    this.rowHighlight.timeout = null;
+                }, fadeTime);
+            }
         },
         ResetRowIntervals() {
             if (this.rowHighlight.interval != null) {

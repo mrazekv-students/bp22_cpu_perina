@@ -1,5 +1,6 @@
 import { config } from "@vue/test-utils";
 config.global.config.globalProperties = {
+    animations: { enable: true },
     times: { instructionWait: 0, connectorFill: 0, connectorFade: 0, highlightFade: 0 },
     cycleCounter: { value: 0 },
     cycleCosts: { cacheCheck: 2, cacheAccess: 10, ramAccess: 200 },

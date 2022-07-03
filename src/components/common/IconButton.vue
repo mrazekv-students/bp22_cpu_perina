@@ -3,7 +3,7 @@
 !-->
 
 <template>
-    <button class="icon-button" :disabled="disabled" @click="Click">
+    <button class="icon-button" v-if="visible" :disabled="disabled" @click="Click">
         <i :class="displayIcon"/>
     </button>
 </template>
@@ -13,18 +13,10 @@ export default {
     name: "IconButton",
 
     props: {
-        displayIcon: {
-            type: String,
-            required: true,
-        },
-        function: {
-            type: Function,
-            required: true,
-        },
-        disabled: {
-            type: Boolean,
-            default: false
-        }
+        displayIcon: { type: String, required: true },
+        function: { type: Function, required: true },
+        visible: { type: Boolean, default: true },
+        disabled: { type: Boolean, default: false }
     },
 
     methods: {
