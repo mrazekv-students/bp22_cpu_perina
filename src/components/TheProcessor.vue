@@ -13,7 +13,8 @@
         <div class="horizontal-container app-container">
             <div class="vertical-container control-container">
                 <div class="horizontal-container button-container">
-                    <icon-button v-for="button in controlButtons" :key="button" :displayIcon="button.display" :function="button.function" :disabled="button.disabled" class="control-button"/>
+                    <icon-button v-for="button in controlButtons" :key="button" :displayIcon="button.display" :function="button.function"
+                        :disabled="button.disabled" :visible="button.visible" class="control-button"/>
                 </div>
 
                 <div class="vertical-container program-container">
@@ -33,10 +34,9 @@
 </template>
 
 <script>
-const s_notStarted = "notStarted";
-const s_started = "started";
-const s_halted = "halted";
-const s_ended = "ended"
+const BUTTON = { FORWARD: "fastForward", START: "start", STOP: "stop", PAUSE: "pause", STEP: "step" };
+const STATE = { STOPPED: "notStarted", STARTED: "started", HALTED: "halted" };
+
 
 // Program select box: https://vue-select.org/
 import vSelect from "vue-select";
@@ -56,25 +56,23 @@ export default {
     components: { IconButton, CodeEditor, TheTabContainer, TheTitle, vSelect },
 
     computed: {
-        hasStarted() {
-            if (this.currentState == s_notStarted || this.currentState == s_ended) return false;
-            else return true;
-        }
+        hasStarted() { return this.currentState != STATE.STOPPED; }
     },
 
     data() {
         return {
-            controlButtons: [
-                { display: "fa-solid fa-play", function: this.StartProgram, disabled: false },
-                { display: "fa-solid fa-stop", function: this.StopProgram, disabled: true },
-                { display: "fa-solid fa-pause", function: this.PauseProgram, disabled: true},
-                { display: "fa-solid fa-forward-step", function: this.ExecuteInstruction, disabled: true }
-            ],
+            controlButtons: {
+                fastForward: { display: "fa-solid fa-forward", function: this.FastForward, disabled: false, visible: false },
+                start: { display: "fa-solid fa-play", function: this.StartProgram, disabled: false, visible: true },
+                stop: { display: "fa-solid fa-stop", function: this.StopProgram, disabled: true, visible: true },
+                pause: { display: "fa-solid fa-pause", function: this.PauseProgram, disabled: true, visible: true },
+                step: { display: "fa-solid fa-forward-step", function: this.ExecuteInstruction, disabled: false, visible: true }
+            },
             compiler: { compile: null, getInstruction: null, getLabel: null, getNextLine: null, highlightLine: null },
             memory: { write: null, read: null, flush: null, initialize: null },
             regs: { highlightACC: null, highlightAP: null },
             cpu: null,
-            currentState: s_notStarted,
+            currentState: STATE.STOPPED,
 
             instructionPointer: 0,
             accumulator: { value: 0 },
@@ -98,84 +96,88 @@ export default {
             console.log("Start program");
 
             // Compile program
-            if (this.currentState == s_ended) {
-                this.ChangeSimulationState(s_notStarted);
-            }
-            if (this.currentState == s_notStarted) {
-                try {
-                    this.compiler.compile();
-                }
-                catch (e) {
-                    this.$notify({
-                        title: "Compilation Error",
-                        text: e.message,
-                        type: "error"
-                    });
-                    console.error(e);
+            if (this.currentState == STATE.STOPPED) {
+                var compResult = this.CompileProgram();
+                if (compResult) {
+                    this.ChangeSimulationState(STATE.STOPPED);
                     return;
                 }
-
-                // Create CPU
-                this.Initialize();
-                this.cpu = new Cpu(this.memory, this.accumulator, this.addressPointer, this.regs, this.cycleCounter);
             }
-
-            this.ChangeSimulationState(s_started);
-            this.compiler.highlightLine(this.compiler.getNextLine(this.instructionPointer));
+            this.ChangeSimulationState(STATE.STARTED);
 
             // Program loops
-            while (this.currentState == s_started) {
+            while (this.currentState == STATE.STARTED) {
                 await this.ExecuteInstruction();
-                await Sleep(this.instructionWaitTime.value);
+                if (this.animations.enable) {
+                    await Sleep(this.times.instructionWait);
+                }
             }
         },
         StopProgram() {
             console.log("Stop program");
-            this.ChangeSimulationState(s_notStarted);
+            this.ChangeSimulationState(STATE.STOPPED);
             this.Initialize();
         },
         PauseProgram() {
             console.log("Pause program");
-            this.ChangeSimulationState(s_halted);
+            this.ChangeSimulationState(STATE.HALTED);
         },
         async ExecuteInstruction() {
+            if (this.currentState == STATE.STOPPED) {
+                var compResult = this.CompileProgram();
+                if (compResult) {
+                    this.ChangeSimulationState(STATE.STOPPED);
+                    return;
+                }
+
+                this.ChangeSimulationState(STATE.HALTED)
+            }
+
             try {
-                if (this.currentState == s_halted) {
-                    this.controlButtons[3].disabled = true;
+                // Disable step button until animation is finished
+                if (this.currentState == STATE.HALTED) {
+                    this.controlButtons[BUTTON.STEP].disabled = true;
                 }
 
                 // Execute instruction
                 this.instruction = this.compiler.getInstruction(this.instructionPointer);
                 var result = await this.cpu.execute(this.instruction);
-
                 console.log(this.instruction);
 
                 // Process result
-                if (result.result == ExecutionResult.NextInstruction) {
-                    this.instructionPointer++;
-                }
-                else if (result.result == ExecutionResult.MoveToLabel) {
-                    this.instructionPointer = this.compiler.getLabel(result.label) + 1;
-                }
-                else if (result.result == ExecutionResult.MoveToAddress) {
-                    this.instructionPointer = result.address;
-                }
-                else if (result.result == ExecutionResult.HaltExecution) {
-                    console.log("Program halted");
-                    this.instructionPointer++;
-                    this.ChangeSimulationState(s_halted);
-                }
-                else if (result.result == ExecutionResult.EndExecution) {
-                    console.log("Program end");
-                    this.compiler.highlightLine(-1);
-                    this.ChangeSimulationState(s_ended);
-                    return;
+                switch(result.result) {
+                    case ExecutionResult.NextInstruction:
+                        this.instructionPointer++;
+                        break;
+                    
+                    case ExecutionResult.MoveToLabel:
+                        this.instructionPointer = this.compiler.getLabel(result.label) + 1;
+                        break;
+
+                    case ExecutionResult.MoveToAddress:
+                        this.instructionPointer = result.address;
+                        break;
+
+                    case ExecutionResult.HaltExecution:
+                        console.log("Program stopped");
+                        this.instructionPointer++;
+                        this.ChangeSimulationState(STATE.HALTED);
+                        break;
+
+                    case ExecutionResult.EndExecution:
+                        console.log("Program ended");
+                        this.compiler.highlightLine(-1);
+                        this.ChangeSimulationState(STATE.STOPPED);
+                        return;
+
+                    default:
+                        throw Error("Unknown instruction result.");
                 }
 
                 this.compiler.highlightLine(this.compiler.getNextLine(this.instructionPointer));
 
-                if (this.currentState == s_halted) {
-                    this.controlButtons[3].disabled = false;
+                if (this.currentState == STATE.HALTED) {
+                    this.controlButtons[BUTTON.STEP].disabled = false;
                 }
             }
             catch (e) {
@@ -185,8 +187,35 @@ export default {
                     type: "error"
                 });
                 console.error(e);
-                this.ChangeSimulationState(s_ended);
+                this.ChangeSimulationState(STATE.STOPPED);
             }
+        },
+        FastForward() {
+            this.animations.enable = false;
+        },
+
+        // Helper method to compile assembly program
+        // Returns true if compilation error
+        CompileProgram() {
+            // Compile program
+            try {
+                this.compiler.compile();
+            }
+            catch (e) {
+                this.$notify({
+                    title: "Compilation Error",
+                    text: e.message,
+                    type: "error"
+                });
+                console.error(e);
+                return true;
+            }
+
+            // Create CPU
+            this.Initialize();
+            this.cpu = new Cpu(this.memory, this.accumulator, this.addressPointer, this.regs, this.cycleCounter);
+            this.compiler.highlightLine(this.compiler.getNextLine(this.instructionPointer));
+            return false;
         },
 
         // Component registration methods
@@ -203,35 +232,38 @@ export default {
         // Other methods
         ChangeSimulationState(state) {
             switch (state) {
-                case s_notStarted:
-                    this.controlButtons[0].disabled = false;
-                    this.controlButtons[1].disabled = true;
-                    this.controlButtons[2].disabled = true;
-                    this.controlButtons[3].disabled = true;
+                case STATE.STOPPED:
+                    this.controlButtons[BUTTON.START].disabled = false;
+                    this.controlButtons[BUTTON.STOP].disabled = true;
+                    this.controlButtons[BUTTON.PAUSE].disabled = true;
+                    this.controlButtons[BUTTON.STEP].disabled = false;
+
+                    this.controlButtons[BUTTON.START].visible = true;
+                    this.controlButtons[BUTTON.FORWARD].visible = false;
                     break;
 
-                case s_started:
-                    this.controlButtons[0].disabled = true;
-                    this.controlButtons[1].disabled = false;
-                    this.controlButtons[2].disabled = false;
-                    this.controlButtons[3].disabled = true;
+                case STATE.STARTED:
+                    this.controlButtons[BUTTON.START].disabled = true;
+                    this.controlButtons[BUTTON.STOP].disabled = false;
+                    this.controlButtons[BUTTON.PAUSE].disabled = false;
+                    this.controlButtons[BUTTON.STEP].disabled = true;
+
+                    this.controlButtons[BUTTON.START].visible = false;
+                    this.controlButtons[BUTTON.FORWARD].visible = true;
                     break;
 
-                case s_halted:
-                    this.controlButtons[0].disabled = false;
-                    this.controlButtons[1].disabled = false;
-                    this.controlButtons[2].disabled = true;
-                    this.controlButtons[3].disabled = false;
-                    break;
+                case STATE.HALTED:
+                    this.controlButtons[BUTTON.START].disabled = false;
+                    this.controlButtons[BUTTON.STOP].disabled = false;
+                    this.controlButtons[BUTTON.PAUSE].disabled = true;
+                    this.controlButtons[BUTTON.STEP].disabled = false;
 
-                case s_ended:
-                    this.controlButtons[0].disabled = false;
-                    this.controlButtons[1].disabled = true;
-                    this.controlButtons[2].disabled = true;
-                    this.controlButtons[3].disabled = true;
+                    this.controlButtons[BUTTON.START].visible = true;
+                    this.controlButtons[BUTTON.FORWARD].visible = false;
                     break;
             }
 
+            this.animations.enable = true;
             this.currentState = state;
         },
         Initialize() {
