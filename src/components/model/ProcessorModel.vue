@@ -16,7 +16,7 @@
 </template>
 
 <script>
-import RegisterLabel from '../common/RegisterLabel.vue'
+import RegisterLabel from './RegisterLabel.vue'
 export default {
     name: "ProcessorModel",
     components: { RegisterLabel },
