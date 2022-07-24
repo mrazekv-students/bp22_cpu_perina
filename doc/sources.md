@@ -3,6 +3,9 @@ https://github.com/koca/vue-prism-editor/tree/feature/next
 https://prismjs.com/
 https://github.com/kyvg/vue3-notification
 
+https://floating-vue.starpad.dev/guide/directive.html#placement-modifier
+https://github.com/fattihkoca/vuejs-title
+
 ## Vue.js tutorials
 https://stackoverflow.com/questions/55316490/vue-best-practice-for-calling-a-method-in-a-child-component
 https://pietschsoft.com/post/2015/09/05/javascript-basics-how-to-create-a-dictionary-with-keyvalue-pairs
