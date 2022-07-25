@@ -12,7 +12,7 @@
                 <span> {{ suborganisation }} </span>
                 <span> {{ authorDate }} </span>
             </div>
-            <icon-button :displayIcon="'fa-solid fa-gear'" :function="ToggleSettings" class="settings-button"/>
+            <icon-button :displayIcon="'fa-solid fa-gear'" :function="ToggleSettings" :tooltip="'Settings'" class="settings-button"/>
         </div>
     </div>
 

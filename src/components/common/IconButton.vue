@@ -3,7 +3,7 @@
 !-->
 
 <template>
-    <button class="icon-button" v-if="visible" :disabled="disabled" @click="Click">
+    <button v-tooltip="tooltip" class="icon-button" v-if="visible" :disabled="disabled" @click="Click">
         <i :class="displayIcon"/>
     </button>
 </template>
@@ -15,6 +15,7 @@ export default {
     props: {
         displayIcon: { type: String, required: true },
         function: { type: Function, required: true },
+        tooltip: { type: String, default: "" },
         visible: { type: Boolean, default: true },
         disabled: { type: Boolean, default: false }
     },

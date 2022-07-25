@@ -42,6 +42,28 @@ body {
     text-transform: uppercase;
 }
 
+.v-popper--theme-tooltip .v-popper__inner {
+    padding: 3px 6px;
+    color: var(--backgroundColor);
+
+    border: solid 1px var(--fontColorFaded);
+    border-radius: 5px;
+    background: var(--fontColor);
+}
+.v-popper--theme-tooltip.v-popper__popper--hidden {
+    visibility: hidden;
+    opacity: 0;
+    transition: opacity .15s, visibility .15s;
+}
+.v-popper--theme-tooltip.v-popper__popper--shown {
+    visibility: visible;
+    opacity: 1;
+    transition: opacity .15s;
+}
+.v-popper--theme-tooltip.v-popper__popper--skip-transition {
+    transition: none !important;
+}
+
 .horizontal-container {
     display: flex;
     flex-direction: row;

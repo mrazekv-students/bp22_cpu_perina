@@ -13,7 +13,8 @@
         <div class="horizontal-container app-container">
             <div class="vertical-container control-container">
                 <div class="horizontal-container button-container">
-                    <icon-button v-for="button in controlButtons" :key="button" :displayIcon="button.display" :function="button.function"
+                    <icon-button v-for="button in controlButtons" :key="button"
+                        :displayIcon="button.display" :function="button.function" :tooltip="button.tooltip"
                         :disabled="button.disabled" :visible="button.visible" class="control-button"/>
                 </div>
 
@@ -62,11 +63,36 @@ export default {
     data() {
         return {
             controlButtons: {
-                fastForward: { display: "fa-solid fa-forward", function: this.FastForward, disabled: false, visible: false },
-                start: { display: "fa-solid fa-play", function: this.StartProgram, disabled: false, visible: true },
-                stop: { display: "fa-solid fa-stop", function: this.StopProgram, disabled: true, visible: true },
-                pause: { display: "fa-solid fa-pause", function: this.PauseProgram, disabled: true, visible: true },
-                step: { display: "fa-solid fa-forward-step", function: this.ExecuteInstruction, disabled: false, visible: true }
+                fastForward: {
+                    display: "fa-solid fa-forward",
+                    function: this.FastForward,
+                    tooltip: "Skip to next breakpoint",
+                    disabled: false, visible: false
+                },
+                start: {
+                    display: "fa-solid fa-play",
+                    function: this.StartProgram,
+                    tooltip: "Start program",
+                    disabled: false, visible: true
+                },
+                stop: {
+                    display: "fa-solid fa-stop",
+                    function: this.StopProgram,
+                    tooltip: "Stop program",
+                    disabled: true, visible: true
+                },
+                pause: {
+                    display: "fa-solid fa-pause",
+                    function: this.PauseProgram,
+                    tooltip: "Pause program execution",
+                    disabled: true, visible: true
+                },
+                step: {
+                    display: "fa-solid fa-forward-step",
+                    function: this.ExecuteInstruction,
+                    tooltip: "Execute next instruction",
+                    disabled: false, visible: true
+                }
             },
             compiler: { compile: null, getInstruction: null, getLabel: null, getNextLine: null, highlightLine: null },
             memory: { write: null, read: null, flush: null, initialize: null },
