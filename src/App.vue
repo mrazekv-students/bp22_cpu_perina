@@ -43,6 +43,7 @@ body {
 }
 
 .v-popper--theme-tooltip .v-popper__inner {
+    max-width: 300px;
     padding: 3px 6px;
     color: var(--backgroundColor);
 
