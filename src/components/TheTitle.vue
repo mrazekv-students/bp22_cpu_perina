@@ -12,7 +12,7 @@
                 <span> {{ suborganisation }} </span>
                 <span> {{ authorDate }} </span>
             </div>
-            <icon-button :displayIcon="'fa-solid fa-gear'" :function="ToggleSettings" :tooltip="'Settings'" class="settings-button"/>
+            <icon-button :displayIcon="'fa-solid fa-gear'" :function="ToggleSettings" :tooltip="tooltips.settings" class="settings-button"/>
         </div>
     </div>
 
@@ -45,7 +45,10 @@ export default {
 
     data() {
         return {
-            showSettings: false
+            showSettings: false,
+            tooltips: {
+                settings: "Settings"
+            }
         }
     },
 

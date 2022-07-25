@@ -5,8 +5,8 @@
 <template>
     <table class="ram">
         <tr>
-            <th class="address"> Address </th>
-            <th class="value"> Data </th>
+            <th v-tooltip="tooltips.address" class="address"> Address </th>
+            <th v-tooltip="tooltips.data" class="value"> Data </th>
         </tr>
         <tr v-for="n in data.length" :key="n" :style="rowHighlightId == (n - 1) ? rowHighlightStyle : ''">
             <td class="address">
@@ -31,11 +31,16 @@ export default {
 
     data() {
         return {
+            rowHighlightId: -1,
+            rowHighlight: { interval: null, timeout: null },
             rowHighlightStyle: {
                 'background': this.colors.secondaryColor + "00"
             },
-            rowHighlightId: -1,
-            rowHighlight: { interval: null, timeout: null},
+            
+            tooltips: {
+                address: "Memory block address",
+                data: "Memory content"
+            }
         }
     },
 
