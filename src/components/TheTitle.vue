@@ -10,23 +10,26 @@
             <div class="vertical-container additional-info">
                 <span> {{ organisation }} </span>
                 <span> {{ suborganisation }} </span>
-                <span> {{ authorDate }} </span>
+                <span> {{ this.author + ', ' + this.date }} </span>
             </div>
-            <icon-button :displayIcon="'fa-solid fa-gear'" :function="ToggleSettings" :tooltip="tooltips.settings" class="settings-button"/>
+            <icon-button displayIcon="fa-solid fa-info" :function="ToggleAbout" :tooltip="tooltips.help" class="title-button" />
+            <icon-button displayIcon="fa-solid fa-gear" :function="ToggleSettings" :tooltip="tooltips.settings" class="title-button"/>
         </div>
     </div>
 
     <Teleport to="body">
-        <the-settings :show="showSettings" @close="ToggleSettings"/>
+        <the-about :show="showAbout" @close="ToggleAbout" />
+        <the-settings :show="showSettings" @close="ToggleSettings" />
     </Teleport>
 </template>
 
 <script>
 import IconButton from './common/IconButton.vue';
+import TheAbout from './TheAbout.vue';
 import TheSettings from './TheSettings.vue';
 export default {
     name: "TheTitle",
-    components: { IconButton, TheSettings },
+    components: { IconButton, TheAbout, TheSettings },
     emits: ["UpdateSettings"],
     
     props: {
@@ -37,22 +40,22 @@ export default {
         date: { type: String }
     },
 
-    computed: {
-        authorDate() {
-            return this.author + ', ' + this.date;
-        }
-    },
-
     data() {
         return {
+            showAbout: false,
             showSettings: false,
             tooltips: {
-                settings: "Settings"
+                settings: "Show settings",
+                help: "About application"
             }
         }
     },
 
     methods: {
+        ToggleAbout() {
+            this.showAbout = !this.showAbout;
+        },
+
         ToggleSettings() {
             if (this.showSettings) {
                 this.$emit("UpdateSettings");
@@ -91,11 +94,10 @@ export default {
     margin-left: auto;
     color: var(--scrollColorLight);
 }
-.title-container>.settings-button {
+.title-container>.title-button {
     width: 3.5rem;
     height: 3.5rem;
     margin-left: 0.5rem;
-    margin-right: 0.5rem;
     border-radius: 10px;
     font-size: 2rem;
     background: var(--mainColorDark);
