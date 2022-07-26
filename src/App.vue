@@ -1,17 +1,32 @@
 <template>
-    <the-processor/>
+    <div class="vertical-container main-container">
+        <the-title title="Cache Simulator" author="Daniel Peřina" date="2022"
+            organisation="Brno University of Technology" suborganisation="Faculty of Information Technology" 
+            @UpdateSettings="Initialize"
+        />
+
+        <the-processor ref="processor"/>
+    </div>
     <notifications :position="'bottom right'" :duration="10000" classes="vue-notification custom-notification"/>
 </template>
 
 <script>
-import TheProcessor from './components/TheProcessor.vue'
+import TheTitle from './components/TheTitle.vue';
+import TheProcessor from './components/TheProcessor.vue';
 export default {
     name: 'App',
-    components: { TheProcessor }
+    components: { TheTitle, TheProcessor },
+
+    methods: {
+        Initialize() {
+            this.$refs.processor.Initialize();
+        }
+    }
 }
 </script>
 
 <style>
+/* COMMON */
 #app {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
@@ -72,5 +87,10 @@ body {
 .vertical-container {
     display: flex;
     flex-direction: column;
+}
+
+/* SPECIFIC */
+.main-container {
+    height: 100%;
 }
 </style>

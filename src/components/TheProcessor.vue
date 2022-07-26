@@ -5,31 +5,25 @@
 !-->
 
 <template>
-    <div class="vertical-container main-container">
-        <the-title :title="'Cache Simulator'" :author="'Daniel Peřina'" :date="'2022'"
-            :organisation="'Brno University of Technology'" :suborganisation="'Faculty of Information Technology'" 
-            @UpdateSettings="Initialize"/>
-
-        <div class="horizontal-container app-container">
-            <div class="vertical-container control-container">
-                <div class="horizontal-container button-container">
-                    <icon-button v-for="button in controlButtons" :key="button"
-                        :displayIcon="button.display" :function="button.function" :tooltip="button.tooltip"
-                        :disabled="button.disabled" :visible="button.visible" class="control-button"/>
-                </div>
-
-                <div class="vertical-container program-container">
-                    <v-select class="program-select" v-model="selected" :options="programs" :label="'label'" :reduce="label => label.label" :disabled="hasStarted"
-                        placeholder="Vyberte ukázkový program" @option:selected="SelectProgram" />
-                    <code-editor :selectedProgram="selectedProgram" :hasStarted="hasStarted" @RegisterCompiler="RegisterCompiler"/>
-                </div>
+    <div class="horizontal-container app-container">
+        <div class="vertical-container control-container">
+            <div class="horizontal-container button-container">
+                <icon-button v-for="button in controlButtons" :key="button"
+                    :displayIcon="button.display" :function="button.function" :tooltip="button.tooltip"
+                    :disabled="button.disabled" :visible="button.visible" class="control-button"/>
             </div>
 
-            <div class="vertical-container model-container">
-                <the-tab-container @RegisterMemory="RegisterMemory" @RegisterRegs="RegisterRegs" :hasStarted="hasStarted"
-                    :instruction="instruction.instruction" :instructionPointer="instructionPointer"
-                    :accumulator="accumulator.value" :addressPointer="addressPointer.value"/>
+            <div class="vertical-container program-container">
+                <v-select class="program-select" v-model="selected" :options="programs" :label="'label'" :reduce="label => label.label" :disabled="hasStarted"
+                    placeholder="Vyberte ukázkový program" @option:selected="SelectProgram" />
+                <code-editor :selectedProgram="selectedProgram" :hasStarted="hasStarted" @RegisterCompiler="RegisterCompiler"/>
             </div>
+        </div>
+
+        <div class="vertical-container model-container">
+            <the-tab-container @RegisterMemory="RegisterMemory" @RegisterRegs="RegisterRegs" :hasStarted="hasStarted"
+                :instruction="instruction.instruction" :instructionPointer="instructionPointer"
+                :accumulator="accumulator.value" :addressPointer="addressPointer.value"/>
         </div>
     </div>
 </template>
@@ -47,14 +41,13 @@ import { examplePrograms } from './codeEditor/ExamplePrograms.js';
 import IconButton from './common/IconButton.vue';
 import CodeEditor from './codeEditor/CodeEditor.vue';
 import TheTabContainer from './TheTabContainer.vue';
-import TheTitle from './TheTitle.vue';
 
 import Cpu from '@/scripts/Cpu.js';
 import ExecutionResult from '@/scripts/enums/ExecutionResult.js';
 import Sleep from '@/scripts/Sleep.js';
 export default {
     name: "TheLayout",
-    components: { IconButton, CodeEditor, TheTabContainer, TheTitle, vSelect },
+    components: { IconButton, CodeEditor, TheTabContainer, vSelect },
 
     computed: {
         hasStarted() { return this.currentState != STATE.STOPPED; }
@@ -293,6 +286,8 @@ export default {
             this.currentState = state;
         },
         Initialize() {
+            console.log("INIT");
+
             this.instructionPointer = 0;
             this.accumulator = { value: 0 };
             this.addressPointer = { value: 0 };
@@ -306,9 +301,6 @@ export default {
 </script>
 
 <style>
-.main-container {
-    height: 100%;
-}
 .app-container {
     height: 90%;
     width: 100%;

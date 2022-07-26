@@ -20,7 +20,7 @@ export default {
 
     props: {
         label: { type: String, default: null },
-        tooltip: { type: String, default: null },
+        tooltip: { type: Object, default: null },
         value: { required: true },
     },
 
