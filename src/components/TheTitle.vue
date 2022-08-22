@@ -78,28 +78,37 @@ export default {
     max-width: 1400px;
     padding: 0.5rem;
 }
-.title-container>img {
+.title-container img {
     height: 3.5rem;
     border-radius: 100%;
     margin-left: 0.5rem;
     margin-right: 1rem;
 }
-.title-container>.title {
+.title-container .title {
     font-size: 3rem;
     font-weight: bold;
     text-transform: uppercase;
 }
-.title-container>.additional-info {
+.title-container .additional-info {
     align-items: flex-end;
     margin-left: auto;
     color: var(--scrollColorLight);
 }
-.title-container>.title-button {
+
+.title-container .title-button {
     width: 3.5rem;
     height: 3.5rem;
     margin-left: 0.5rem;
     border-radius: 10px;
     font-size: 2rem;
     background: var(--mainColorDark);
+}
+
+.close-button {
+    width: 2rem;
+    height: 2rem;
+    margin-left: auto;
+    border-radius: 5px;
+    font-size: 1.5rem;
 }
 </style>

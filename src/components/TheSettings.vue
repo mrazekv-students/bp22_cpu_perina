@@ -85,14 +85,6 @@ export default {
     margin-top: 1rem;
 }
 
-.settings-container>.close-button {
-    width: 2rem;
-    height: 2rem;
-    margin-left: auto;
-    border-radius: 5px;
-    font-size: 1.5rem;
-}
-
 .settings-section>h2 {
     margin-bottom: 0.5rem;
     font-size: 1.5rem;

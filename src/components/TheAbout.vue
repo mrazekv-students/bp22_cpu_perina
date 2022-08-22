@@ -7,8 +7,25 @@
     <Transition name="modal">
         <div v-if="show" class="modal-mask">
             <div class="modal-wrapper">
-                <div class="settings-container horizontal-container">
-                    
+                <div class="about-container horizontal-container">
+                    <div class="vertical-container">
+                        <h1>Cache Simulator</h1>
+                        <p>
+                            TODO: Basic info about application
+                        </p>
+                        <h2>Controls</h2>
+                        <p>
+                            TODO: Describe how to control application
+                        </p>
+                        <h2>Usage</h2>
+                        <p>
+                            TODO: Describe basic use cases and thing that can be done with application
+                        </p>
+                        <h2>Assembler</h2>
+                        <p>
+                            TODO: Assembler instruction
+                        </p>
+                    </div>
                     <icon-button :displayIcon="'fa-solid fa-xmark'" :function="CloseAbout" class="close-button"/>
                 </div>
             </div>
@@ -51,8 +68,9 @@ export default {
     justify-content: center;
     align-items: center;
 }
-.settings-container {
-    width: 420px;
+.about-container {
+    width: 820px;
+    max-height: 90vh;
     padding: 2rem;
     border-radius: 10px;
     background-color: var(--backgroundColor);
