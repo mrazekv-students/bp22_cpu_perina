@@ -11,11 +11,37 @@
                     <div class="about-content vertical-container">
                         <h2>Cache Simulator</h2>
                         <p>
-                            TODO: Basic info about application
+                            The Cache Simulator is a simple website application for simulating and displaying function of caches in CPU.
+                            CPU caches are small but fast memory storages that serve as a buffer between fast procesor and significantly slower DRAM memory.
+                            In this application, user can input random program written in assembler (see below for instruction list) and simulate its execution and flow of data between CPU, cache and RAM.
+                            That way user can test various different architectures of cache, their influence on various programs and see why it is important to take cache structure into account when programming performant code.
                         </p>
                         <h3>Controls</h3>
                         <p>
-                            TODO: Describe how to control application
+                            The application consists of two parts.
+                            On the left are program control button and a code editor.
+                            At the top of the code editor is a selection box containing example programs.
+                            These program show various interesting properties of caches and can be freely edited (the changes are not saved).
+                        </p>
+                        <p>
+                            Once the desired program is entered the simulation can be started by either clicking the <b>START</b> button or the <b>STEP</b> button.
+                            Running program can be paused by clicking the <b>PAUSE</b> button and ended using the <b>STOP</b> button.
+                            The control buttons have following shortcuts:
+                        </p>
+                        <ul>
+                            <li><b>START</b> - X</li>
+                            <li><b>STOP</b> - X</li>
+                            <li><b>PAUSE</b> - X</li>
+                            <li><b>STEP</b> - X</li>
+                        </ul>
+                        <p>
+                            On the right side are CPU and memory models.
+                            The application supports 4 cache models: no cache, directly mapped cache, two-way cache and full cache.
+                            User can change currently selected cache model only when the execution is neither running or paused.
+                        </p>
+                        <p>
+                            At the far right of the title bar is a settings button which shows the settings dialog.
+                            Here user can change size of both cache memory and RAM memory, CPU costs of accessing both and speed of animations.
                         </p>
                         <h3>Usage</h3>
                         <p>
@@ -116,8 +142,12 @@ export default {
     text-transform: uppercase;
     color: var(--fontColor);
 }
-.about-content p {
+.about-content p, ul {
+    width: 98%;
     margin-bottom: 1.0rem;
+}
+.about-content p {
+    text-align: justify;
 }
 
 .about-content table {
