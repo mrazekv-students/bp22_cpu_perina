@@ -5,30 +5,25 @@
 !-->
 
 <template>
-    <div class="vertical-container main-container">
-        <the-title :title="'Cache Simulator'" :author="'Daniel Peřina'" :date="'2022'"
-            :organisation="'Brno University of Technology'" :suborganisation="'Faculty of Information Technology'" 
-            @UpdateSettings="Initialize"/>
-
-        <div class="horizontal-container app-container">
-            <div class="vertical-container control-container">
-                <div class="horizontal-container button-container">
-                    <icon-button v-for="button in controlButtons" :key="button" :displayIcon="button.display" :function="button.function"
-                        :disabled="button.disabled" :visible="button.visible" class="control-button"/>
-                </div>
-
-                <div class="vertical-container program-container">
-                    <v-select class="program-select" v-model="selected" :options="programs" :label="'label'" :reduce="label => label.label" :disabled="hasStarted"
-                        placeholder="Vyberte ukázkový program" @option:selected="SelectProgram" />
-                    <code-editor :selectedProgram="selectedProgram" :hasStarted="hasStarted" @RegisterCompiler="RegisterCompiler"/>
-                </div>
+    <div class="horizontal-container app-container">
+        <div class="vertical-container control-container">
+            <div class="horizontal-container button-container">
+                <icon-button v-for="button in controlButtons" :key="button"
+                    :displayIcon="button.display" :function="button.function" :tooltip="button.tooltip"
+                    :disabled="button.disabled" :visible="button.visible" class="control-button"/>
             </div>
 
-            <div class="vertical-container model-container">
-                <the-tab-container @RegisterMemory="RegisterMemory" @RegisterRegs="RegisterRegs" :hasStarted="hasStarted"
-                    :instruction="instruction.instruction" :instructionPointer="instructionPointer"
-                    :accumulator="accumulator.value" :addressPointer="addressPointer.value"/>
+            <div class="vertical-container program-container">
+                <v-select class="program-select" v-model="selected" :options="programs" :label="'label'" :reduce="label => label.label" :disabled="hasStarted"
+                    placeholder="Vyberte ukázkový program" @option:selected="SelectProgram" />
+                <code-editor :selectedProgram="selectedProgram" :hasStarted="hasStarted" @RegisterCompiler="RegisterCompiler"/>
             </div>
+        </div>
+
+        <div class="vertical-container model-container">
+            <the-tab-container @RegisterMemory="RegisterMemory" @RegisterRegs="RegisterRegs" :hasStarted="hasStarted"
+                :instruction="instruction.instruction" :instructionPointer="instructionPointer"
+                :accumulator="accumulator.value" :addressPointer="addressPointer.value"/>
         </div>
     </div>
 </template>
@@ -46,14 +41,13 @@ import { examplePrograms } from './codeEditor/ExamplePrograms.js';
 import IconButton from './common/IconButton.vue';
 import CodeEditor from './codeEditor/CodeEditor.vue';
 import TheTabContainer from './TheTabContainer.vue';
-import TheTitle from './TheTitle.vue';
 
 import Cpu from '@/scripts/Cpu.js';
 import ExecutionResult from '@/scripts/enums/ExecutionResult.js';
 import Sleep from '@/scripts/Sleep.js';
 export default {
     name: "TheLayout",
-    components: { IconButton, CodeEditor, TheTabContainer, TheTitle, vSelect },
+    components: { IconButton, CodeEditor, TheTabContainer, vSelect },
 
     computed: {
         hasStarted() { return this.currentState != STATE.STOPPED; }
@@ -62,11 +56,36 @@ export default {
     data() {
         return {
             controlButtons: {
-                fastForward: { display: "fa-solid fa-forward", function: this.FastForward, disabled: false, visible: false },
-                start: { display: "fa-solid fa-play", function: this.StartProgram, disabled: false, visible: true },
-                stop: { display: "fa-solid fa-stop", function: this.StopProgram, disabled: true, visible: true },
-                pause: { display: "fa-solid fa-pause", function: this.PauseProgram, disabled: true, visible: true },
-                step: { display: "fa-solid fa-forward-step", function: this.ExecuteInstruction, disabled: false, visible: true }
+                fastForward: {
+                    display: "fa-solid fa-forward",
+                    function: this.FastForward,
+                    tooltip: "Skip to next breakpoint",
+                    disabled: false, visible: false
+                },
+                start: {
+                    display: "fa-solid fa-play",
+                    function: this.StartProgram,
+                    tooltip: "Start program",
+                    disabled: false, visible: true
+                },
+                stop: {
+                    display: "fa-solid fa-stop",
+                    function: this.StopProgram,
+                    tooltip: "Stop program",
+                    disabled: true, visible: true
+                },
+                pause: {
+                    display: "fa-solid fa-pause",
+                    function: this.PauseProgram,
+                    tooltip: "Pause program execution",
+                    disabled: true, visible: true
+                },
+                step: {
+                    display: "fa-solid fa-forward-step",
+                    function: this.ExecuteInstruction,
+                    tooltip: "Execute next instruction",
+                    disabled: false, visible: true
+                }
             },
             compiler: { compile: null, getInstruction: null, getLabel: null, getNextLine: null, highlightLine: null },
             memory: { write: null, read: null, flush: null, initialize: null },
@@ -280,9 +299,6 @@ export default {
 </script>
 
 <style>
-.main-container {
-    height: 100%;
-}
 .app-container {
     height: 90%;
     width: 100%;

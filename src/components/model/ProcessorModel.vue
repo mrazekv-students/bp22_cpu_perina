@@ -8,15 +8,18 @@
         <span class="title">CPU</span>
         <register-label :value="instruction" class="current-instruction"/>
         <div class="horizontal-container registers">
-            <register-label label="IP" :value="instuctionPointer"/>
-            <register-label label="ACC" :value="accumulator" @RegisterLabel="RegisterACC"/>
+            <register-label label="IP" :tooltip="tooltips.regIP"
+                :value="instuctionPointer"/>
+            <register-label label="ACC" :tooltip="tooltips.regACC"
+                :value="accumulator" @RegisterLabel="RegisterACC"/>
         </div>
-        <register-label label="AP" :value="addressPointerString" class="address-pointer" @RegisterLabel="RegisterAP"/>
+        <register-label label="AP" :tooltip="tooltips.regAP"
+            :value="addressPointerString" @RegisterLabel="RegisterAP" class="address-pointer"/>
     </div>
 </template>
 
 <script>
-import RegisterLabel from '../common/RegisterLabel.vue'
+import RegisterLabel from './RegisterLabel.vue'
 export default {
     name: "ProcessorModel",
     components: { RegisterLabel },
@@ -37,7 +40,12 @@ export default {
 
     data() {
         return {
-            registers: { highlightACC: null, highlightAP: null }
+            registers: { highlightACC: null, highlightAP: null },
+            tooltips: {
+                regIP: { content: "<h4>Instruction pointer register</h4>Register containing address of next instruction", html: true },
+                regACC: { content: "<h4>Accumulator register</h4>Register for program data", html: true },
+                regAP: { content: "<h4>Address pointer register</h4>Register with memory address used during memory accesses", html: true },
+            }
         }
     },
 

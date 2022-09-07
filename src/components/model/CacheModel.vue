@@ -6,10 +6,10 @@
 <template>
     <table class="cache">
         <tr>
-            <th class="address"> Address </th>
-            <th class="valid"> V </th>
-            <th class="tag"> Tag </th>
-            <th class="value"> Data </th>
+            <th v-tooltip="tooltips.address" class="address"> Address </th>
+            <th v-tooltip="tooltips.dirtyBit" class="valid"> V </th>
+            <th v-tooltip="tooltips.tag" class="tag"> Tag </th>
+            <th v-tooltip="tooltips.data" class="value"> Data </th>
         </tr>
         <tr v-for="n in data.length" :key="n" :style="rowHighlightId == (n - 1) ? rowHighlightStyle : ''">
             <td class="address">
@@ -42,6 +42,11 @@ export default {
 
     data() {
         return {
+            rowHighlightId: -1,
+            rowHighlight: { interval: null, timeout: null},
+            tagHighlightId: -1,
+            tagHighlight: { interval: null, timeout: null},
+
             rowHighlightStyle: {
                 'background': this.colors.secondaryColor + "00"
             },
@@ -53,10 +58,12 @@ export default {
                 'font-weight': "bold"
             },
 
-            rowHighlightId: -1,
-            rowHighlight: { interval: null, timeout: null},
-            tagHighlightId: -1,
-            tagHighlight: { interval: null, timeout: null},
+            tooltips: {
+                address: "Memory block address",
+                dirtyBit: { content: "<h4>Dirty bit</h4>Signals coherence of data in cache and RAM", html: true },
+                tag: { content: "<h4>Memory block tag</h4>Value specifying RAM address", html: true },
+                data: "Memory content",
+            }
         }
     },
 

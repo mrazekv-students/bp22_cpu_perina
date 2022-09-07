@@ -4,7 +4,7 @@
 
 <template>
     <div class="register-label">
-        <span v-show="label != null" class="title">{{ label }}</span>
+        <span v-show="label != null" v-tooltip="tooltip" class="title">{{ label }}</span>
         <div class="value">
             <div :style="highlightStyle">
                 <span>{{ value }}</span>
@@ -20,6 +20,7 @@ export default {
 
     props: {
         label: { type: String, default: null },
+        tooltip: { type: Object, default: null },
         value: { required: true },
     },
 

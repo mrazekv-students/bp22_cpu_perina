@@ -1,5 +1,6 @@
 import { createApp } from 'vue';
 import Notifications from '@kyvg/vue3-notification';
+import FloatingVue from 'floating-vue'
 import App from './App.vue';
 
 const app = createApp(App);
@@ -17,4 +18,10 @@ app.config.globalProperties.memorySize = { cache: 4, ram: 16 };
 // Colors
 app.config.globalProperties.colors = { secondaryColor: "#8b161c", secondaryColorLight: "#cc1717", fontColor: "#D6D6D6", infoColor: "#3f60bb" }
 
-app.use(Notifications).mount('#app');
+// FloatingVue tooltip config
+FloatingVue.options.disposeTimeout = 0;
+FloatingVue.options.instantMove = true;
+FloatingVue.options.themes.tooltip.triggers = ["hover"];
+FloatingVue.options.themes.tooltip.delay = { show: 500, hide: 0 };
+
+app.use(Notifications).use(FloatingVue).mount('#app');

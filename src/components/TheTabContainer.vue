@@ -19,7 +19,7 @@
 
 <script>
 import TabButton from './common/TabButton.vue';
-import CycleCounter from './common/CycleCounter.vue';
+import CycleCounter from './model/CycleCounter.vue';
 import RamOnlyMemory from './memory/RamOnlyMemory.vue';
 import DirectCacheMemory from './memory/DirectCacheMemory.vue';
 import TwoWayCacheMemory from './memory/TwoWayCacheMemory.vue';
