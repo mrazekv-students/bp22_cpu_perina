@@ -8,7 +8,6 @@
         <tab-button :displayValue="'Direct Cache'" :disabled="hasStarted" :active="activeTab['DirectCacheMemory']" :function="() => ChangeCurrentTab('DirectCacheMemory')"/>
         <tab-button :displayValue="'Two-Way Cache'" :disabled="hasStarted" :active="activeTab['TwoWayCacheMemory']" :function="() => ChangeCurrentTab('TwoWayCacheMemory')"/>
         <tab-button :displayValue="'Full Cache'" :disabled="hasStarted" :active="activeTab['FullCacheMemory']" :function="() => ChangeCurrentTab('FullCacheMemory')"/>
-        <cycle-counter :cycles="this.cycleCounter.value"/>
     </div>
     <div class="horizontal-container tab-container">
         <component :is="currentTab" @RegisterMemory="(e) => $emit('RegisterMemory', e)" @RegisterRegs="(e) => $emit('RegisterRegs', e)"
@@ -19,14 +18,13 @@
 
 <script>
 import TabButton from './common/TabButton.vue';
-import CycleCounter from './model/CycleCounter.vue';
 import RamOnlyMemory from './memory/RamOnlyMemory.vue';
 import DirectCacheMemory from './memory/DirectCacheMemory.vue';
 import TwoWayCacheMemory from './memory/TwoWayCacheMemory.vue';
 import FullCacheMemory from './memory/FullCacheMemory.vue'
 export default {
     name: "TheTabContainer",
-    components: { TabButton, CycleCounter, RamOnlyMemory, DirectCacheMemory, TwoWayCacheMemory, FullCacheMemory },
+    components: { TabButton, RamOnlyMemory, DirectCacheMemory, TwoWayCacheMemory, FullCacheMemory },
     emits: ["RegisterMemory", "RegisterRegs"],
 
     props: {
@@ -54,8 +52,6 @@ export default {
             this.activeTab[this.currentTab] = false;
             this.currentTab = tab;
             this.activeTab[this.currentTab] = true;
-
-            this.cycleCounter.value = 0;
         },
     }
 }

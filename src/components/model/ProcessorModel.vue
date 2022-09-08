@@ -15,14 +15,17 @@
         </div>
         <register-label label="AP" :tooltip="tooltips.regAP"
             :value="addressPointerString" @RegisterLabel="RegisterAP" class="address-pointer"/>
+        
+        <cache-stats :cycles="this.cycleCounter.value" :memoryAccesses="0" :cacheHits="0" :cacheMisses="0"/>
     </div>
 </template>
 
 <script>
 import RegisterLabel from './RegisterLabel.vue'
+import CacheStats from './CacheStats.vue'
 export default {
     name: "ProcessorModel",
-    components: { RegisterLabel },
+    components: { RegisterLabel, CacheStats },
     emits: ["RegisterRegs"],
 
     props: {
@@ -70,9 +73,9 @@ export default {
     padding: 0.5rem 1rem;
 
     border: solid 10px var(--mainColor);
-    border-left-width: 5px;
-    border-right-width: 5px;
-    border-radius: 20px;
+    border-left-width: 2px;
+    border-right-width: 2px;
+    border-radius: 10px;
     background: var(--mainColorDark);
 }
 .processor>.title {
