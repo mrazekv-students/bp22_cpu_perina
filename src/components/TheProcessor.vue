@@ -291,6 +291,9 @@ export default {
             this.addressPointer = { value: 0 };
             this.instruction = { instruction: "INST" };
             this.cacheStats.cycles = 0;
+            this.cacheStats.memoryAccesses = 0;
+            this.cacheStats.cacheHits = 0;
+            this.cacheStats.cacheMisses = 0;
             this.compiler.highlightLine(-1);
             this.memory.initialize();
         }
