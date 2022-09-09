@@ -49,13 +49,13 @@ export default {
             return this.cacheHits.toLocaleString();
         },
         cacheHitsPercentFormat() {
-            return ((this.cacheHits / this.memoryAccesses) * 100).toPrecision(2);
+            return ((this.cacheHits / this.memoryAccesses) * 100).toPrecision(4);
         },
         cacheMissesFormat() {
             return this.cacheMisses.toLocaleString();
         },
         cacheMissesPercentFormat() {
-            return ((this.cacheMisses / this.memoryAccesses) * 100).toPrecision(2);
+            return ((this.cacheMisses / this.memoryAccesses) * 100).toPrecision(4);
         }
     }
 }

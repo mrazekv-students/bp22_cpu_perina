@@ -72,18 +72,22 @@ export default {
 
             var cacheTag = address & ~(0b11);
 
+            this.cacheStats.memoryAccesses++;
+
             // Data koherence: valid-bit
             // Memory block is in cache
             for (var i = 0; i < this.cacheData.length; i++) {
                 this.cacheStats.cycles += this.cycleCosts.cacheCheck;
                 await this.cacheModel.highlightTag(i, Math.min(this.times.highlightFade / 2, 500));
                 if (this.cacheData[i].tag == cacheTag && !this.cacheData[i].isEmpty) {
+                    this.cacheStats.cacheHits++;
                     await this.memoryUtils.writeToCache(this.GetCacheAddress(i, address), cacheTag, data);
                     return;
                 }
             }
 
             // Not in cache
+            this.cacheStats.cacheMisses++;
             // Selection of victim: check if unused, then random
             var id = null;
             for (var j = 0; j < this.cacheData.length; j++) {
@@ -119,16 +123,20 @@ export default {
 
             var cacheTag = address & ~(0b11);
 
+            this.cacheStats.memoryAccesses++;
+
             // Check in cache
             for (var i = 0; i < this.cacheData.length; i++) {
                 this.cacheStats.cycles += this.cycleCosts.cacheCheck;
                 await this.cacheModel.highlightTag(i, Math.min(this.times.highlightFade / 2, 500));
                 if (this.cacheData[i].tag == cacheTag && !this.cacheData[i].isEmpty) {
+                    this.cacheStats.cacheHits++;
                     return await this.memoryUtils.readFromCache(this.GetCacheAddress(i, address));
                 }
             }
 
             // Not in cache
+            this.cacheStats.cacheMisses++;
             // Selection of victim: check if unused, then random
             var id = null;
             for (var j = 0; j < this.cacheData.length; j++) {
