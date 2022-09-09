@@ -86,7 +86,7 @@ export default {
             // Data koherence: valid-bit
             // Memory block is in cache
             for (var i = 0; i < this.cacheData.length; i++) {
-                this.cacheStats.cyclesCount += this.cycleCosts.cacheCheck;
+                this.cacheStats.cycles += this.cycleCosts.cacheCheck;
                 await this.cacheModel[i].highlightTag(cacheBlock, Math.min(this.times.highlightFade / 2, 500));
                 if (this.cacheData[i][cacheBlock].tag == cacheTag  && !this.cacheData[i][cacheBlock].isEmpty) {
                     await this.memoryUtils.writeToCache(cacheAddress, cacheTag, data, i);
@@ -132,7 +132,7 @@ export default {
 
             // Check in cache
             for (var i = 0; i < this.cacheData.length; i++) {
-                this.cacheStats.cyclesCount += this.cycleCosts.cacheCheck;
+                this.cacheStats.cycles += this.cycleCosts.cacheCheck;
                 await this.cacheModel[i].highlightTag(cacheBlock, Math.min(this.times.highlightFade / 2, 500));
                 if (this.cacheData[i][cacheBlock].tag == cacheTag && !this.cacheData[i][cacheBlock].isEmpty) {
                     return await this.memoryUtils.readFromCache(cacheAddress, i);
