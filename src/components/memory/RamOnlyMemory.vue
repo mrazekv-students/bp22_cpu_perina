@@ -54,7 +54,7 @@ export default {
 
                 await this.connector.fromCpuToMemory();
                 this.ramModel.highlight(address);
-                this.cycleCounter.value += this.cycleCosts.ramAccess;
+                this.cacheStats.cyclesCount += this.cycleCosts.ramAccess;
                 this.ramData[block][offset] = data;
             }
             else throw RangeError(`Invalid memory address (0x${address.toString(16).toUpperCase()}).`);
@@ -65,7 +65,7 @@ export default {
                 var block = address >> 2;
                 var offset = address & 0b11;
 
-                this.cycleCounter.value += this.cycleCosts.ramAccess;
+                this.cacheStats.cyclesCount += this.cycleCosts.ramAccess;
                 this.ramModel.highlight(address);
                 await this.connector.fromMemoryToCpu();
                 return this.ramData[block][offset];

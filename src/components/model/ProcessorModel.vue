@@ -16,7 +16,7 @@
         <register-label label="AP" :tooltip="tooltips.regAP"
             :value="addressPointerString" @RegisterLabel="RegisterAP" class="address-pointer"/>
         
-        <cache-stats :cycles="this.cycleCounter.value" :memoryAccesses="0" :cacheHits="0" :cacheMisses="0"/>
+        <cache-stats :cycles="0" :memoryAccesses="0" :cacheHits="0" :cacheMisses="0"/>
     </div>
 </template>
 

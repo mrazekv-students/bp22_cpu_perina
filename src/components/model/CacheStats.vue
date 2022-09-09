@@ -6,7 +6,7 @@
     <div class="vertical-container cache-stats">
         <div class="vertical-container cycle-counter">
             <span class="stats-label">CPU cycles</span>
-            <span class="stats-value">{{ cycleCounterFormat }}</span>
+            <span class="stats-value">{{ cyclesFormat }}</span>
         </div>
         <div class="vertical-container memory-stats">
             <div class="horizontal-container">
@@ -39,7 +39,7 @@ export default {
     },
     
     computed: {
-        cycleCounterFormat() {
+        cyclesFormat() {
             return this.cycles.toLocaleString();
         },
         memoryAccessesFormat() {

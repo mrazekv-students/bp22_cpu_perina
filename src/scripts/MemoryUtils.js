@@ -33,7 +33,7 @@ export default class MemoryUtils {
             this.cacheModel[path].highlight(cacheAddress)
         }
 
-        this.config.cycleCounter.value += this.config.cycleCosts.ramAccess;
+        this.config.cacheStats.cyclesCount += this.config.cycleCosts.ramAccess;
     }
 
     // Write from cache to RAM
@@ -53,7 +53,7 @@ export default class MemoryUtils {
         }
 
         this.ramModel.highlight(ramAddress);
-        this.config.cycleCounter.value += this.config.cycleCosts.ramAccess;
+        this.config.cacheStats.cyclesCount += this.config.cycleCosts.ramAccess;
     }
 
     // Read from cache
@@ -73,7 +73,7 @@ export default class MemoryUtils {
             returnVal = this.cache[path][block].data[offset];
         }
 
-        this.config.cycleCounter.value += this.config.cycleCosts.cacheAccess;    
+        this.config.cacheStats.cyclesCount += this.config.cycleCosts.cacheAccess;    
         return returnVal;
     }
 
@@ -93,6 +93,6 @@ export default class MemoryUtils {
             this.cacheModel[path].highlight(address);   
         }
         
-        this.config.cycleCounter.value += this.config.cycleCosts.cacheAccess;
+        this.config.cacheStats.cyclesCount += this.config.cycleCosts.cacheAccess;
     }
 }
