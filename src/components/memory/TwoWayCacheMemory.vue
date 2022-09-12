@@ -83,18 +83,22 @@ export default {
             var cacheBlock = cacheAddress >> 2;
             var cacheTag = address >> this.cacheAddressBits;
 
+            this.cacheStats.memoryAccesses++;
+
             // Data koherence: valid-bit
             // Memory block is in cache
             for (var i = 0; i < this.cacheData.length; i++) {
-                this.cycleCounter.value += this.cycleCosts.cacheCheck;
+                this.cacheStats.cycles += this.cycleCosts.cacheCheck;
                 await this.cacheModel[i].highlightTag(cacheBlock, Math.min(this.times.highlightFade / 2, 500));
                 if (this.cacheData[i][cacheBlock].tag == cacheTag  && !this.cacheData[i][cacheBlock].isEmpty) {
+                    this.cacheStats.cacheHits++;
                     await this.memoryUtils.writeToCache(cacheAddress, cacheTag, data, i);
                     return;
                 }
             }
 
             // Not in cache
+            this.cacheStats.cacheMisses++;
             // Selection of victim: check if unused, then random
             var id = null;
             for (var j = 0; j < this.cacheData.length; j++) {
@@ -130,16 +134,20 @@ export default {
             var cacheBlock = cacheAddress >> 2;
             var cacheTag = address >> this.cacheAddressBits;
 
+            this.cacheStats.memoryAccesses++;
+
             // Check in cache
             for (var i = 0; i < this.cacheData.length; i++) {
-                this.cycleCounter.value += this.cycleCosts.cacheCheck;
+                this.cacheStats.cycles += this.cycleCosts.cacheCheck;
                 await this.cacheModel[i].highlightTag(cacheBlock, Math.min(this.times.highlightFade / 2, 500));
                 if (this.cacheData[i][cacheBlock].tag == cacheTag && !this.cacheData[i][cacheBlock].isEmpty) {
+                    this.cacheStats.cacheHits++;
                     return await this.memoryUtils.readFromCache(cacheAddress, i);
                 }
             }
 
             // Not in cache
+            this.cacheStats.cacheMisses++;
             // Selection of victim: check if unused, then random
             var id = null;
             for (var j = 0; j < this.cacheData.length; j++) {

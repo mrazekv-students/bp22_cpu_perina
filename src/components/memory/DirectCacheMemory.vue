@@ -74,15 +74,19 @@ export default {
             var cacheBlock = cacheAddress >> 2;
             var cacheTag = address >> this.cacheAddressBits;
 
+            this.cacheStats.memoryAccesses++;
+
             // Data koherence: valid-bit
             // Memory block is in cache
-            this.cycleCounter.value += this.cycleCosts.cacheCheck;
+            this.cacheStats.cycles += this.cycleCosts.cacheCheck;
             await this.cacheModel.highlightTag(cacheBlock, Math.min(this.times.highlightFade / 2, 500));
             if (this.cacheData[cacheBlock].tag == cacheTag && !this.cacheData[cacheBlock].isEmpty) {
+                this.cacheStats.cacheHits++;
                 await this.memoryUtils.writeToCache(cacheAddress, cacheTag, data);
             }
             // Not in cache
             else {
+                this.cacheStats.cacheMisses++;
                 // Current memory block valid - can overwrite
                 if (this.cacheData[cacheBlock].valid) {
                     await this.memoryUtils.readFromRam(cacheAddress, address, cacheTag);
@@ -107,14 +111,18 @@ export default {
             var cacheBlock = cacheAddress >> 2;
             var cacheTag = address >> this.cacheAddressBits;
 
+            this.cacheStats.memoryAccesses++;
+
             // Check in cache
-            this.cycleCounter.value += this.cycleCosts.cacheCheck;
+            this.cacheStats.cycles += this.cycleCosts.cacheCheck;
             await this.cacheModel.highlightTag(cacheBlock, Math.min(this.times.highlightFade / 2, 500));
             if (this.cacheData[cacheBlock].tag == cacheTag && !this.cacheData[cacheBlock].isEmpty) {
+                this.cacheStats.cacheHits++;
                 return await this.memoryUtils.readFromCache(cacheAddress);
             }
             // Not in cache
             else {
+                this.cacheStats.cacheMisses++;
                 // Current memory block valid - can overwrite
                 if (this.cacheData[cacheBlock].valid) {
                     await this.memoryUtils.readFromRam(cacheAddress, address, cacheTag);

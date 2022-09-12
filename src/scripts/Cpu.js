@@ -4,12 +4,12 @@ import Instruction from "./enums/Instruction.js";
 import ExecutionResult from "./enums/ExecutionResult.js";
 
 export default class Cpu {
-    constructor(memory, acc, ap, regs, cycleCounter) {
+    constructor(memory, acc, ap, regs, cacheStats) {
         this.memory = memory;
         this.acc = acc;
         this.ap = ap;
         this.regs = regs;
-        this.cycleCounter = cycleCounter;
+        this.cacheStats = cacheStats;
     }
 
     // Executes instruction
@@ -112,13 +112,13 @@ export default class Cpu {
 
     // Execute HALT instruction
     _executeHalt() {
-        this.cycleCounter.value += 1;
+        this.cacheStats.cycles += 1;
         return { result: ExecutionResult.HaltExecution };
     }
 
     // Execute NEGATE instruction
     _executeNegate() {
-        this.cycleCounter.value += 1;
+        this.cacheStats.cycles += 1;
         this.acc.value = -this.acc.value;
         this.regs.highlightACC();
         return { result: ExecutionResult.NextInstruction };
@@ -126,7 +126,7 @@ export default class Cpu {
 
     // Execute ACCDEC instruction
     _executeAccdec() {
-        this.cycleCounter.value += 1;
+        this.cacheStats.cycles += 1;
         this.acc.value -= 1;
         this.regs.highlightACC();
         return { result: ExecutionResult.NextInstruction };
@@ -134,7 +134,7 @@ export default class Cpu {
     
     // Execute ACCINC instruction
     _executeAccinc() {
-        this.cycleCounter.value += 1;
+        this.cacheStats.cycles += 1;
         this.acc.value += 1;
         this.regs.highlightACC();
         return { result: ExecutionResult.NextInstruction };
@@ -142,19 +142,19 @@ export default class Cpu {
 
     // Execute NOP instruction
     _executeNop() {
-        this.cycleCounter.value += 1;
+        this.cacheStats.cycles += 1;
         return { result: ExecutionResult.NextInstruction };
     }
 
     // Execute OUTP instruction - NOP
     _executeOutp() {
-        this.cycleCounter.value += 1;
+        this.cacheStats.cycles += 1;
         return { result: ExecutionResult.NextInstruction };
     }
 
     // Execute INP instruction - ACC = Random(0 - 1023)
     _executeInp() {
-        this.cycleCounter.value += 1;
+        this.cacheStats.cycles += 1;
         this.acc.value = Math.floor(Math.random() * 1024);
         this.regs.highlightACC();
         return { result: ExecutionResult.NextInstruction };
@@ -162,7 +162,7 @@ export default class Cpu {
 
     // Execute MLOAD instruction
     _executeMload(value) {
-        this.cycleCounter.value += 1;
+        this.cacheStats.cycles += 1;
         this.acc.value = value;
         this.regs.highlightACC();
         return { result: ExecutionResult.NextInstruction };
@@ -170,7 +170,7 @@ export default class Cpu {
 
     // Execute DLOAD instruction
     async _executeDload(address) {
-        this.cycleCounter.value += 1;
+        this.cacheStats.cycles += 1;
         this.ap.value = address;
         this.regs.highlightAP();
 
@@ -181,13 +181,13 @@ export default class Cpu {
 
     // Execute ILOAD instruction
     async _executeIload(address) {
-        this.cycleCounter.value += 1;
+        this.cacheStats.cycles += 1;
         this.ap.value = address;
         this.regs.highlightAP();
         this.ap.value = await this.memory.read(address);
         this.regs.highlightAP();
 
-        this.cycleCounter.value += 1
+        this.cacheStats.cycles += 1
         this.acc.value = await this.memory.read(this.ap.value);
         this.regs.highlightACC();
         return { result: ExecutionResult.NextInstruction };
@@ -195,7 +195,7 @@ export default class Cpu {
 
     // Execute DSTORE instruction
     async _executeDstore(address) {
-        this.cycleCounter.value += 1;
+        this.cacheStats.cycles += 1;
         this.ap.value = address;
         this.regs.highlightAP();
 
@@ -205,28 +205,28 @@ export default class Cpu {
 
     // Execute ISTORE instruction
     async _executeIstore(address) {
-        this.cycleCounter.value += 1;
+        this.cacheStats.cycles += 1;
         this.ap.value = address;
         this.regs.highlightAP();
         this.ap.value = await this.memory.read(address);
         this.regs.highlightAP();
 
-        this.cycleCounter.value += 1;
+        this.cacheStats.cycles += 1;
         await this.memory.write(this.ap.value, this.acc.value);
         return { result: ExecutionResult.NextInstruction };
     }
 
     // Execute BRANCH instruction
     _executeBranch(label) {
-        this.cycleCounter.value += 1;
+        this.cacheStats.cycles += 1;
         return { result: ExecutionResult.MoveToLabel, label: label };
     }
 
     // Execute BRZERO instruction
     _executeBrzero(label) {
-        this.cycleCounter.value += 1;
+        this.cacheStats.cycles += 1;
         if (this.acc.value == 0) {
-            this.cycleCounter.value += 1;
+            this.cacheStats.cycles += 1;
             return { result: ExecutionResult.MoveToLabel, label: label };
         }
         else
@@ -235,9 +235,9 @@ export default class Cpu {
 
     // Execute BRPOS instruction
     _executeBrpos(label) {
-        this.cycleCounter.value += 1;
+        this.cacheStats.cycles += 1;
         if (this.acc.value > 0) {
-            this.cycleCounter.value += 1;
+            this.cacheStats.cycles += 1;
             return { result: ExecutionResult.MoveToLabel, label: label };
         }
         else
@@ -246,9 +246,9 @@ export default class Cpu {
 
     // Execute BRNEG instruction
     _executeBrneg(label) {
-        this.cycleCounter.value += 1;
+        this.cacheStats.cycles += 1;
         if (this.acc.value < 0) {
-            this.cycleCounter.value += 1;
+            this.cacheStats.cycles += 1;
             return { result: ExecutionResult.MoveToLabel, label: label };
         }
         else
@@ -257,7 +257,7 @@ export default class Cpu {
 
     // Execute MADD instruction
     async _executeMadd(address) {
-        this.cycleCounter.value += 1;
+        this.cacheStats.cycles += 1;
         this.ap.value = address;
         this.regs.highlightAP();
 
@@ -268,7 +268,7 @@ export default class Cpu {
 
     // Execute IJUMP instruction
     async _executeIjump(address) {
-        this.cycleCounter.value += 1;
+        this.cacheStats.cycles += 1;
         this.ap.value = address;
         this.regs.highlightAP();
         
@@ -283,7 +283,7 @@ export default class Cpu {
 
     // Execute FLUSH instruction
     _executeFlush() {
-        this.cycleCounter.value = 0;
+        this.cacheStats.cycles = 0;
         this.memory.flush();
         return { result: ExecutionResult.NextInstruction };
     }
