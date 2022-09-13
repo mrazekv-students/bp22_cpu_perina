@@ -15,7 +15,7 @@ export default {
     props: {
         displayIcon: { type: String, required: true },
         function: { type: Function, required: true },
-        tooltip: { type: String, default: null },
+        tooltip: { default: null },
         visible: { type: Boolean, default: true },
         disabled: { type: Boolean, default: false }
     },

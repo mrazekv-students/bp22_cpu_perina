@@ -36,7 +36,8 @@ export default {
         instructionPointer: { type: Number },
         accumulator: { type: Number},
         addressPointer: { type: Number },
-        hasStarted: { type: Boolean }
+        hasStarted: { type: Boolean },
+        editingCode: { type: Boolean }
     },
 
     data() {
@@ -59,26 +60,28 @@ export default {
 
     created() {
         window.addEventListener("keydown", (e) => {
-            switch (e.key) {
-                case "+":
-                case "1":
-                    if (this.currentTab != "RamOnlyMemory") this.ChangeCurrentTab("RamOnlyMemory");
-                    break;
+            if (!this.editingCode) {
+                switch (e.key) {
+                    case "+":
+                    case "1":
+                        if (this.currentTab != "RamOnlyMemory") this.ChangeCurrentTab("RamOnlyMemory");
+                        break;
 
-                case "ě":
-                case "2":
-                    if (this.currentTab != "DirectCacheMemory") this.ChangeCurrentTab("DirectCacheMemory");
-                    break;
-                
-                case "š":
-                case "3":
-                    if (this.currentTab != "TwoWayCacheMemory") this.ChangeCurrentTab("TwoWayCacheMemory");
-                    break;
-                
-                case "č":
-                case "4":
-                    if (this.currentTab != "FullCacheMemory") this.ChangeCurrentTab("FullCacheMemory");
-                    break;
+                    case "ě":
+                    case "2":
+                        if (this.currentTab != "DirectCacheMemory") this.ChangeCurrentTab("DirectCacheMemory");
+                        break;
+                    
+                    case "š":
+                    case "3":
+                        if (this.currentTab != "TwoWayCacheMemory") this.ChangeCurrentTab("TwoWayCacheMemory");
+                        break;
+                    
+                    case "č":
+                    case "4":
+                        if (this.currentTab != "FullCacheMemory") this.ChangeCurrentTab("FullCacheMemory");
+                        break;
+                }
             }
         })
     },
