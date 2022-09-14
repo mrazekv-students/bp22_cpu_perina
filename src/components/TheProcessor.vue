@@ -16,12 +16,13 @@
             <div class="vertical-container program-container">
                 <v-select class="program-select" v-model="selected" :options="programs" :label="'label'" :reduce="label => label.label" :disabled="hasStarted"
                     placeholder="Vyberte ukázkový program" @option:selected="SelectProgram" />
-                <code-editor :selectedProgram="selectedProgram" :hasStarted="hasStarted" @RegisterCompiler="RegisterCompiler"/>
+                <code-editor :selectedProgram="selectedProgram" :hasStarted="hasStarted" @RegisterCompiler="RegisterCompiler"
+                    @focus="() => editingCode = true" @blur="() => editingCode = false"/>
             </div>
         </div>
 
         <div class="vertical-container model-container">
-            <the-tab-container @RegisterMemory="RegisterMemory" @RegisterRegs="RegisterRegs" :hasStarted="hasStarted"
+            <the-tab-container @RegisterMemory="RegisterMemory" @RegisterRegs="RegisterRegs" :hasStarted="hasStarted" :editingCode="editingCode"
                 :instruction="instruction.instruction" :instructionPointer="instructionPointer"
                 :accumulator="accumulator.value" :addressPointer="addressPointer.value"/>
         </div>
@@ -59,31 +60,31 @@ export default {
                 fastForward: {
                     display: "fa-solid fa-forward",
                     function: this.FastForward,
-                    tooltip: "Skip to next breakpoint",
+                    tooltip: { content: "<p>Skip to next breakpoint</p><p>Shortcut: [<b>S</b>]</p>", html: true },
                     disabled: false, visible: false
                 },
                 start: {
                     display: "fa-solid fa-play",
                     function: this.StartProgram,
-                    tooltip: "Start program",
+                    tooltip: { content: "<p>Start program</p><p>Shortcut: [<b>S</b>]</p>", html: true },
                     disabled: false, visible: true
                 },
                 stop: {
                     display: "fa-solid fa-stop",
                     function: this.StopProgram,
-                    tooltip: "Stop program",
+                    tooltip: { content: "<p>Stop program</p><p>Shortcut: [<b>Q</b>]</p>", html: true },
                     disabled: true, visible: true
                 },
                 pause: {
                     display: "fa-solid fa-pause",
                     function: this.PauseProgram,
-                    tooltip: "Pause program execution",
+                    tooltip: { content: "<p>Pause program execution</p><p>Shortcut: [<b>SPACE</b>]</p>", html: true },
                     disabled: true, visible: true
                 },
                 step: {
                     display: "fa-solid fa-forward-step",
                     function: this.ExecuteInstruction,
-                    tooltip: "Execute next instruction",
+                    tooltip: { content: "<p>Execute next instruction</p><p>Shortcut: [<b>F</b>]</p>", html: true },
                     disabled: false, visible: true
                 }
             },
@@ -92,6 +93,7 @@ export default {
             regs: { highlightACC: null, highlightAP: null },
             cpu: null,
             currentState: STATE.STOPPED,
+            editingCode: false,
 
             instructionPointer: 0,
             accumulator: { value: 0 },
@@ -102,6 +104,38 @@ export default {
             selected: examplePrograms[0].label,
             selectedProgram: examplePrograms[0].code
         }
+    },
+
+    created() {
+        window.addEventListener("keydown", (e) => {
+            if (!this.editingCode) {
+                switch (e.key) {
+                    case "s":
+                        switch (this.currentState) {
+                            case STATE.STOPPED:
+                            case STATE.HALTED:
+                                this.StartProgram();
+                                break;
+                            case STATE.STARTED:
+                                this.FastForward();
+                                break;
+                        }
+                        break;
+
+                    case "q":
+                        if (this.currentState != STATE.STOPPED) this.StopProgram();
+                        break;
+                    
+                    case " ":
+                        if (this.currentState == STATE.STARTED) this.PauseProgram();
+                        break;
+                    
+                    case "f":
+                        if (this.currentState != STATE.STARTED) this.ExecuteInstruction();
+                        break;
+                }
+            }
+        })
     },
 
     methods: {
